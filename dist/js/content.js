@@ -5173,14 +5173,21 @@ __webpack_require__.r(__webpack_exports__);
 class Lang {
     constructor() {
         this.htmlLangType = this.getHtmlLangType();
-        this.type = this.htmlLangType;
+        this.type = this.htmlLangTypeToLangType();
         this.bindEvents();
     }
     // 用户在下载器设置里选择的语言
     type;
-    // 用户在 Pixiv 使用的语言。不会动态变化
+    // 用户在 Pixiv 使用的显示语言。不会动态变化
     htmlLangType;
-    langTypes = ['zh-cn', 'zh-tw', 'en', 'ja', 'ko', 'ru'];
+    langTypes = [
+        'zh-cn',
+        'zh-tw',
+        'en',
+        'ja',
+        'ko',
+        'ru',
+    ];
     flagIndex = new Map([
         ['zh-cn', 0],
         ['zh-tw', 1],
@@ -5189,6 +5196,13 @@ class Lang {
         ['ko', 4],
         ['ru', 5],
     ]);
+    /**将 Pixiv 的语言类型转换为下载器支持的语言类型。对于泰语和马来语，显示为英语 */
+    htmlLangTypeToLangType() {
+        if (this.htmlLangType === 'th' || this.htmlLangType === 'ms') {
+            return 'en';
+        }
+        return this.htmlLangType;
+    }
     bindEvents() {
         window.addEventListener(_EVT__WEBPACK_IMPORTED_MODULE_1__.EVT.list.settingChange, (ev) => {
             const data = ev.detail.data;
@@ -5196,7 +5210,8 @@ class Lang {
                 return;
             }
             const old = this.type;
-            this.type = data.value === 'auto' ? this.htmlLangType : data.value;
+            this.type =
+                data.value === 'auto' ? this.htmlLangTypeToLangType() : data.value;
             if (this.type !== old) {
                 _EVT__WEBPACK_IMPORTED_MODULE_1__.EVT.fire('langChange');
                 this.elList.forEach((el) => {
@@ -5207,14 +5222,14 @@ class Lang {
     }
     // 获取页面使用的语言，返回语言标记
     getHtmlLangType() {
-        // 单独对俄语进行一次检测
-        // 因为现在 Pixiv 官方没有提供俄语选项，因此无法从 html 标签上获取到 ru 属性
-        // 因此需要从 navigator.language 判断是否为俄语用户
-        if (navigator.language.startsWith('ru') ||
-            navigator.languages.includes('ru') ||
-            navigator.languages.includes('ru-RU')) {
-            return 'ru';
-        }
+        // 因为现在 Pixiv 官方没有提供俄语选项，所以 htmlLangType 永远不会是 ru
+        // 之前我从 navigator.language 判断是否为俄语用户（以便让下载器默认使用俄语显示），但这有时反而带来了困扰
+        // 例如 “AI 生成” 这个标签及其翻译在 Pixiv 的网页上永远不会显示为 `сгенерированный ИИ`，
+        // 但如果浏览器的语言是俄语，下载器就会把它显示为 `сгенерированный ИИ`，这导致用户产生了困惑
+        // 所以现在不再从 navigator.language 判断俄语用户
+        // if (navigator.language.startsWith('ru')) {
+        // return 'ru'
+        // }
         const flag = document.documentElement.lang;
         switch (flag) {
             case 'zh':
@@ -5232,6 +5247,11 @@ class Lang {
             case 'ru':
             case 'ru-RU':
                 return 'ru'; // Русский
+            case 'th':
+                return 'th'; // ภาษาไทย
+            case 'ms':
+                return 'ms'; // Bahasa Melayu
+            // 对于其他语言，视为英语
             default:
                 return 'en'; // English
         }
@@ -5622,6 +5642,11 @@ class Log {
             }
             else {
                 span = this.refresh[refreshFlag];
+            }
+            // 虽然刷新的日志不计入总数，但如果某个日志区域里的第一条日志就是刷新日志，那么此时必须把 count 加 1
+            // 否则会因为 count 为 0 而导致这个日志区域被判断为没有内容，从而不会显示
+            if (this.count === 0) {
+                this.count++;
             }
         }
         else {
@@ -9906,19 +9931,11 @@ class ShowWhatIsNew {
       <span>${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_扩展程序升到x版本', this.flag)}</span>
       <br>
       <br>
-      <span>${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_版本更新内容1820')}</span>
-      <br>
-      <br>
       <span>${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_修复bug')}</span>
       <br>
       <br>
       <span>${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_优化用户体验')}</span>
       `;
-            if (_Language__WEBPACK_IMPORTED_MODULE_0__.lang.type === 'zh-cn') {
-                msg += `<br>
-      <br>
-      <span>${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_QQ修复了粘贴问题的提醒')}</span>`;
-            }
             // <strong><span>✨ ${lang.transl('_新增设置项')}:</span></strong>
             // <strong><span>✨ ${lang.transl('_新增功能')}:</span></strong>
             // <span class="blue">${lang.transl('_下载间隔')}</span>
@@ -11281,6 +11298,7 @@ class Tools {
                 return undefined;
         }
     }
+    /** 储存 Pixiv 每种显示语言里，“AI 生成”标记所使用的文字 */
     static AIMark = new Map([
         ['zh-cn', 'AI生成'],
         ['zh-tw', 'AI生成'],
@@ -11288,6 +11306,8 @@ class Tools {
         ['ja', 'AI生成'],
         ['ko', 'AI 생성'],
         ['ru', 'сгенерированный ИИ'],
+        ['th', 'สร้างโดย AI'],
+        ['ms', 'Janaan AI'],
     ]);
     /**如果一个作品是 AI 生成的，则返回特定的字符串标记
      *
@@ -11295,7 +11315,7 @@ class Tools {
      */
     static getAIGeneratedMark(aiType) {
         if (aiType === 2) {
-            return this.AIMark.get(_Language__WEBPACK_IMPORTED_MODULE_1__.lang.htmlLangType);
+            return this.AIMark.get(_Language__WEBPACK_IMPORTED_MODULE_1__.lang.htmlLangType) || 'AI-generated';
         }
         return '';
     }
@@ -14664,7 +14684,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SetTimeoutWorker__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../SetTimeoutWorker */ "./src/ts/SetTimeoutWorker.ts");
 /* harmony import */ var _pageFunciton_RemoveWorksOfFollowedUsersOnSearchPage__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../pageFunciton/RemoveWorksOfFollowedUsersOnSearchPage */ "./src/ts/pageFunciton/RemoveWorksOfFollowedUsersOnSearchPage.ts");
 /* harmony import */ var _crawl_VipSearchOptimize__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../crawl/VipSearchOptimize */ "./src/ts/crawl/VipSearchOptimize.ts");
+/* harmony import */ var _filter_FilterSearchResults__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../filter/FilterSearchResults */ "./src/ts/filter/FilterSearchResults.ts");
 // 初始化 artwork 搜索页
+
 
 
 
@@ -16362,9 +16384,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _crawl_CrawlLatestFewWorks__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../crawl/CrawlLatestFewWorks */ "./src/ts/crawl/CrawlLatestFewWorks.ts");
 /* harmony import */ var _pageFunciton_ExportFollowingList__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../pageFunciton/ExportFollowingList */ "./src/ts/pageFunciton/ExportFollowingList.ts");
 /* harmony import */ var _pageFunciton_BatchFollowUser__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../pageFunciton/BatchFollowUser */ "./src/ts/pageFunciton/BatchFollowUser.ts");
-/* harmony import */ var _pageFunciton_FilterInactiveUsers__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../pageFunciton/FilterInactiveUsers */ "./src/ts/pageFunciton/FilterInactiveUsers.ts");
 // 初始化关注页面、好 P 友页面、粉丝页面
-
 
 
 
@@ -16419,9 +16439,16 @@ class InitFollowingPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0__
         _Tools__WEBPACK_IMPORTED_MODULE_6__.Tools.addBtn('crawlBtns', _Colors__WEBPACK_IMPORTED_MODULE_1__.Colors.bgGreen, '_批量关注用户', '', 'batchFollowUser').addEventListener('click', async () => {
             _pageFunciton_BatchFollowUser__WEBPACK_IMPORTED_MODULE_14__.batchFollowUser.start();
         });
-        _Tools__WEBPACK_IMPORTED_MODULE_6__.Tools.addBtn('crawlBtns', _Colors__WEBPACK_IMPORTED_MODULE_1__.Colors.bgWarning, '_筛选不活跃的用户', '', 'filterInactiveUsers').addEventListener('click', async () => {
-            _pageFunciton_FilterInactiveUsers__WEBPACK_IMPORTED_MODULE_15__.filterInactiveUsers.start();
-        });
+        // 在公开版本里隐藏此功能
+        // Tools.addBtn(
+        //   'crawlBtns',
+        //   Colors.bgWarning,
+        //   '_筛选不活跃的用户',
+        //   '',
+        //   'filterInactiveUsers'
+        // ).addEventListener('click', async () => {
+        //   filterInactiveUsers.start()
+        // })
     }
     getWantPage() {
         this.crawlNumber = _setting_Settings__WEBPACK_IMPORTED_MODULE_10__.settings.crawlNumber[_PageType__WEBPACK_IMPORTED_MODULE_11__.pageType.type].value;
@@ -18145,7 +18172,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _crawl_VipSearchOptimize__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../crawl/VipSearchOptimize */ "./src/ts/crawl/VipSearchOptimize.ts");
 /* harmony import */ var _setting_Settings__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../setting/Settings */ "./src/ts/setting/Settings.ts");
 /* harmony import */ var _PageType__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../PageType */ "./src/ts/PageType.ts");
+/* harmony import */ var _filter_FilterSearchResults__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../filter/FilterSearchResults */ "./src/ts/filter/FilterSearchResults.ts");
 // 初始化小说搜索页
+
 
 
 
@@ -24898,6 +24927,150 @@ class Filter {
 }
 const filter = new Filter();
 
+
+
+/***/ }),
+
+/***/ "./src/ts/filter/FilterSearchResults.ts":
+/*!**********************************************!*\
+  !*** ./src/ts/filter/FilterSearchResults.ts ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _setting_Settings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../setting/Settings */ "./src/ts/setting/Settings.ts");
+/* harmony import */ var _EVT__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../EVT */ "./src/ts/EVT.ts");
+/* harmony import */ var _Filter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Filter */ "./src/ts/filter/Filter.ts");
+/* harmony import */ var _Tools__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Tools */ "./src/ts/Tools.ts");
+
+
+
+
+// 类型守卫：如果 work 对象有 illustType 属性，就是 ImageWork
+function isImageWork(work) {
+    return work.illustType !== undefined;
+}
+/** 拦截 API 的请求，检查搜索结果的数据，过滤掉不符合要求的作品 */
+class FilterSearchResults {
+    constructor() {
+        this.bindEvents();
+    }
+    bindEvents() {
+        // 启用此功能时注入脚本
+        // window.addEventListener(EVT.list.settingChange, (ev: CustomEventInit) => {
+        //   const data = ev.detail.data as any
+        //   if (data.name === 'filterSearchResults' && data.value) {
+        //     this.injectScript()
+        //   }
+        // })
+        // 当设置初始化完毕之后，发送 ready 消息
+        window.addEventListener(_EVT__WEBPACK_IMPORTED_MODULE_1__.EVT.list.settingInitialized, (ev) => {
+            window.postMessage({
+                source: 'pixiv-downloader-content-script',
+                setEnable: _setting_Settings__WEBPACK_IMPORTED_MODULE_0__.settings.filterSearchResults,
+            }, window.location.origin);
+        });
+        // 接收注入脚本发送过来的数据
+        window.addEventListener('message', async (event) => {
+            if (event.source === window &&
+                event.data.source === 'pixiv-downloader-inject-script') {
+                const { url, requestId, dataToFilter } = event.data;
+                // 如果不需要处理，则直接返回原数据
+                if (!_setting_Settings__WEBPACK_IMPORTED_MODULE_0__.settings.filterSearchResults || !url || !this.needFilter(url)) {
+                    return this.postResult(requestId, dataToFilter);
+                }
+                // 过滤数据
+                // 第一次执行过滤时比较慢，要 200 ms 左右，之后就很快，只需要几毫秒
+                await this.filterData(dataToFilter);
+                // 返回数据
+                this.postResult(requestId, dataToFilter);
+            }
+        });
+    }
+    async filterData(data) {
+        if (!data || !data.body) {
+            return;
+        }
+        const workListKeys = ['illustManga', 'illust', 'manga', 'novel'];
+        for (const key of workListKeys) {
+            const workListContainer = data.body[key];
+            if (workListContainer && Array.isArray(workListContainer.data)) {
+                const list = workListContainer.data;
+                const filterResults = await Promise.all(list.map((work) => {
+                    let option;
+                    // 根据作品类型设置不同的过滤选项
+                    if (isImageWork(work)) {
+                        // 图像作品
+                        option = {
+                            aiType: work.aiType,
+                            id: work.id,
+                            workType: work.illustType,
+                            workTypeString: _Tools__WEBPACK_IMPORTED_MODULE_3__.Tools.getWorkTypeString(work.illustType),
+                            tags: work.tags,
+                            bookmarkData: work.bookmarkData,
+                            createDate: work.createDate,
+                            width: work.width,
+                            height: work.height,
+                            pageCount: work.pageCount,
+                            userId: work.userId,
+                            xRestrict: work.xRestrict,
+                            mini: work.url,
+                        };
+                    }
+                    else {
+                        // 小说作品
+                        option = {
+                            aiType: work.aiType,
+                            id: work.id,
+                            workType: 3,
+                            workTypeString: 'novels',
+                            tags: work.tags,
+                            bookmarkData: work.bookmarkData,
+                            userId: work.userId,
+                            createDate: work.createDate,
+                            xRestrict: work.xRestrict,
+                        };
+                    }
+                    return _Filter__WEBPACK_IMPORTED_MODULE_2__.filter.check(option);
+                }));
+                workListContainer.data = list.filter((_, index) => filterResults[index]);
+                console.log('过滤后的作品数量：', workListContainer.data.length);
+            }
+        }
+    }
+    /**将处理完的数据响应回去 */
+    postResult(requestId, filteredData) {
+        window.postMessage({
+            source: 'pixiv-downloader-content-script',
+            requestId,
+            filteredData,
+        }, window.location.origin);
+    }
+    // 注入拦截 fetch 请求的脚本
+    // private injected = false
+    // private injectScript() {
+    //   if (!this.injected) {
+    //     const url = browser.runtime.getURL('lib/api_interceptor.js')
+    //     const script = document.createElement('script')
+    //     script.setAttribute('type', 'text/javascript')
+    //     script.setAttribute('src', url)
+    //     document.head.appendChild(script)
+    //     this.injected = true
+    //   }
+    // }
+    // 需要拦截的 API 列表，都是搜索页面里的 API
+    apiList = [
+        'ajax/search/top/',
+        'ajax/search/illustrations/',
+        'ajax/search/manga/',
+        'ajax/search/novels/',
+    ];
+    needFilter(url) {
+        return this.apiList.some((api) => url.includes(api));
+    }
+}
+new FilterSearchResults();
 
 
 /***/ }),
@@ -32565,207 +32738,75 @@ To prevent duplicate filenames, it is recommended to always add {series_id}.`,
         `현재 페이지의 제목`,
         `Заголовок текущей страницы`,
     ],
-    _QQ修复了粘贴问题的提醒: [
-        `📋 对使用下载器的“复制功能”的用户的提醒：<br> QQ 之前的版本存在 Bug，无法粘贴下载器复制的图文混合内容（text/html）。最近（11月5日）QQ 的新版本修复了此问题，请及时更新。`,
-        `📋 對使用下載器的「複製功能」的用戶的提醒：<br> QQ 之前的版本存在 Bug，無法貼上下載器複製的圖文混合內容（text/html）。最近（11月5日）QQ 的新版本修復了此問題，請及時更新。`,
-        `📋 Reminder for users using the downloader's "copy function":<br> Previous versions of QQ had a bug that prevented pasting the mixed image-text content (text/html) copied by the downloader. The latest version of QQ (November 5th) has fixed this issue, please update promptly.`,
-        `📋 ダウンロードツールの「コピー機能」を使用するユーザーへのリマインダー：<br> QQ の以前のバージョンにはバグがあり、ダウンロードツールでコピーした画像とテキストの混合コンテンツ（text/html）を貼り付けできませんでした。最近（11月5日）の QQ の新バージョンでこの問題が修正されました。速やかに更新してください。`,
-        `📋 다운로더의 "복사 기능"을 사용하는 사용자에게 알림:<br> QQ 이전 버전에는 버그가 있어 다운로더가 복사한 이미지-텍스트 혼합 콘텐츠(text/html)를 붙여넣을 수 없습니다. 최근(11월 5일) QQ 새 버전에서 이 문제가 수정되었습니다. 즉시 업데이트하세요.`,
-        `📋 Напоминание для пользователей, использующих функцию "копирования" загрузчика:<br> В предыдущих версиях QQ была ошибка, из-за которой нельзя было вставить смешанный контент с изображениями и текстом (text/html), скопированный загрузчиком. В последней версии QQ (5 ноября) эта проблема исправлена, пожалуйста, обновите timely.`,
+    _过滤搜索页面的作品: [
+        `<span class="key">过滤</span>搜索页面的作品`,
+        `<span class="key">過濾</span>搜尋頁面的作品`,
+        `<span class="key">Filter</span> works on the search page`,
+        `<span class="key">フィルタリング</span>検索ページの作品`,
+        `<span class="key">필터링</span> 검색 페이지의 작품`,
+        `<span class="key">Фильтрация</span> работ на странице поиска`,
     ],
-    _版本更新内容1820: [
-        `<strong>📚 新功能：自动合并系列小说</strong>
-<br>
-抓取作品时，如果一个小说属于某个系列，下载器可以自动抓取这个系列里的所有小说并且合并。
-<br>
-这个功能位于“更多”-“下载”分类里，默认未启用，你可以在有需要时启用。
-<br>
-<br>
-<strong>✨ 新增设置：合并系列小说时的命名规则</strong>
-<br>
-你可以设置合并小说时生成的文件的名字。
-<br>
-这个设置位于“更多”-“下载”分类里。
-<br>
-<br>
-<strong>✨ 新增命名标记 {age} {age_r}</strong>
-<br>
-<span class="blue">{age}</span> 作品的年龄限制，分为：<span class="blue">All Ages</span>、<span class="blue">R-18</span>、<span class="blue">R-18G</span>
-<br>
-<span class="blue">{age_r}</span> 仅当作品为限制级时，输出它的年龄限制，分为：<span class="blue">R-18</span>、<span class="blue">R-18G</span>
-<br>
-<br>
-<strong>📖 优化了保存小说时的内容</strong>
-<br>
-<br>
-<strong>🔧 动图保存为 APNG 格式时，文件的扩展名从 png 改成 apng</strong>
-<br>
-这样可以让静态图片和动图区别更明显，也有助于一些软件识别 apng 图片。
-<br>
-<br>
-<strong>🔧 作品页面里的快速收藏按钮 (✩) 可以取消收藏了</strong>
-<br>
-如果该作品已经被收藏，点击该按钮 (✩) 可以取消收藏。`,
-        `<strong>📚 新功能：自動合併系列小說</strong>
-<br>
-抓取作品時，如果一個小說屬於某個系列，下載器可以自動抓取這個系列裡的所有小說並且合併。
-<br>
-這個功能位於「更多」-「下載」分類裡，預設未啟用，你可以在有需要時啟用。
-<br>
-<br>
-<strong>✨ 新增設置：合併系列小說時的命名規則</strong>
-<br>
-你可以設置合併小說時生成的檔案的名字。
-<br>
-這個設置位於「更多」-「下載」分類裡。
-<br>
-<br>
-<strong>✨ 新增命名標記 {age} {age_r}</strong>
-<br>
-<span class="blue">{age}</span> 作品的年齡限制，分為：<span class="blue">All Ages</span>、<span class="blue">R-18</span>、<span class="blue">R-18G</span>
-<br>
-<span class="blue">{age_r}</span> 僅當作品為限制級時，輸出它的年齡限制，分為：<span class="blue">R-18</span>、<span class="blue">R-18G</span>
-<br>
-<br>
-<strong>📖 優化了保存小說時的內容</strong>
-<br>
-<br>
-<strong>🔧 動圖保存為 APNG 格式時，檔案的擴展名從 png 改成 apng</strong>
-<br>
-這樣可以讓靜態圖片和動圖區別更明顯，也有助於一些軟件識別 apng 圖片。
-<br>
-<br>
-<strong>🔧 作品頁面裡的快速收藏按鈕 (✩) 可以取消收藏了</strong>
-<br>
-如果該作品已經被收藏，點擊該按鈕 (✩) 可以取消收藏。`,
-        `<strong>📚 New Feature: Auto-Merge Novel Series</strong>
-<br>
-When crawling works, if a novel belongs to a certain series, the downloader can automatically crawl all novels in that series and merge them.
-<br>
-This feature is located in the "More" - "Download" category, disabled by default, and you can enable it when needed.
-<br>
-<br>
-<strong>✨ New Setting: Naming Rule When Merging Novel Series</strong>
-<br>
-You can set the name of the file generated when merging novels.
-<br>
-This setting is located in the "More" - "Download" category.
-<br>
-<br>
-<strong>✨ New Naming Tags {age} {age_r}</strong>
-<br>
-<span class="blue">{age}</span> The age restriction of the work, divided into: <span class="blue">All Ages</span>, <span class="blue">R-18</span>, <span class="blue">R-18G</span>
-<br>
-<span class="blue">{age_r}</span> Output its age restriction only when the work is restricted, divided into: <span class="blue">R-18</span>, <span class="blue">R-18G</span>
-<br>
-<br>
-<strong>📖 Optimized Content When Saving Novels</strong>
-<br>
-<br>
-<strong>🔧 When Saving Ugoira as APNG Format, File Extension Changed from png to apng</strong>
-<br>
-This makes the distinction between static images and Ugoira more obvious and helps some software recognize apng images.
-<br>
-<br>
-<strong>🔧 Quick Bookmark Button (✩) on Work Pages Can Now Unbookmark</strong>
-<br>
-If the work has already been bookmarked, clicking this button (✩) can unbookmark it.`,
-        `<strong>📚 新機能：シリーズ小説の自動マージ</strong>
-<br>
-作品をクロールする際、1つの小説が特定のシリーズに属する場合、ダウンロードツールはこのシリーズ内のすべての小説を自動的にクロールしてマージできます。
-<br>
-この機能は「その他」-「ダウンロード」カテゴリにあり、デフォルトで無効になっています。必要に応じて有効にできます。
-<br>
-<br>
-<strong>✨ 新設定：シリーズ小説をマージする際の命名ルール</strong>
-<br>
-小説をマージする際に生成されるファイルの名前を設定できます。
-<br>
-この設定は「その他」-「ダウンロード」カテゴリにあります。
-<br>
-<br>
-<strong>✨ 新命名タグ {age} {age_r}</strong>
-<br>
-<span class="blue">{age}</span> 作品の年齢制限：<span class="blue">All Ages</span>、<span class="blue">R-18</span>、<span class="blue">R-18G</span> に分かれます
-<br>
-<span class="blue">{age_r}</span> 作品が制限級の場合のみ、その年齢制限を出力：<span class="blue">R-18</span>、<span class="blue">R-18G</span>
-<br>
-<br>
-<strong>📖 小説保存時のコンテンツを最適化</strong>
-<br>
-<br>
-<strong>🔧 Ugoira を APNG 形式で保存する場合、ファイル拡張子を png から apng に変更</strong>
-<br>
-これにより、静止画と Ugoira の区別がより明確になり、一部のソフトウェアが apng 画像を認識しやすくなります。
-<br>
-<br>
-<strong>🔧 作品ページのクイックブックマークボタン (✩) でブックマーク解除が可能になりました</strong>
-<br>
-その作品がすでにブックマークされている場合、このボタン (✩) をクリックしてブックマークを解除できます。`,
-        `<strong>📚 새 기능: 시리즈 소설 자동 병합</strong>
-<br>
-작품을 크롤링할 때, 한 소설이 특정 시리즈에 속하면 다운로더가 해당 시리즈의 모든 소설을 자동으로 크롤링하여 병합할 수 있습니다.
-<br>
-이 기능은 "더보기" - "다운로드" 카테고리에 있으며, 기본적으로 비활성화되어 있으며 필요 시 활성화할 수 있습니다.
-<br>
-<br>
-<strong>✨ 새 설정: 시리즈 소설 병합 시 명명 규칙</strong>
-<br>
-소설을 병합할 때 생성되는 파일의 이름을 설정할 수 있습니다.
-<br>
-이 설정은 "더보기" - "다운로드" 카테고리에 있습니다.
-<br>
-<br>
-<strong>✨ 새 명명 태그 {age} {age_r}</strong>
-<br>
-<span class="blue">{age}</span> 작품의 연령 제한：<span class="blue">All Ages</span>、<span class="blue">R-18</span>、<span class="blue">R-18G</span> 으로 나뉩니다
-<br>
-<span class="blue">{age_r}</span> 작품이 제한 등급일 때만 그 연령 제한을 출력：<span class="blue">R-18</span>、<span class="blue">R-18G</span>
-<br>
-<br>
-<strong>📖 소설 저장 시 콘텐츠 최적화</strong>
-<br>
-<br>
-<strong>🔧 Ugoira 를 APNG 형식으로 저장할 때 파일 확장자를 png 에서 apng 로 변경</strong>
-<br>
-이렇게 하면 정적 이미지와 Ugoira 의 구분이 더 명확해지며, 일부 소프트웨어가 apng 이미지를 인식하는 데 도움이 됩니다.
-<br>
-<br>
-<strong>🔧 작품 페이지의 빠른 북마크 버튼 (✩) 으로 북마크 취소 가능</strong>
-<br>
-해당 작품이 이미 북마크된 경우 이 버튼 (✩) 을 클릭하여 북마크를 취소할 수 있습니다.`,
-        `<strong>📚 Новая функция: Автоматическое объединение серий романов</strong>
-<br>
-При крауле работ, если роман принадлежит определенной серии, загрузчик может автоматически краулить все романы в этой серии и объединять их.
-<br>
-Эта функция находится в категории "Больше" - "Загрузка", отключена по умолчанию, и вы можете включить её при необходимости.
-<br>
-<br>
-<strong>✨ Новая настройка: Правило именования при объединении серий романов</strong>
-<br>
-Вы можете установить имя файла, генерируемого при объединении романов.
-<br>
-Эта настройка находится в категории "Больше" - "Загрузка".
-<br>
-<br>
-<strong>✨ Новые теги именования {age} {age_r}</strong>
-<br>
-<span class="blue">{age}</span> Возрастное ограничение работы, разделено на: <span class="blue">All Ages</span>, <span class="blue">R-18</span>, <span class="blue">R-18G</span>
-<br>
-<span class="blue">{age_r}</span> Выводить возрастное ограничение только если работа ограничена, разделено на: <span class="blue">R-18</span>, <span class="blue">R-18G</span>
-<br>
-<br>
-<strong>📖 Оптимизировано содержимое при сохранении романов</strong>
-<br>
-<br>
-<strong>🔧 При сохранении Ugoira в формате APNG расширение файла изменено с png на apng</strong>
-<br>
-Это делает различие между статическими изображениями и Ugoira более очевидным и помогает некоторому ПО распознавать изображения apng.
-<br>
-<br>
-<strong>🔧 Кнопка быстрого добавления в закладки (✩) на страницах работ теперь может удалять из закладок</strong>
-<br>
-Если работа уже добавлена в закладки, нажатие на эту кнопку (✩) может удалить её из закладок.`,
+    _过滤搜索页面的作品的说明: [
+        `当你启用此功能后，下载器会在搜索页面里拦截 Pixiv 的请求，在作品显示之前就应用过滤器，移除不符合条件的作品。这样，只有符合条件的作品会显示出来。
+    <br>
+    <br>
+    <strong>注意事项：</strong>
+    <br>
+    - 当你启用此功能、以及修改过滤条件后，页面上显示的作品不会变化，这是正常的，因为它们已经显示出来了。这个功能是通过拦截请求实现的，所以之后发起的请求才会应用你的修改，所以你在翻页、刷新时可以看到修改的效果。
+    <br>
+    - 由于作品列表的数据里不包含收藏数量，所以下载器不能使用收藏数量来过滤作品。收藏数量条件会被忽略。
+    <br>
+    - 启用此功能时，请谨慎使用“图片色彩”过滤器。如果只选择了一种颜色（也就是需要判断图片的色彩），下载器需要加载所有作品的缩略图来判断颜色，这会产生大量请求，而且也会花费比较多的时间（过滤可能需要超过 2 秒钟）。`,
+        `當你啟用此功能後，下載器會在搜尋頁面裡攔截 Pixiv 的請求，在作品顯示之前就應用過濾器，移除不符合條件的作品。這樣，只有符合條件的作品會顯示出來。
+    <br>
+    <br>
+    <strong>注意事項：</strong>
+    <br>
+    - 當你啟用此功能、以及修改過濾條件後，頁面上顯示的作品不會變化，這是正常的，因為它們已經顯示出來了。這個功能是通過攔截請求實現的，所以之後發起的請求才會應用你的修改，所以你在翻頁、刷新時可以看到修改的效果。
+    <br>
+    - 由於作品列表的資料裡不包含收藏數量，所以下載器不能使用收藏數量來過濾作品。收藏數量條件會被忽略。
+    <br>
+    - 啟用此功能時，請謹慎使用「圖片色彩」過濾器。如果只選擇了一種顏色（也就是需要判斷圖片的色彩），下載器需要載入所有作品的縮略圖來判斷顏色，這會產生大量請求，而且也會花費比較多的時間（過濾可能需要超過 2 秒鐘）。`,
+        `After you enable this feature, the downloader will intercept Pixiv's requests on the search page and apply the filter before the works are displayed, removing works that do not meet the conditions. This way, only works that meet the conditions will be displayed.
+    <br>
+    <br>
+    <strong>Notes:</strong>
+    <br>
+    - After you enable this feature or modify the filter conditions, the works displayed on the page will not change; this is normal because they have already been displayed. This feature is implemented by intercepting requests, so subsequent requests will apply your changes. Therefore, you can see the effect of the changes when you turn the page or refresh.
+    <br>
+    - Since the work list data does not include the bookmark count, the downloader cannot use the bookmark count to filter works. The bookmark count condition will be ignored.
+    <br>
+    - When enabling this feature, please use the "Image Color" filter with caution. If only one color is selected (which means judging the color of the image), the downloader needs to load thumbnails of all works to determine the color, which will generate a large number of requests and also take more time (filtering may take more than 2 seconds).`,
+        `この機能を有効にすると、ダウンロードツールは検索ページでPixivのリクエストを傍受し、作品が表示される前にフィルターを適用して条件に合わない作品を削除します。これにより、条件に合った作品のみが表示されます。
+    <br>
+    <br>
+    <strong>注意事項：</strong>
+    <br>
+    - この機能を有効にしたり、フィルター条件を変更した後、ページに表示されている作品は変更されません。これは正常です。なぜなら、それらはすでに表示されているからです。この機能はリクエストの傍受によって実装されているため、後続のリクエストにのみ変更が適用されます。したがって、ページをめくるか更新すると変更の効果が見られます。
+    <br>
+    - 作品リストのデータにブックマーク数を含まないため、ダウンロードツールはブックマーク数で作品をフィルタリングできません。ブックマーク数の条件は無視されます。
+    <br>
+    - この機能を有効にする際は、「画像色」フィルターを慎重に使用してください。1つの色のみを選択した場合（画像の色を判断する必要がある場合）、ダウンロードツールはすべての作品のサムネイルをロードして色を判断する必要があります。これにより大量のリクエストが発生し、時間もかかります（フィルタリングに2秒以上かかる可能性があります）。`,
+        `이 기능을 활성화한 후, 다운로더는 검색 페이지에서 Pixiv의 요청을 차단하고 작품이 표시되기 전에 필터를 적용하여 조건을 충족하지 않는 작품을 제거합니다. 이렇게 하면 조건을 충족하는 작품만 표시됩니다.
+    <br>
+    <br>
+    <strong>주의사항:</strong>
+    <br>
+    - 이 기능을 활성화하거나 필터 조건을 수정한 후 페이지에 표시된 작품은 변경되지 않습니다. 이는 정상입니다. 왜냐하면 이미 표시되었기 때문입니다. 이 기능은 요청 차단을 통해 구현되므로 후속 요청에만 변경 사항이 적용됩니다. 따라서 페이지를 넘기거나 새로고침할 때 변경 효과를 볼 수 있습니다.
+    <br>
+    - 작품 목록 데이터에 북마크 수가 포함되지 않으므로 다운로더는 북마크 수를 사용하여 작품을 필터링할 수 없습니다. 북마크 수 조건은 무시됩니다.
+    <br>
+    - 이 기능을 활성화할 때 "이미지 색상" 필터를 신중하게 사용하십시오. 한 가지 색상만 선택한 경우(이미지의 색상을 판단해야 하는 경우), 다운로더는 모든 작품의 썸네일을 로드하여 색상을 판단해야 하며, 이는 대량의 요청을 생성하고 더 많은 시간을 소비합니다(필터링에 2초 이상 걸릴 수 있습니다).`,
+        `После активации этой функции загрузчик будет перехватывать запросы Pixiv на странице поиска и применять фильтр до отображения работ, удаляя те, которые не соответствуют условиям. Таким образом, будут отображаться только работы, соответствующие условиям.
+    <br>
+    <br>
+    <strong>Примечания:</strong>
+    <br>
+    - После активации этой функции или изменения условий фильтрации отображаемые на странице работы не изменятся; это нормально, поскольку они уже отображены. Эта функция реализована путем перехвата запросов, поэтому изменения применяются только к последующим запросам. Поэтому вы увидите эффект изменений при перелистывании страниц или обновлении.
+    <br>
+    - Поскольку данные списка работ не включают количество закладок, загрузчик не может использовать количество закладок для фильтрации работ. Условие по количеству закладок будет игнорироваться.
+    <br>
+    - При активации этой функции используйте фильтр "Цвет изображения" с осторожностью. Если выбран только один цвет (т.е. требуется определить цвет изображения), загрузчику нужно загрузить миниатюры всех работ для определения цвета, что сгенерирует большое количество запросов и займет больше времени (фильтрация может занять более 2 секунд).`,
     ],
 };
 
@@ -34585,357 +34626,6 @@ class FastScreen {
 
 /***/ }),
 
-/***/ "./src/ts/pageFunciton/FilterInactiveUsers.ts":
-/*!****************************************************!*\
-  !*** ./src/ts/pageFunciton/FilterInactiveUsers.ts ***!
-  \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   filterInactiveUsers: () => (/* binding */ filterInactiveUsers)
-/* harmony export */ });
-/* harmony import */ var _Language__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Language */ "./src/ts/Language.ts");
-/* harmony import */ var _Log__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Log */ "./src/ts/Log.ts");
-/* harmony import */ var _PageType__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../PageType */ "./src/ts/PageType.ts");
-/* harmony import */ var _setting_Settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../setting/Settings */ "./src/ts/setting/Settings.ts");
-/* harmony import */ var _Toast__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Toast */ "./src/ts/Toast.ts");
-/* harmony import */ var _utils_Utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/Utils */ "./src/ts/utils/Utils.ts");
-/* harmony import */ var _API__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../API */ "./src/ts/API.ts");
-/* harmony import */ var _MsgBox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../MsgBox */ "./src/ts/MsgBox.ts");
-/* harmony import */ var _Input__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Input */ "./src/ts/Input.ts");
-
-
-
-
-
-
-
-
-
-// 筛选不活跃（在最近一段时间内没有发表新作品）的用户
-class FilterInactiveUsers {
-    busy = false;
-    baseOffset = 0; // 开始抓取时，记录初始的偏移量
-    onceNumber = 24; // 每页 24 个用户
-    crawlPageNumber = 1; // 需要抓取多少个页面
-    // 页面子类型：我的关注 | 我的好 P 友 | 我的粉丝
-    pageType = 'following';
-    rest = 'show';
-    tag = '';
-    currentUserId = '';
-    requestTimes = 0; // 获取用户列表时，记录请求的次数
-    limit = 100; // 每次请求多少个用户
-    totalNeed = Number.MAX_SAFE_INTEGER;
-    /**要求用户在这个时间之后有新作品，否则就是不活跃的用户 */
-    time = 0;
-    /**已经抓取了多少个用户（未过滤） */
-    numberOfCrawledUsers = 0;
-    // 储存符合条件的用户
-    //**没有作品的用户 */
-    userNoWork = [];
-    //**最近不活跃的用户 */
-    userInactive = [];
-    /**一共储存了多少个用户 */
-    get total() {
-        return this.userNoWork.length + this.userInactive.length;
-    }
-    async start() {
-        if (this.busy) {
-            _Toast__WEBPACK_IMPORTED_MODULE_4__.toast.error(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_有同类任务正在执行请等待之前的任务完成'));
-            return;
-        }
-        const input = new _Input__WEBPACK_IMPORTED_MODULE_8__.Input({
-            instruction: `${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_筛选不活跃的用户的输入提示')}`,
-            value: '6',
-            width: 500,
-        });
-        const value = await input.submit();
-        if (!value) {
-            return _Toast__WEBPACK_IMPORTED_MODULE_4__.toast.warning(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_本次操作已取消'));
-        }
-        const number = Number.parseInt(value);
-        if (isNaN(number) || number <= 0) {
-            return _Toast__WEBPACK_IMPORTED_MODULE_4__.toast.error(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_参数不合法本次操作已取消'));
-        }
-        this.time = new Date().getTime() - number * 30 * 24 * 60 * 60 * 1000;
-        this.busy = true;
-        // 显示提示
-        const log1 = '🚀' + _Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_筛选不活跃的用户');
-        _Log__WEBPACK_IMPORTED_MODULE_1__.log.log(log1);
-        _Toast__WEBPACK_IMPORTED_MODULE_4__.toast.warning(log1);
-        const log2 = _Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_开始抓取用户列表');
-        _Log__WEBPACK_IMPORTED_MODULE_1__.log.log(log2);
-        // 总是慢速抓取
-        _Log__WEBPACK_IMPORTED_MODULE_1__.log.warning(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_慢速抓取'));
-        this.readyGet();
-    }
-    getWantPage() {
-        this.crawlPageNumber = _setting_Settings__WEBPACK_IMPORTED_MODULE_3__.settings.crawlNumber[_PageType__WEBPACK_IMPORTED_MODULE_2__.pageType.type].value;
-        if (this.crawlPageNumber === -1) {
-            _Log__WEBPACK_IMPORTED_MODULE_1__.log.warning(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_下载所有页面'));
-        }
-        else {
-            _Log__WEBPACK_IMPORTED_MODULE_1__.log.warning(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_注意这个任务遵从抓取多少页面的设置'));
-            _Log__WEBPACK_IMPORTED_MODULE_1__.log.warning(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_从本页开始下载x页', this.crawlPageNumber.toString()));
-        }
-    }
-    getPageType() {
-        const pathname = window.location.pathname;
-        if (pathname.includes('/following')) {
-            this.pageType = 'following';
-        }
-        else if (pathname.includes('/mypixiv')) {
-            this.pageType = 'mypixiv';
-        }
-        else if (pathname.includes('/followers')) {
-            this.pageType = 'followers';
-        }
-    }
-    readyGet() {
-        this.getWantPage();
-        this.getPageType();
-        this.rest = location.href.includes('rest=hide') ? 'hide' : 'show';
-        this.tag = _utils_Utils__WEBPACK_IMPORTED_MODULE_5__.Utils.getURLPathField(window.location.pathname, 'following');
-        // 获取抓取开始时的页码
-        const nowPage = _utils_Utils__WEBPACK_IMPORTED_MODULE_5__.Utils.getURLSearchField(location.href, 'p');
-        // 计算开始抓取时的偏移量
-        if (nowPage !== '') {
-            this.baseOffset = (parseInt(nowPage) - 1) * this.onceNumber;
-        }
-        else {
-            this.baseOffset = 0;
-        }
-        // 要抓取多少个用户
-        this.totalNeed = Number.MAX_SAFE_INTEGER;
-        if (this.crawlPageNumber !== -1) {
-            this.totalNeed = this.onceNumber * this.crawlPageNumber;
-        }
-        // 获取当前页面的用户 id
-        const test = /users\/(\d*)\//.exec(location.href);
-        if (test && test.length > 1) {
-            this.currentUserId = test[1];
-        }
-        else {
-            const msg = `Get the user's own id failed`;
-            _Log__WEBPACK_IMPORTED_MODULE_1__.log.error(msg, 2);
-            throw new Error(msg);
-        }
-        this.getUserList();
-    }
-    // 获取用户列表
-    async getUserList() {
-        const offset = this.baseOffset + this.requestTimes * this.limit;
-        let res;
-        try {
-            switch (this.pageType) {
-                case 'following':
-                    res = await _API__WEBPACK_IMPORTED_MODULE_6__.API.getFollowingList(this.currentUserId, this.rest, this.tag, offset);
-                    break;
-                case 'mypixiv':
-                    res = await _API__WEBPACK_IMPORTED_MODULE_6__.API.getMyPixivList(this.currentUserId, offset);
-                    break;
-                case 'followers':
-                    res = await _API__WEBPACK_IMPORTED_MODULE_6__.API.getFollowersList(this.currentUserId, offset);
-                    break;
-            }
-        }
-        catch {
-            this.getUserList();
-            return;
-        }
-        const users = res.body.users;
-        if (users.length === 0) {
-            // 用户列表抓取完毕
-            return this.getUserListComplete();
-        }
-        for (const userData of users) {
-            this.check(userData);
-            this.numberOfCrawledUsers++;
-            if (this.numberOfCrawledUsers >= this.totalNeed) {
-                // 抓取到了指定数量的用户
-                return this.getUserListComplete();
-            }
-        }
-        _Log__WEBPACK_IMPORTED_MODULE_1__.log.log(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_当前有x个符合条件的用户', this.total.toString()), 1, false, 'filterInactiveUsersProgress');
-        this.requestTimes++;
-        // 获取下一批用户列表
-        window.setTimeout(() => {
-            this.getUserList();
-        }, _setting_Settings__WEBPACK_IMPORTED_MODULE_3__.settings.slowCrawlDealy);
-    }
-    async getUserListComplete() {
-        this.busy = false;
-        _Log__WEBPACK_IMPORTED_MODULE_1__.log.log(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_当前有x个符合条件的用户', this.total.toString()));
-        // 在批量关注用户时，抓取结果为 0 并不影响继续执行
-        if (this.total === 0) {
-            const msg = '✅' +
-                _Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_用户数量为0') +
-                ', ' +
-                _Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_没有可用的抓取结果');
-            _Log__WEBPACK_IMPORTED_MODULE_1__.log.warning(msg);
-            _MsgBox__WEBPACK_IMPORTED_MODULE_7__.msgBox.warning(msg);
-        }
-        else {
-            this.exportResult();
-            const msg = '✅' + _Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_筛选不活跃的用户');
-            _Log__WEBPACK_IMPORTED_MODULE_1__.log.success(msg);
-            _Toast__WEBPACK_IMPORTED_MODULE_4__.toast.success(msg);
-        }
-        this.reset();
-    }
-    check(userData) {
-        // 如果该用户没有任何作品
-        if (userData.illusts.length === 0 && userData.novels.length === 0) {
-            this.userNoWork.push({
-                id: userData.userId,
-                name: userData.userName,
-            });
-            return;
-        }
-        // 如果有插画或小说中的任何一种作品，则检查其发布时间
-        const noNewIllust = this.checkNoNewWork('illust', userData.illusts);
-        const noNewNovel = this.checkNoNewWork('novel', userData.novels);
-        if (noNewIllust && noNewNovel) {
-            this.userInactive.push({
-                id: userData.userId,
-                name: userData.userName,
-            });
-            // if (userData.illusts.length > 0 && userData.novels.length > 0) {
-            //   console.log('该用户有两种作品并且不活跃', userData.userId)
-            // }
-        }
-    }
-    checkNoNewWork(type, workData) {
-        if (workData.length === 0) {
-            return true;
-        }
-        // 查找最近发表的作品的 id
-        const idList = workData.map((work) => Number.parseInt(work.id));
-        const maxId = Math.max(...idList).toString();
-        // 获取它的数据
-        const work = workData.find((work) => work.id === maxId);
-        const createTime = new Date(work.createDate).getTime();
-        return createTime < this.time;
-    }
-    exportResult() {
-        const noWorkUsersHtml = this.userNoWork.map((user) => `<li><a href="https://www.pixiv.net/users/${user.id}" target="_blank">${user.name}</a></li>`);
-        const inactiveUsersHtml = this.userInactive.map((user) => `<li><a href="https://www.pixiv.net/users/${user.id}" target="_blank">${user.name}</a></li>`);
-        const bgColor = '#222';
-        const html = `
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_筛选不活跃的用户')}</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      html {
-        font-size: 14px;
-      }
-      body {
-        background-color: ${bgColor};
-        color: #fff;
-        font-size: 1.2rem;
-      }
-      a {
-        color: #00a6ef;
-        text-decoration: none;
-      }
-      a:visited {
-        color: #b733f8;
-      }
-      .usersWrap {
-        width: 90vw;
-        max-height: 95vh;
-        margin: 3vh auto 0;
-        display: flex;
-        justify-content: space-between;
-      }
-      .list {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        flex-basis: 50%;
-        flex-shrink: 0;
-        flex-grow: 0;
-        overflow-y: auto;
-      }
-      .list:nth-child(1) {
-        border-right: #aaa 1px solid;
-      }
-      .list .title {
-        font-size: 1.4rem;
-        flex-grow: 0;
-      }
-      .list ul {
-        display: flex;
-        width: 100%;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: flex-start;
-      }
-      .list .title,
-      .list li {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        list-style: none;
-        min-height: 40px;
-        padding: 4px 0;
-        line-height: 32px;
-        text-align: center;
-      }
-      .list li {
-        flex-basis: 33%;
-        word-break: break-all;
-        flex-grow: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="usersWrap">
-      <div class="list">
-        <div class="title">${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_没有作品的用户')}（${this.userNoWork.length}）</div>
-        <ul>
-            ${noWorkUsersHtml.join('')}
-        </ul>
-      </div>
-      <div class="list">
-        <div class="title">${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_最近不活跃的用户')}（${this.userInactive.length}）</div>
-        <ul>
-            ${inactiveUsersHtml.join('')}
-        </ul>
-      </div>
-    </div>
-  </body>
-</html>
-`;
-        const blob = new Blob([html], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        window.open(url, '_blank');
-    }
-    reset() {
-        this.requestTimes = 0;
-        this.numberOfCrawledUsers = 0;
-        this.userNoWork = [];
-        this.userInactive = [];
-    }
-}
-const filterInactiveUsers = new FilterInactiveUsers();
-
-
-
-/***/ }),
-
 /***/ "./src/ts/pageFunciton/QuickBookmark.ts":
 /*!**********************************************!*\
   !*** ./src/ts/pageFunciton/QuickBookmark.ts ***!
@@ -36239,6 +35929,14 @@ class Form {
     }
     /**点击一些按钮时，通过 msgBox 显示帮助 */
     showMsgWhenClick() {
+        // 过滤搜索页面的作品的说明
+        this.form
+            .querySelector('#showFilterSearchResultsTip')
+            .addEventListener('click', () => {
+            _MsgBox__WEBPACK_IMPORTED_MODULE_10__.msgBox.show(_Language__WEBPACK_IMPORTED_MODULE_2__.lang.transl('_过滤搜索页面的作品的说明'), {
+                title: _Language__WEBPACK_IMPORTED_MODULE_2__.lang.transl('_过滤搜索页面的作品'),
+            });
+        });
         // 显示“把 R-18(G) 作品存入指定的文件夹里”可以用命名标记代替的说明
         this.form
             .querySelector('#showR18FolderNameTip')
@@ -36409,7 +36107,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Wiki__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Wiki */ "./src/ts/setting/Wiki.ts");
 
 
-// 设置项编号从 0 开始，现在最大是 91
+// 设置项编号从 0 开始，现在最大是 92
 const formHtml = `
 <form class="settingForm">
   <div class="tabsContnet">
@@ -37635,6 +37333,14 @@ const formHtml = `
       <input type="checkbox" name="showFastSearchArea" class="need_beautify checkbox_switch" checked>
       <span class="beautify_switch" tabindex="0"></span>
     </p>
+    <p class="option" data-no="92">
+      <a href="${_Wiki__WEBPACK_IMPORTED_MODULE_1__.wiki.link(92)}" target="_blank" class="settingNameStyle">
+        <span data-xztext="_过滤搜索页面的作品"></span>
+      </a>
+      <input type="checkbox" name="filterSearchResults" class="need_beautify checkbox_switch">
+      <span class="beautify_switch" tabindex="0"></span>
+      <button type="button" class="gray1 textButton" id="showFilterSearchResultsTip" data-xztext="_帮助"></button>
+    </p>
     <p class="option" data-no="88">
       <a href="${_Wiki__WEBPACK_IMPORTED_MODULE_1__.wiki.link(88)}" target="_blank" class="has_tip settingNameStyle" data-xztip="_在搜索页面里移除已关注用户的作品的说明">
         <span data-xztext="_在搜索页面里移除已关注用户的作品"></span>
@@ -37958,6 +37664,7 @@ class FormSettings {
             'rememberTheLastSaveLocation',
             'autoMergeNovel',
             'skipNovelsInSeriesWhenAutoMerge',
+            'filterSearchResults',
         ],
         text: [
             'firstFewImages',
@@ -38473,6 +38180,12 @@ class Options {
             // 2025-11-24
             time: 1763942400000,
         },
+        {
+            // 过滤搜索页面的作品
+            id: 92,
+            // 2025-12-19
+            time: 1766102400000,
+        },
     ];
     bindEvents() {
         window.addEventListener(_EVT__WEBPACK_IMPORTED_MODULE_1__.EVT.list.settingChange, (ev) => {
@@ -38517,7 +38230,7 @@ class Options {
     }
     /**总是隐藏某些设置 */
     alwaysHideSomeOption() {
-        this.hideOption([15, 79, 80]);
+        this.hideOption([15, 79, 80, 92]);
         // 某些设置在移动端不会生效，所以隐藏它们
         // 主要是和作品缩略图相关的一些设置、增强功能
         if (_Config__WEBPACK_IMPORTED_MODULE_0__.Config.mobile) {
@@ -38530,7 +38243,7 @@ class Options {
                 23, 24, 26, 27, 28, 30, 31, 33, 34, 35, 36, 37, 38, 39, 40, 42, 43, 44,
                 46, 47, 48, 49, 50, 51, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65,
                 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83,
-                84, 85, 86, 87, 88, 89, 90, 91,
+                84, 85, 86, 87, 88, 89, 90, 91, 92,
             ]);
         }
     }
@@ -39219,6 +38932,7 @@ class Settings {
         autoMergeNovel: false,
         skipNovelsInSeriesWhenAutoMerge: true,
         seriesNovelNameRule: 'novel series/{page_tag}/{series_title}-{series_id}-{user}-{part}-{tags}.{ext}',
+        filterSearchResults: false,
     };
     allSettingKeys = Object.keys(this.defaultSettings);
     // 值为浮点数的选项

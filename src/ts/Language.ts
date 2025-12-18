@@ -3,21 +3,39 @@ import { EVT } from './EVT'
 
 type LangTypes = 'zh-cn' | 'zh-tw' | 'en' | 'ja' | 'ko' | 'ru'
 
+// Pixiv 网页的显示语言，比下载器的显示语言多了两个：泰语和马来语
+type LangTypesPixiv =
+  | 'zh-cn'
+  | 'zh-tw'
+  | 'en'
+  | 'ja'
+  | 'ko'
+  | 'ru'
+  | 'th'
+  | 'ms'
+
 // 语言类
 class Lang {
   constructor() {
     this.htmlLangType = this.getHtmlLangType()
-    this.type = this.htmlLangType
+    this.type = this.htmlLangTypeToLangType()
     this.bindEvents()
   }
 
   // 用户在下载器设置里选择的语言
   public type!: LangTypes
 
-  // 用户在 Pixiv 使用的语言。不会动态变化
-  public htmlLangType!: LangTypes
+  // 用户在 Pixiv 使用的显示语言。不会动态变化
+  public htmlLangType!: LangTypesPixiv
 
-  public readonly langTypes = ['zh-cn', 'zh-tw', 'en', 'ja', 'ko', 'ru']
+  public readonly langTypes = [
+    'zh-cn',
+    'zh-tw',
+    'en',
+    'ja',
+    'ko',
+    'ru',
+  ] as const
 
   private readonly flagIndex: Map<LangTypes, number> = new Map([
     ['zh-cn', 0],
@@ -28,6 +46,14 @@ class Lang {
     ['ru', 5],
   ])
 
+  /**将 Pixiv 的语言类型转换为下载器支持的语言类型。对于泰语和马来语，显示为英语 */
+  private htmlLangTypeToLangType(): LangTypes {
+    if (this.htmlLangType === 'th' || this.htmlLangType === 'ms') {
+      return 'en'
+    }
+    return this.htmlLangType as LangTypes
+  }
+
   private bindEvents() {
     window.addEventListener(EVT.list.settingChange, (ev: CustomEventInit) => {
       const data = ev.detail.data as any
@@ -35,7 +61,8 @@ class Lang {
         return
       }
       const old = this.type
-      this.type = data.value === 'auto' ? this.htmlLangType : data.value
+      this.type =
+        data.value === 'auto' ? this.htmlLangTypeToLangType() : data.value
       if (this.type !== old) {
         EVT.fire('langChange')
         this.elList.forEach((el) => {
@@ -46,17 +73,15 @@ class Lang {
   }
 
   // 获取页面使用的语言，返回语言标记
-  private getHtmlLangType(): LangTypes {
-    // 单独对俄语进行一次检测
-    // 因为现在 Pixiv 官方没有提供俄语选项，因此无法从 html 标签上获取到 ru 属性
-    // 因此需要从 navigator.language 判断是否为俄语用户
-    if (
-      navigator.language.startsWith('ru') ||
-      navigator.languages.includes('ru') ||
-      navigator.languages.includes('ru-RU')
-    ) {
-      return 'ru'
-    }
+  private getHtmlLangType(): LangTypesPixiv {
+    // 因为现在 Pixiv 官方没有提供俄语选项，所以 htmlLangType 永远不会是 ru
+    // 之前我从 navigator.language 判断是否为俄语用户（以便让下载器默认使用俄语显示），但这有时反而带来了困扰
+    // 例如 “AI 生成” 这个标签及其翻译在 Pixiv 的网页上永远不会显示为 `сгенерированный ИИ`，
+    // 但如果浏览器的语言是俄语，下载器就会把它显示为 `сгенерированный ИИ`，这导致用户产生了困惑
+    // 所以现在不再从 navigator.language 判断俄语用户
+    // if (navigator.language.startsWith('ru')) {
+    // return 'ru'
+    // }
 
     const flag = document.documentElement.lang
     switch (flag) {
@@ -80,6 +105,13 @@ class Lang {
       case 'ru-RU':
         return 'ru' // Русский
 
+      case 'th':
+        return 'th' // ภาษาไทย
+
+      case 'ms':
+        return 'ms' // Bahasa Melayu
+
+      // 对于其他语言，视为英语
       default:
         return 'en' // English
     }

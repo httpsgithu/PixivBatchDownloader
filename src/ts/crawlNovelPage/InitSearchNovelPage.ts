@@ -20,6 +20,7 @@ import { setTimeoutWorker } from '../SetTimeoutWorker'
 import { vipSearchOptimize } from '../crawl/VipSearchOptimize'
 import { settings } from '../setting/Settings'
 import { pageType } from '../PageType'
+import '../filter/FilterSearchResults'
 
 class InitSearchNovelPage extends InitPageBase {
   constructor() {

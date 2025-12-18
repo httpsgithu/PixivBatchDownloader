@@ -138,6 +138,7 @@ class FormSettings {
       'rememberTheLastSaveLocation',
       'autoMergeNovel',
       'skipNovelsInSeriesWhenAutoMerge',
+      'filterSearchResults',
     ],
     text: [
       'firstFewImages',

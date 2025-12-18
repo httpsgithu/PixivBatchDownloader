@@ -23,7 +23,18 @@
     },
     "default_title": "Powerful Pixiv Downloader"
   },
-  "content_scripts": [
+  "content_scripts": [{
+      "js": [
+        "js/injectScript.js"
+      ],
+      "matches": ["*://www.pixiv.net/*"],
+      "exclude_matches": [
+        "*://www.pixiv.net/ajax*",
+        "*://www.pixiv.net/*format=json*",
+        "*://www.pixiv.net/*messages*"
+      ],
+      "run_at": "document_start"
+    },
     {
       "css": ["style/viewer.min.css", "style/style.css"],
       "js": [
@@ -83,6 +94,7 @@
       "resources": [
         "lib/gif.worker.js",
         "lib/listen_history_change.js",
+        "lib/api_interceptor.js",
         "manifest.json",
         "icon/logo128.png",
         "style/showLargerThumbnails.css"

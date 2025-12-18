@@ -1,7 +1,7 @@
 import { Config } from '../Config'
 import { wiki } from './Wiki'
 
-// 设置项编号从 0 开始，现在最大是 91
+// 设置项编号从 0 开始，现在最大是 92
 export const formHtml = `
 <form class="settingForm">
   <div class="tabsContnet">
@@ -1226,6 +1226,14 @@ export const formHtml = `
       </a>
       <input type="checkbox" name="showFastSearchArea" class="need_beautify checkbox_switch" checked>
       <span class="beautify_switch" tabindex="0"></span>
+    </p>
+    <p class="option" data-no="92">
+      <a href="${wiki.link(92)}" target="_blank" class="settingNameStyle">
+        <span data-xztext="_过滤搜索页面的作品"></span>
+      </a>
+      <input type="checkbox" name="filterSearchResults" class="need_beautify checkbox_switch">
+      <span class="beautify_switch" tabindex="0"></span>
+      <button type="button" class="gray1 textButton" id="showFilterSearchResultsTip" data-xztext="_帮助"></button>
     </p>
     <p class="option" data-no="88">
       <a href="${wiki.link(88)}" target="_blank" class="has_tip settingNameStyle" data-xztip="_在搜索页面里移除已关注用户的作品的说明">

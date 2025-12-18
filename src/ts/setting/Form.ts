@@ -213,6 +213,15 @@ class Form {
 
   /**点击一些按钮时，通过 msgBox 显示帮助 */
   private showMsgWhenClick() {
+    // 过滤搜索页面的作品的说明
+    this.form
+      .querySelector('#showFilterSearchResultsTip')!
+      .addEventListener('click', () => {
+        msgBox.show(lang.transl('_过滤搜索页面的作品的说明'), {
+          title: lang.transl('_过滤搜索页面的作品'),
+        })
+      })
+
     // 显示“把 R-18(G) 作品存入指定的文件夹里”可以用命名标记代替的说明
     this.form
       .querySelector('#showR18FolderNameTip')!

@@ -5,6 +5,7 @@ module.exports = {
   devtool: 'source-map',
   entry: {
     content: './src/ts/content.ts',
+    injectScript: './src/ts/injectScript.ts',
     background: './src/ts/background.ts',
   },
   output: {

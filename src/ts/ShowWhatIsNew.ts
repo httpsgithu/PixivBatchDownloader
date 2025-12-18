@@ -20,20 +20,11 @@ class ShowWhatIsNew {
       <span>${lang.transl('_扩展程序升到x版本', this.flag)}</span>
       <br>
       <br>
-      <span>${lang.transl('_版本更新内容1820')}</span>
-      <br>
-      <br>
       <span>${lang.transl('_修复bug')}</span>
       <br>
       <br>
       <span>${lang.transl('_优化用户体验')}</span>
       `
-
-      if (lang.type === 'zh-cn') {
-        msg += `<br>
-      <br>
-      <span>${lang.transl('_QQ修复了粘贴问题的提醒')}</span>`
-      }
 
       // <strong><span>✨ ${lang.transl('_新增设置项')}:</span></strong>
       // <strong><span>✨ ${lang.transl('_新增功能')}:</span></strong>

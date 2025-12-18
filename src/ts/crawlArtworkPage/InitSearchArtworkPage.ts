@@ -26,6 +26,7 @@ import { downloadOnClickBookmark } from '../download/DownloadOnClickBookmark'
 import { setTimeoutWorker } from '../SetTimeoutWorker'
 import '../pageFunciton/RemoveWorksOfFollowedUsersOnSearchPage'
 import { vipSearchOptimize } from '../crawl/VipSearchOptimize'
+import '../filter/FilterSearchResults'
 
 type AddBMKData = {
   id: number

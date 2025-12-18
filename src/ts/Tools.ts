@@ -935,6 +935,7 @@ class Tools {
     }
   }
 
+  /** 储存 Pixiv 每种显示语言里，“AI 生成”标记所使用的文字 */
   static readonly AIMark: Map<string, string> = new Map([
     ['zh-cn', 'AI生成'],
     ['zh-tw', 'AI生成'],
@@ -942,6 +943,8 @@ class Tools {
     ['ja', 'AI生成'],
     ['ko', 'AI 생성'],
     ['ru', 'сгенерированный ИИ'],
+    ['th', 'สร้างโดย AI'],
+    ['ms', 'Janaan AI'],
   ])
 
   /**如果一个作品是 AI 生成的，则返回特定的字符串标记
@@ -950,7 +953,7 @@ class Tools {
    */
   static getAIGeneratedMark(aiType?: 0 | 1 | 2) {
     if (aiType === 2) {
-      return this.AIMark.get(lang.htmlLangType)
+      return this.AIMark.get(lang.htmlLangType) || 'AI-generated'
     }
     return ''
   }
