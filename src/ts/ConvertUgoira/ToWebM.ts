@@ -1,39 +1,44 @@
 import { EVT } from '../EVT'
 import { UgoiraInfo } from '../crawl/CrawlResult'
 
-declare const Whammy: any
+declare const Mediabunny: any
 
 class ToWebM {
   public async convert(
     ImageBitmapList: ImageBitmap[],
     info: UgoiraInfo
   ): Promise<Blob> {
-    return new Promise(async (resolve, reject) => {
-      const width = ImageBitmapList[0].width
-      const height = ImageBitmapList[0].height
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')!
-      canvas.width = width
-      canvas.height = height
-
-      // 创建视频编码器
-      const encoder = new Whammy.Video()
-
-      // 添加帧数据
-      ImageBitmapList.forEach((imageBitmap, index) => {
-        ctx.drawImage(imageBitmap, 0, 0)
-        // 把图像转换为 webp 格式的 DataURL，这样 webm 编码器内部可以直接使用，不需要进行一些重复的操作
-        // https://github.com/antimatter15/whammy#basic-usage
-        const url = canvas.toDataURL('image/webp', 0.9)
-        encoder.add(url, info.frames![index].delay)
-      })
-
-      // 编码视频
-      encoder.compile(false, (video: Blob) => {
-        EVT.fire('convertSuccess')
-        resolve(video)
-      })
+    const output = new Mediabunny.Output({
+      format: new Mediabunny.WebMOutputFormat(),
+      target: new Mediabunny.BufferTarget(),
     })
+
+    const videoSource = new Mediabunny.VideoSampleSource({
+      codec: 'vp9',
+      bitrate: Mediabunny.QUALITY_HIGH,
+    })
+    output.addVideoTrack(videoSource)
+
+    await output.start()
+
+    let timestamp = 0
+    for (let i = 0; i < ImageBitmapList.length; i++) {
+      const bitmap = ImageBitmapList[i]
+      const duration = info.frames[i].delay / 1000
+      const sample = new Mediabunny.VideoSample(bitmap, {
+        timestamp: timestamp, // in seconds
+        duration: duration, // in seconds
+      })
+      await videoSource.add(sample)
+      sample.close()
+      timestamp += duration
+    }
+
+    await output.finalize()
+    const blob = new Blob([output.target.buffer], { type: 'video/webm' })
+
+    EVT.fire('convertSuccess')
+    return blob
   }
 }
 

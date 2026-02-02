@@ -39,7 +39,7 @@
       "css": ["style/viewer.min.css", "style/style.css"],
       "js": [
         "lib/viewer.min.js",
-        "lib/whammy.js",
+        "lib/mediabunny.min.js",
         "lib/gif.js",
         "lib/jszip-utils.min.js",
         "lib/jszip.min.js",

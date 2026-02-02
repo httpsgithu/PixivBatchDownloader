@@ -1,11 +1,11 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./node_modules/webextension-polyfill/dist/browser-polyfill.js":
+/***/ "./node_modules/webextension-polyfill/dist/browser-polyfill.js"
 /*!*********************************************************************!*\
   !*** ./node_modules/webextension-polyfill/dist/browser-polyfill.js ***!
   \*********************************************************************/
-/***/ (function(module, exports) {
+(module, exports) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
   if (true) {
@@ -1230,13 +1230,13 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 //# sourceMappingURL=browser-polyfill.js.map
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/API.ts":
+/***/ "./src/ts/API.ts"
 /*!***********************!*\
   !*** ./src/ts/API.ts ***!
   \***********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -1625,13 +1625,13 @@ class API {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/ArtworkThumbnail.ts":
+/***/ "./src/ts/ArtworkThumbnail.ts"
 /*!************************************!*\
   !*** ./src/ts/ArtworkThumbnail.ts ***!
   \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -1776,13 +1776,13 @@ const artworkThumbnail = new ArtworkThumbnail();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/BG.ts":
+/***/ "./src/ts/BG.ts"
 /*!**********************!*\
   !*** ./src/ts/BG.ts ***!
   \**********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -1952,13 +1952,13 @@ const bg = new BG();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/BoldKeywords.ts":
+/***/ "./src/ts/BoldKeywords.ts"
 /*!********************************!*\
   !*** ./src/ts/BoldKeywords.ts ***!
   \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -1992,13 +1992,13 @@ class BoldKeywords {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/Bookmark.ts":
+/***/ "./src/ts/Bookmark.ts"
 /*!****************************!*\
   !*** ./src/ts/Bookmark.ts ***!
   \****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2215,13 +2215,13 @@ const bookmark = new Bookmark();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/CenterPanel.ts":
+/***/ "./src/ts/CenterPanel.ts"
 /*!*******************************!*\
   !*** ./src/ts/CenterPanel.ts ***!
   \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2525,13 +2525,13 @@ class CenterPanel {
 new CenterPanel();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/CheckUnsupportBrowser.ts":
+/***/ "./src/ts/CheckUnsupportBrowser.ts"
 /*!*****************************************!*\
   !*** ./src/ts/CheckUnsupportBrowser.ts ***!
   \*****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2605,13 +2605,13 @@ class CheckUnsupportBrowser {
 new CheckUnsupportBrowser();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/Colors.ts":
+/***/ "./src/ts/Colors.ts"
 /*!**************************!*\
   !*** ./src/ts/Colors.ts ***!
   \**************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2645,13 +2645,13 @@ var Colors;
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/Config.ts":
+/***/ "./src/ts/Config.ts"
 /*!**************************!*\
   !*** ./src/ts/Config.ts ***!
   \**************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2701,13 +2701,13 @@ class Config {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/ConvertUgoira/ConvertUgoira.ts":
+/***/ "./src/ts/ConvertUgoira/ConvertUgoira.ts"
 /*!***********************************************!*\
   !*** ./src/ts/ConvertUgoira/ConvertUgoira.ts ***!
   \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2835,13 +2835,13 @@ const convertUgoira = new ConvertUgoira();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/ConvertUgoira/ToAPNG.ts":
+/***/ "./src/ts/ConvertUgoira/ToAPNG.ts"
 /*!****************************************!*\
   !*** ./src/ts/ConvertUgoira/ToAPNG.ts ***!
   \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2886,13 +2886,13 @@ const toAPNG = new ToAPNG();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/ConvertUgoira/ToGIF.ts":
+/***/ "./src/ts/ConvertUgoira/ToGIF.ts"
 /*!***************************************!*\
   !*** ./src/ts/ConvertUgoira/ToGIF.ts ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -2983,13 +2983,13 @@ const toGIF = new ToGIF();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/ConvertUgoira/ToWebM.ts":
+/***/ "./src/ts/ConvertUgoira/ToWebM.ts"
 /*!****************************************!*\
   !*** ./src/ts/ConvertUgoira/ToWebM.ts ***!
   \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3000,42 +3000,45 @@ __webpack_require__.r(__webpack_exports__);
 
 class ToWebM {
     async convert(ImageBitmapList, info) {
-        return new Promise(async (resolve, reject) => {
-            const width = ImageBitmapList[0].width;
-            const height = ImageBitmapList[0].height;
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = width;
-            canvas.height = height;
-            // 创建视频编码器
-            const encoder = new Whammy.Video();
-            // 添加帧数据
-            ImageBitmapList.forEach((imageBitmap, index) => {
-                ctx.drawImage(imageBitmap, 0, 0);
-                // 把图像转换为 webp 格式的 DataURL，这样 webm 编码器内部可以直接使用，不需要进行一些重复的操作
-                // https://github.com/antimatter15/whammy#basic-usage
-                const url = canvas.toDataURL('image/webp', 0.9);
-                encoder.add(url, info.frames[index].delay);
-            });
-            // 编码视频
-            encoder.compile(false, (video) => {
-                _EVT__WEBPACK_IMPORTED_MODULE_0__.EVT.fire('convertSuccess');
-                resolve(video);
-            });
+        const output = new Mediabunny.Output({
+            format: new Mediabunny.WebMOutputFormat(),
+            target: new Mediabunny.BufferTarget(),
         });
+        const videoSource = new Mediabunny.VideoSampleSource({
+            codec: 'vp9',
+            bitrate: Mediabunny.QUALITY_HIGH,
+        });
+        output.addVideoTrack(videoSource);
+        await output.start();
+        let timestamp = 0;
+        for (let i = 0; i < ImageBitmapList.length; i++) {
+            const bitmap = ImageBitmapList[i];
+            const duration = info.frames[i].delay / 1000;
+            const sample = new Mediabunny.VideoSample(bitmap, {
+                timestamp: timestamp, // in seconds
+                duration: duration, // in seconds
+            });
+            await videoSource.add(sample);
+            sample.close();
+            timestamp += duration;
+        }
+        await output.finalize();
+        const blob = new Blob([output.target.buffer], { type: 'video/webm' });
+        _EVT__WEBPACK_IMPORTED_MODULE_0__.EVT.fire('convertSuccess');
+        return blob;
     }
 }
 const toWebM = new ToWebM();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/CopyWorkInfo.ts":
+/***/ "./src/ts/CopyWorkInfo.ts"
 /*!********************************!*\
   !*** ./src/ts/CopyWorkInfo.ts ***!
   \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3387,13 +3390,13 @@ const copyWorkInfo = new CopyWorkInfo();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/EVT.ts":
+/***/ "./src/ts/EVT.ts"
 /*!***********************!*\
   !*** ./src/ts/EVT.ts ***!
   \***********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -3585,13 +3588,13 @@ const EVT = new EVENT();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/FileName.ts":
+/***/ "./src/ts/FileName.ts"
 /*!****************************!*\
   !*** ./src/ts/FileName.ts ***!
   \****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -4101,13 +4104,13 @@ const fileName = new FileName();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/HighlightFollowingUsers.ts":
+/***/ "./src/ts/HighlightFollowingUsers.ts"
 /*!*******************************************!*\
   !*** ./src/ts/HighlightFollowingUsers.ts ***!
   \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -4445,13 +4448,13 @@ class HighlightFollowingUsers {
 new HighlightFollowingUsers();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/ImageViewer.ts":
+/***/ "./src/ts/ImageViewer.ts"
 /*!*******************************!*\
   !*** ./src/ts/ImageViewer.ts ***!
   \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -4889,13 +4892,13 @@ class ImageViewer {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/InitPage.ts":
+/***/ "./src/ts/InitPage.ts"
 /*!****************************!*\
   !*** ./src/ts/InitPage.ts ***!
   \****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -5022,13 +5025,13 @@ class InitPage {
 new InitPage();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/Input.ts":
+/***/ "./src/ts/Input.ts"
 /*!*************************!*\
   !*** ./src/ts/Input.ts ***!
   \*************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -5175,13 +5178,13 @@ class Input {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/Language.ts":
+/***/ "./src/ts/Language.ts"
 /*!****************************!*\
   !*** ./src/ts/Language.ts ***!
   \****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -5371,13 +5374,13 @@ const lang = new Lang();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/ListenPageSwitch.ts":
+/***/ "./src/ts/ListenPageSwitch.ts"
 /*!************************************!*\
   !*** ./src/ts/ListenPageSwitch.ts ***!
   \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -5437,13 +5440,13 @@ class ListenPageSwitch {
 new ListenPageSwitch();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/Loading.ts":
+/***/ "./src/ts/Loading.ts"
 /*!***************************!*\
   !*** ./src/ts/Loading.ts ***!
   \***************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -5497,13 +5500,13 @@ const loading = new Loading();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/Log.ts":
+/***/ "./src/ts/Log.ts"
 /*!***********************!*\
   !*** ./src/ts/Log.ts ***!
   \***********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -5904,13 +5907,13 @@ const log = new Log();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/MsgBox.ts":
+/***/ "./src/ts/MsgBox.ts"
 /*!**************************!*\
   !*** ./src/ts/MsgBox.ts ***!
   \**************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -6039,13 +6042,13 @@ const msgBox = new MsgBox();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/NovelThumbnail.ts":
+/***/ "./src/ts/NovelThumbnail.ts"
 /*!**********************************!*\
   !*** ./src/ts/NovelThumbnail.ts ***!
   \**********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -6152,13 +6155,13 @@ const novelThumbnail = new NovelThumbnail();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/OpenCenterPanel.ts":
+/***/ "./src/ts/OpenCenterPanel.ts"
 /*!***********************************!*\
   !*** ./src/ts/OpenCenterPanel.ts ***!
   \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -6209,13 +6212,13 @@ class OpenCenterPanel {
 new OpenCenterPanel();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/PageType.ts":
+/***/ "./src/ts/PageType.ts"
 /*!****************************!*\
   !*** ./src/ts/PageType.ts ***!
   \****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -6537,13 +6540,13 @@ const pageType = new PageType();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/PreviewUgoira.ts":
+/***/ "./src/ts/PreviewUgoira.ts"
 /*!*********************************!*\
   !*** ./src/ts/PreviewUgoira.ts ***!
   \*********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -6857,13 +6860,13 @@ class PreviewUgoira {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/PreviewWork.ts":
+/***/ "./src/ts/PreviewWork.ts"
 /*!*******************************!*\
   !*** ./src/ts/PreviewWork.ts ***!
   \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -7635,13 +7638,13 @@ class PreviewWork {
 new PreviewWork();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/PreviewWorkDetailInfo.ts":
+/***/ "./src/ts/PreviewWorkDetailInfo.ts"
 /*!*****************************************!*\
   !*** ./src/ts/PreviewWorkDetailInfo.ts ***!
   \*****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -7915,13 +7918,13 @@ const previewWorkDetailInfo = new PreviewWorkDetailInfo();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/RemoveBlockedUsersWork.ts":
+/***/ "./src/ts/RemoveBlockedUsersWork.ts"
 /*!******************************************!*\
   !*** ./src/ts/RemoveBlockedUsersWork.ts ***!
   \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -8083,13 +8086,13 @@ class RemoveBlockedUsersWork {
 new RemoveBlockedUsersWork();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/RemoveWorksTagsInBookmarks.ts":
+/***/ "./src/ts/RemoveWorksTagsInBookmarks.ts"
 /*!**********************************************!*\
   !*** ./src/ts/RemoveWorksTagsInBookmarks.ts ***!
   \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -8150,13 +8153,13 @@ const removeWorksTagsInBookmarks = new RemoveWorksTagsInBookmarks();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/ReplaceSquareThumb.ts":
+/***/ "./src/ts/ReplaceSquareThumb.ts"
 /*!**************************************!*\
   !*** ./src/ts/ReplaceSquareThumb.ts ***!
   \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -8264,13 +8267,13 @@ class ReplaceSquareThumb {
 new ReplaceSquareThumb();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/RequestSponsorship.ts":
+/***/ "./src/ts/RequestSponsorship.ts"
 /*!**************************************!*\
   !*** ./src/ts/RequestSponsorship.ts ***!
   \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -8309,13 +8312,13 @@ class RequestSponsorship {
 new RequestSponsorship();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/SelectWork.ts":
+/***/ "./src/ts/SelectWork.ts"
 /*!******************************!*\
   !*** ./src/ts/SelectWork.ts ***!
   \******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -8730,13 +8733,13 @@ class SelectWork {
 new SelectWork();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/SetTimeoutWorker.ts":
+/***/ "./src/ts/SetTimeoutWorker.ts"
 /*!************************************!*\
   !*** ./src/ts/SetTimeoutWorker.ts ***!
   \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -8791,13 +8794,13 @@ const setTimeoutWorker = new SetTimeoutWorker();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/SetUserName.ts":
+/***/ "./src/ts/SetUserName.ts"
 /*!*******************************!*\
   !*** ./src/ts/SetUserName.ts ***!
   \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -9052,13 +9055,13 @@ class SetUserName {
 new SetUserName();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/ShowHelp.ts":
+/***/ "./src/ts/ShowHelp.ts"
 /*!****************************!*\
   !*** ./src/ts/ShowHelp.ts ***!
   \****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -9089,13 +9092,13 @@ const showHelp = new ShowHelp();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/ShowLargerThumbnails.ts":
+/***/ "./src/ts/ShowLargerThumbnails.ts"
 /*!****************************************!*\
   !*** ./src/ts/ShowLargerThumbnails.ts ***!
   \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -9474,13 +9477,13 @@ class ShowLargerThumbnails {
 new ShowLargerThumbnails();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/ShowNotification.ts":
+/***/ "./src/ts/ShowNotification.ts"
 /*!************************************!*\
   !*** ./src/ts/ShowNotification.ts ***!
   \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -9545,13 +9548,13 @@ class ShowNotification {
 new ShowNotification();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/ShowOriginSizeImage.ts":
+/***/ "./src/ts/ShowOriginSizeImage.ts"
 /*!***************************************!*\
   !*** ./src/ts/ShowOriginSizeImage.ts ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -9947,13 +9950,13 @@ const showOriginSizeImage = new ShowOriginSizeImage();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/ShowWhatIsNew.ts":
+/***/ "./src/ts/ShowWhatIsNew.ts"
 /*!*********************************!*\
   !*** ./src/ts/ShowWhatIsNew.ts ***!
   \*********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -10021,13 +10024,13 @@ class ShowWhatIsNew {
 new ShowWhatIsNew();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/Theme.ts":
+/***/ "./src/ts/Theme.ts"
 /*!*************************!*\
   !*** ./src/ts/Theme.ts ***!
   \*************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -10206,13 +10209,13 @@ const theme = new Theme();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/Tip.ts":
+/***/ "./src/ts/Tip.ts"
 /*!***********************!*\
   !*** ./src/ts/Tip.ts ***!
   \***********************/
-/***/ (() => {
+() {
 
 "use strict";
 
@@ -10264,13 +10267,13 @@ class Tip {
 new Tip();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/Toast.ts":
+/***/ "./src/ts/Toast.ts"
 /*!*************************!*\
   !*** ./src/ts/Toast.ts ***!
   \*************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -10460,13 +10463,13 @@ const toast = new Toast();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/Token.ts":
+/***/ "./src/ts/Token.ts"
 /*!*************************!*\
   !*** ./src/ts/Token.ts ***!
   \*************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -10559,13 +10562,13 @@ const token = new Token();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/Tools.ts":
+/***/ "./src/ts/Tools.ts"
 /*!*************************!*\
   !*** ./src/ts/Tools.ts ***!
   \*************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -11486,13 +11489,13 @@ class Tools {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/UnBookmarkWorks.ts":
+/***/ "./src/ts/UnBookmarkWorks.ts"
 /*!***********************************!*\
   !*** ./src/ts/UnBookmarkWorks.ts ***!
   \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -11566,13 +11569,13 @@ const unBookmarkWorks = new UnBookmarkWorks();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/WorkThumbnail.ts":
+/***/ "./src/ts/WorkThumbnail.ts"
 /*!*********************************!*\
   !*** ./src/ts/WorkThumbnail.ts ***!
   \*********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -11731,13 +11734,13 @@ class WorkThumbnail {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/WorkToolBar.ts":
+/***/ "./src/ts/WorkToolBar.ts"
 /*!*******************************!*\
   !*** ./src/ts/WorkToolBar.ts ***!
   \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -11860,13 +11863,13 @@ const workToolBar = new WorkToolBar();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/buttonsOnThumb/ButtonsConfig.ts":
+/***/ "./src/ts/buttonsOnThumb/ButtonsConfig.ts"
 /*!************************************************!*\
   !*** ./src/ts/buttonsOnThumb/ButtonsConfig.ts ***!
   \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -11908,13 +11911,13 @@ class ButtonsConfig {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/buttonsOnThumb/ButtonsOnArtworkPage.ts":
+/***/ "./src/ts/buttonsOnThumb/ButtonsOnArtworkPage.ts"
 /*!*******************************************************!*\
   !*** ./src/ts/buttonsOnThumb/ButtonsOnArtworkPage.ts ***!
   \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -12094,13 +12097,13 @@ class ButtonsOnArtworkPage extends _ButtonsConfig__WEBPACK_IMPORTED_MODULE_7__.B
 new ButtonsOnArtworkPage();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/buttonsOnThumb/ButtonsOnThumbOnPC.ts":
+/***/ "./src/ts/buttonsOnThumb/ButtonsOnThumbOnPC.ts"
 /*!*****************************************************!*\
   !*** ./src/ts/buttonsOnThumb/ButtonsOnThumbOnPC.ts ***!
   \*****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -12281,13 +12284,13 @@ class ButtonsOnThumbOnPC extends _ButtonsConfig__WEBPACK_IMPORTED_MODULE_9__.But
 new ButtonsOnThumbOnPC();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/buttonsOnThumb/DownloadBtnOnThumbOnMobile.ts":
+/***/ "./src/ts/buttonsOnThumb/DownloadBtnOnThumbOnMobile.ts"
 /*!*************************************************************!*\
   !*** ./src/ts/buttonsOnThumb/DownloadBtnOnThumbOnMobile.ts ***!
   \*************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -12390,13 +12393,13 @@ class DownloadBtnOnThumbOnMobile {
 new DownloadBtnOnThumbOnMobile();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawl/CrawlLatestFewWorks.ts":
+/***/ "./src/ts/crawl/CrawlLatestFewWorks.ts"
 /*!*********************************************!*\
   !*** ./src/ts/crawl/CrawlLatestFewWorks.ts ***!
   \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -12468,13 +12471,13 @@ const crawlLatestFewWorks = new CrawlLatestFewWorks();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawl/InitPageBase.ts":
+/***/ "./src/ts/crawl/InitPageBase.ts"
 /*!**************************************!*\
   !*** ./src/ts/crawl/InitPageBase.ts ***!
   \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -13066,13 +13069,13 @@ class InitPageBase {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawl/InitRequestPage.ts":
+/***/ "./src/ts/crawl/InitRequestPage.ts"
 /*!*****************************************!*\
   !*** ./src/ts/crawl/InitRequestPage.ts ***!
   \*****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -13093,13 +13096,13 @@ class InitRequestPage extends _InitPageBase__WEBPACK_IMPORTED_MODULE_0__.InitPag
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawl/InitUnsupportedPage.ts":
+/***/ "./src/ts/crawl/InitUnsupportedPage.ts"
 /*!*********************************************!*\
   !*** ./src/ts/crawl/InitUnsupportedPage.ts ***!
   \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -13121,13 +13124,13 @@ class InitUnsupportedPage extends _InitPageBase__WEBPACK_IMPORTED_MODULE_0__.Ini
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawl/LogErrorStatus.ts":
+/***/ "./src/ts/crawl/LogErrorStatus.ts"
 /*!****************************************!*\
   !*** ./src/ts/crawl/LogErrorStatus.ts ***!
   \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -13260,13 +13263,13 @@ const logErrorStatus = new LogErrorStatus();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawl/StopCrawl.ts":
+/***/ "./src/ts/crawl/StopCrawl.ts"
 /*!***********************************!*\
   !*** ./src/ts/crawl/StopCrawl.ts ***!
   \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -13323,13 +13326,13 @@ class StopCrawl {
 new StopCrawl();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawl/TimedCrawl.ts":
+/***/ "./src/ts/crawl/TimedCrawl.ts"
 /*!************************************!*\
   !*** ./src/ts/crawl/TimedCrawl.ts ***!
   \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -13481,13 +13484,13 @@ const timedCrawl = new TimedCrawl();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawl/VipSearchOptimize.ts":
+/***/ "./src/ts/crawl/VipSearchOptimize.ts"
 /*!*******************************************!*\
   !*** ./src/ts/crawl/VipSearchOptimize.ts ***!
   \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -13636,13 +13639,13 @@ const vipSearchOptimize = new VipSearchOptimize();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlArtworkPage/CrawlRecommendWorks.ts":
+/***/ "./src/ts/crawlArtworkPage/CrawlRecommendWorks.ts"
 /*!********************************************************!*\
   !*** ./src/ts/crawlArtworkPage/CrawlRecommendWorks.ts ***!
   \********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -13754,13 +13757,13 @@ class CrawlRecommendWorks {
 new CrawlRecommendWorks();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlArtworkPage/InitAreaRankingPage.ts":
+/***/ "./src/ts/crawlArtworkPage/InitAreaRankingPage.ts"
 /*!********************************************************!*\
   !*** ./src/ts/crawlArtworkPage/InitAreaRankingPage.ts ***!
   \********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -13842,13 +13845,13 @@ class InitAreaRankingPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlArtworkPage/InitArtworkPage.ts":
+/***/ "./src/ts/crawlArtworkPage/InitArtworkPage.ts"
 /*!****************************************************!*\
   !*** ./src/ts/crawlArtworkPage/InitArtworkPage.ts ***!
   \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -14044,13 +14047,13 @@ class InitArtworkPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0__.I
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlArtworkPage/InitArtworkSeriesPage.ts":
+/***/ "./src/ts/crawlArtworkPage/InitArtworkSeriesPage.ts"
 /*!**********************************************************!*\
   !*** ./src/ts/crawlArtworkPage/InitArtworkSeriesPage.ts ***!
   \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -14173,13 +14176,13 @@ class InitArtworkSeriesPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlArtworkPage/InitBookmarkDetailPage.ts":
+/***/ "./src/ts/crawlArtworkPage/InitBookmarkDetailPage.ts"
 /*!***********************************************************!*\
   !*** ./src/ts/crawlArtworkPage/InitBookmarkDetailPage.ts ***!
   \***********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -14235,13 +14238,13 @@ class InitBookmarkDetailPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODUL
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlArtworkPage/InitDiscoverPage.ts":
+/***/ "./src/ts/crawlArtworkPage/InitDiscoverPage.ts"
 /*!*****************************************************!*\
   !*** ./src/ts/crawlArtworkPage/InitDiscoverPage.ts ***!
   \*****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -14302,13 +14305,13 @@ class InitDiscoverPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0__.
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlArtworkPage/InitNewArtworkPage.ts":
+/***/ "./src/ts/crawlArtworkPage/InitNewArtworkPage.ts"
 /*!*******************************************************!*\
   !*** ./src/ts/crawlArtworkPage/InitNewArtworkPage.ts ***!
   \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -14464,13 +14467,13 @@ class InitNewArtworkPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0_
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlArtworkPage/InitPixivisionPage.ts":
+/***/ "./src/ts/crawlArtworkPage/InitPixivisionPage.ts"
 /*!*******************************************************!*\
   !*** ./src/ts/crawlArtworkPage/InitPixivisionPage.ts ***!
   \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -14580,13 +14583,13 @@ class InitPixivisionPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0_
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlArtworkPage/InitRankingArtworkPage.ts":
+/***/ "./src/ts/crawlArtworkPage/InitRankingArtworkPage.ts"
 /*!***********************************************************!*\
   !*** ./src/ts/crawlArtworkPage/InitRankingArtworkPage.ts ***!
   \***********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -14764,13 +14767,13 @@ class InitRankingArtworkPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODUL
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlArtworkPage/InitSearchArtworkPage.ts":
+/***/ "./src/ts/crawlArtworkPage/InitSearchArtworkPage.ts"
 /*!**********************************************************!*\
   !*** ./src/ts/crawlArtworkPage/InitSearchArtworkPage.ts ***!
   \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -15557,13 +15560,13 @@ class InitSearchArtworkPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlMixedPage/CrawlTagList.ts":
+/***/ "./src/ts/crawlMixedPage/CrawlTagList.ts"
 /*!***********************************************!*\
   !*** ./src/ts/crawlMixedPage/CrawlTagList.ts ***!
   \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -15789,13 +15792,13 @@ const crawlTagList = new CrawlTagList();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlMixedPage/InitBookmarkNewPage.ts":
+/***/ "./src/ts/crawlMixedPage/InitBookmarkNewPage.ts"
 /*!******************************************************!*\
   !*** ./src/ts/crawlMixedPage/InitBookmarkNewPage.ts ***!
   \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -15989,13 +15992,13 @@ class InitBookmarkNewPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlMixedPage/InitBookmarkPage.ts":
+/***/ "./src/ts/crawlMixedPage/InitBookmarkPage.ts"
 /*!***************************************************!*\
   !*** ./src/ts/crawlMixedPage/InitBookmarkPage.ts ***!
   \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -16474,8 +16477,9 @@ One possible reason: You have been banned from Pixiv.`);
 
 
 
-/***/ }),
+/***/ },
 
+<<<<<<< HEAD
 /***/ "./src/ts/crawlMixedPage/InitDashboardPage.ts":
 /*!****************************************************!*\
   !*** ./src/ts/crawlMixedPage/InitDashboardPage.ts ***!
@@ -16840,10 +16844,13 @@ class InitDashboardPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0__
 /***/ }),
 
 /***/ "./src/ts/crawlMixedPage/InitFollowingPage.ts":
+=======
+/***/ "./src/ts/crawlMixedPage/InitFollowingPage.ts"
+>>>>>>> 9653f5a7 (Refactor: replace Whammy with mediabunny to improve ToWebM performance)
 /*!****************************************************!*\
   !*** ./src/ts/crawlMixedPage/InitFollowingPage.ts ***!
   \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -17074,13 +17081,13 @@ class InitFollowingPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0__
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlMixedPage/InitHomePage.ts":
+/***/ "./src/ts/crawlMixedPage/InitHomePage.ts"
 /*!***********************************************!*\
   !*** ./src/ts/crawlMixedPage/InitHomePage.ts ***!
   \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -17364,13 +17371,13 @@ class InitHomePage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0__.Init
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlMixedPage/InitUnlistedPage.ts":
+/***/ "./src/ts/crawlMixedPage/InitUnlistedPage.ts"
 /*!***************************************************!*\
   !*** ./src/ts/crawlMixedPage/InitUnlistedPage.ts ***!
   \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -17419,13 +17426,13 @@ class InitUnlistedPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0__.
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlMixedPage/InitUserPage.ts":
+/***/ "./src/ts/crawlMixedPage/InitUserPage.ts"
 /*!***********************************************!*\
   !*** ./src/ts/crawlMixedPage/InitUserPage.ts ***!
   \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -17728,13 +17735,13 @@ class InitUserPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0__.Init
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlMixedPage/QuickCrawl.ts":
+/***/ "./src/ts/crawlMixedPage/QuickCrawl.ts"
 /*!*********************************************!*\
   !*** ./src/ts/crawlMixedPage/QuickCrawl.ts ***!
   \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -17821,13 +17828,13 @@ class QuickCrawl {
 new QuickCrawl();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlNovelPage/GetNovelGlossarys.ts":
+/***/ "./src/ts/crawlNovelPage/GetNovelGlossarys.ts"
 /*!****************************************************!*\
   !*** ./src/ts/crawlNovelPage/GetNovelGlossarys.ts ***!
   \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -17890,13 +17897,13 @@ const getNovelGlossarys = new GetNovelGlossarys();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlNovelPage/InitNewNovelPage.ts":
+/***/ "./src/ts/crawlNovelPage/InitNewNovelPage.ts"
 /*!***************************************************!*\
   !*** ./src/ts/crawlNovelPage/InitNewNovelPage.ts ***!
   \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -18041,13 +18048,13 @@ class InitNewNovelPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0__.
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlNovelPage/InitNovelPage.ts":
+/***/ "./src/ts/crawlNovelPage/InitNovelPage.ts"
 /*!************************************************!*\
   !*** ./src/ts/crawlNovelPage/InitNovelPage.ts ***!
   \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -18151,13 +18158,13 @@ class InitNovelPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0__.Ini
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlNovelPage/InitNovelSeriesPage.ts":
+/***/ "./src/ts/crawlNovelPage/InitNovelSeriesPage.ts"
 /*!******************************************************!*\
   !*** ./src/ts/crawlNovelPage/InitNovelSeriesPage.ts ***!
   \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -18232,13 +18239,13 @@ class InitNovelSeriesPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlNovelPage/InitRankingNovelPage.ts":
+/***/ "./src/ts/crawlNovelPage/InitRankingNovelPage.ts"
 /*!*******************************************************!*\
   !*** ./src/ts/crawlNovelPage/InitRankingNovelPage.ts ***!
   \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -18433,13 +18440,13 @@ class InitRankingNovelPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlNovelPage/InitRankingNovelPageNew.ts":
+/***/ "./src/ts/crawlNovelPage/InitRankingNovelPageNew.ts"
 /*!**********************************************************!*\
   !*** ./src/ts/crawlNovelPage/InitRankingNovelPageNew.ts ***!
   \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -18629,13 +18636,13 @@ class InitRankingNovelPageNew extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODU
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/crawlNovelPage/InitSearchNovelPage.ts":
+/***/ "./src/ts/crawlNovelPage/InitSearchNovelPage.ts"
 /*!******************************************************!*\
   !*** ./src/ts/crawlNovelPage/InitSearchNovelPage.ts ***!
   \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -18975,13 +18982,13 @@ class InitSearchNovelPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/AutoMergeNovel.ts":
+/***/ "./src/ts/download/AutoMergeNovel.ts"
 /*!*******************************************!*\
   !*** ./src/ts/download/AutoMergeNovel.ts ***!
   \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -19156,13 +19163,13 @@ const autoMergeNovel = new AutoMergeNovel();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/BookmarkAfterDL.ts":
+/***/ "./src/ts/download/BookmarkAfterDL.ts"
 /*!********************************************!*\
   !*** ./src/ts/download/BookmarkAfterDL.ts ***!
   \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -19321,13 +19328,13 @@ class BookmarkAfterDL {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/CheckWarningMessage.ts":
+/***/ "./src/ts/download/CheckWarningMessage.ts"
 /*!************************************************!*\
   !*** ./src/ts/download/CheckWarningMessage.ts ***!
   \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -19409,13 +19416,13 @@ class CheckWarningMessage {
 new CheckWarningMessage();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/Download.ts":
+/***/ "./src/ts/download/Download.ts"
 /*!*************************************!*\
   !*** ./src/ts/download/Download.ts ***!
   \*************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -19807,13 +19814,13 @@ class Download {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/DownloadControl.ts":
+/***/ "./src/ts/download/DownloadControl.ts"
 /*!********************************************!*\
   !*** ./src/ts/download/DownloadControl.ts ***!
   \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -20333,13 +20340,13 @@ class DownloadControl {
 new DownloadControl();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/DownloadInterval.ts":
+/***/ "./src/ts/download/DownloadInterval.ts"
 /*!*********************************************!*\
   !*** ./src/ts/download/DownloadInterval.ts ***!
   \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -20430,13 +20437,13 @@ const downloadInterval = new DownloadInterval();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/DownloadNovelCover.ts":
+/***/ "./src/ts/download/DownloadNovelCover.ts"
 /*!***********************************************!*\
   !*** ./src/ts/download/DownloadNovelCover.ts ***!
   \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -20494,13 +20501,13 @@ const downloadNovelCover = new DownloadNovelCover();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/DownloadNovelEmbeddedImage.ts":
+/***/ "./src/ts/download/DownloadNovelEmbeddedImage.ts"
 /*!*******************************************************!*\
   !*** ./src/ts/download/DownloadNovelEmbeddedImage.ts ***!
   \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -20758,13 +20765,13 @@ const downloadNovelEmbeddedImage = new DownloadNovelEmbeddedImage();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/DownloadOnClickBookmark.ts":
+/***/ "./src/ts/download/DownloadOnClickBookmark.ts"
 /*!****************************************************!*\
   !*** ./src/ts/download/DownloadOnClickBookmark.ts ***!
   \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -20836,13 +20843,13 @@ const downloadOnClickBookmark = new DownloadOnClickBookmark();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/DownloadOnClickLike.ts":
+/***/ "./src/ts/download/DownloadOnClickLike.ts"
 /*!************************************************!*\
   !*** ./src/ts/download/DownloadOnClickLike.ts ***!
   \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -20891,13 +20898,13 @@ class DownloadOnClickLike {
 new DownloadOnClickLike();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/DownloadRecord.ts":
+/***/ "./src/ts/download/DownloadRecord.ts"
 /*!*******************************************!*\
   !*** ./src/ts/download/DownloadRecord.ts ***!
   \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -21261,13 +21268,13 @@ const downloadRecord = new DownloadRecord();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/DownloadStates.ts":
+/***/ "./src/ts/download/DownloadStates.ts"
 /*!*******************************************!*\
   !*** ./src/ts/download/DownloadStates.ts ***!
   \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -21346,13 +21353,13 @@ const downloadStates = new DownloadStates();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/ExportLST.ts":
+/***/ "./src/ts/download/ExportLST.ts"
 /*!**************************************!*\
   !*** ./src/ts/download/ExportLST.ts ***!
   \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -21401,13 +21408,13 @@ class ExportLST {
 new ExportLST();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/ExportResult.ts":
+/***/ "./src/ts/download/ExportResult.ts"
 /*!*****************************************!*\
   !*** ./src/ts/download/ExportResult.ts ***!
   \*****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -21451,13 +21458,13 @@ class ExportResult {
 new ExportResult();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/ExportResult2CSV.ts":
+/***/ "./src/ts/download/ExportResult2CSV.ts"
 /*!*********************************************!*\
   !*** ./src/ts/download/ExportResult2CSV.ts ***!
   \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -21650,13 +21657,13 @@ class ExportResult2CSV {
 new ExportResult2CSV();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/ImportResult.ts":
+/***/ "./src/ts/download/ImportResult.ts"
 /*!*****************************************!*\
   !*** ./src/ts/download/ImportResult.ts ***!
   \*****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -21748,13 +21755,13 @@ class ImportResult {
 new ImportResult();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/MakeNovelFile.ts":
+/***/ "./src/ts/download/MakeNovelFile.ts"
 /*!******************************************!*\
   !*** ./src/ts/download/MakeNovelFile.ts ***!
   \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -21913,13 +21920,13 @@ const makeNovelFile = new MakeNovelFile();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/MergeNovel.ts":
+/***/ "./src/ts/download/MergeNovel.ts"
 /*!***************************************!*\
   !*** ./src/ts/download/MergeNovel.ts ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -22504,13 +22511,13 @@ class MergeNovel {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/MergeNovelFileName.ts":
+/***/ "./src/ts/download/MergeNovelFileName.ts"
 /*!***********************************************!*\
   !*** ./src/ts/download/MergeNovelFileName.ts ***!
   \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -22662,13 +22669,13 @@ const mergeNovelFileName = new MergeNovelFileName();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/ProgressBar.ts":
+/***/ "./src/ts/download/ProgressBar.ts"
 /*!****************************************!*\
   !*** ./src/ts/download/ProgressBar.ts ***!
   \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -22819,13 +22826,13 @@ const progressBar = new ProgressBar();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/Resume.ts":
+/***/ "./src/ts/download/Resume.ts"
 /*!***********************************!*\
   !*** ./src/ts/download/Resume.ts ***!
   \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -23181,13 +23188,13 @@ class Resume {
 new Resume();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/SaveWorkDescription.ts":
+/***/ "./src/ts/download/SaveWorkDescription.ts"
 /*!************************************************!*\
   !*** ./src/ts/download/SaveWorkDescription.ts ***!
   \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -23395,13 +23402,13 @@ class SaveWorkDescription {
 new SaveWorkDescription();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/SaveWorkMeta.ts":
+/***/ "./src/ts/download/SaveWorkMeta.ts"
 /*!*****************************************!*\
   !*** ./src/ts/download/SaveWorkMeta.ts ***!
   \*****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -23549,13 +23556,13 @@ class SaveWorkMeta {
 new SaveWorkMeta();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/SendDownload.ts":
+/***/ "./src/ts/download/SendDownload.ts"
 /*!*****************************************!*\
   !*** ./src/ts/download/SendDownload.ts ***!
   \*****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -23605,13 +23612,13 @@ class SendDownload {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/ShowConvertCount.ts":
+/***/ "./src/ts/download/ShowConvertCount.ts"
 /*!*********************************************!*\
   !*** ./src/ts/download/ShowConvertCount.ts ***!
   \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -23646,13 +23653,13 @@ class ShowConvertCount {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/ShowDownloadStates.ts":
+/***/ "./src/ts/download/ShowDownloadStates.ts"
 /*!***********************************************!*\
   !*** ./src/ts/download/ShowDownloadStates.ts ***!
   \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -23703,13 +23710,13 @@ class ShowDownloadStates {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/ShowDuplicateLog.ts":
+/***/ "./src/ts/download/ShowDuplicateLog.ts"
 /*!*********************************************!*\
   !*** ./src/ts/download/ShowDuplicateLog.ts ***!
   \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -23779,13 +23786,13 @@ class ShowDuplicateLog {
 new ShowDuplicateLog();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/ShowRemainingDownloadOnTitle.ts":
+/***/ "./src/ts/download/ShowRemainingDownloadOnTitle.ts"
 /*!*********************************************************!*\
   !*** ./src/ts/download/ShowRemainingDownloadOnTitle.ts ***!
   \*********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -23856,13 +23863,13 @@ class ShowRemainingDownloadOnTitle {
 new ShowRemainingDownloadOnTitle();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/ShowSkipCount.ts":
+/***/ "./src/ts/download/ShowSkipCount.ts"
 /*!******************************************!*\
   !*** ./src/ts/download/ShowSkipCount.ts ***!
   \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -23918,13 +23925,13 @@ class ShowSkipCount {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/ShowTotalResultOnTitle.ts":
+/***/ "./src/ts/download/ShowTotalResultOnTitle.ts"
 /*!***************************************************!*\
   !*** ./src/ts/download/ShowTotalResultOnTitle.ts ***!
   \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -24005,13 +24012,13 @@ class ShowTotalResultOnTitle {
 new ShowTotalResultOnTitle();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/download/showStatusOnTitle.ts":
+/***/ "./src/ts/download/showStatusOnTitle.ts"
 /*!**********************************************!*\
   !*** ./src/ts/download/showStatusOnTitle.ts ***!
   \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -24205,13 +24212,13 @@ class ShowStatusOnTitle {
 new ShowStatusOnTitle();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/filter/BlackandWhiteImage.ts":
+/***/ "./src/ts/filter/BlackandWhiteImage.ts"
 /*!*********************************************!*\
   !*** ./src/ts/filter/BlackandWhiteImage.ts ***!
   \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -24331,13 +24338,13 @@ const blackAndWhiteImage = new BlackAndWhiteImage();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/filter/BlockTagsForSpecificUser.ts":
+/***/ "./src/ts/filter/BlockTagsForSpecificUser.ts"
 /*!***************************************************!*\
   !*** ./src/ts/filter/BlockTagsForSpecificUser.ts ***!
   \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -24673,13 +24680,13 @@ const blockTagsForSpecificUser = new BlockTagsForSpecificUser();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/filter/Filter.ts":
+/***/ "./src/ts/filter/Filter.ts"
 /*!*********************************!*\
   !*** ./src/ts/filter/Filter.ts ***!
   \*********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -25468,8 +25475,9 @@ const filter = new Filter();
 
 
 
-/***/ }),
+/***/ },
 
+<<<<<<< HEAD
 /***/ "./src/ts/filter/FilterSearchResults.ts":
 /*!**********************************************!*\
   !*** ./src/ts/filter/FilterSearchResults.ts ***!
@@ -25600,10 +25608,13 @@ new FilterSearchResults();
 /***/ }),
 
 /***/ "./src/ts/filter/Mute.ts":
+=======
+/***/ "./src/ts/filter/Mute.ts"
+>>>>>>> 9653f5a7 (Refactor: replace Whammy with mediabunny to improve ToWebM performance)
 /*!*******************************!*\
   !*** ./src/ts/filter/Mute.ts ***!
   \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -25694,13 +25705,13 @@ const mute = new Mute();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/filter/WorkPublishTime.ts":
+/***/ "./src/ts/filter/WorkPublishTime.ts"
 /*!******************************************!*\
   !*** ./src/ts/filter/WorkPublishTime.ts ***!
   \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -25831,13 +25842,13 @@ const workPublishTime = new WorkPublishTime();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/langText.ts":
+/***/ "./src/ts/langText.ts"
 /*!****************************!*\
   !*** ./src/ts/langText.ts ***!
   \****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -33434,13 +33445,13 @@ To prevent duplicate filenames, it is recommended to always add {series_id}.`,
 // - `发布时间`、`发表时间`、`投稿时间`是相同的意思，应该翻译为`posting time`。
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/output/OutputPanel.ts":
+/***/ "./src/ts/output/OutputPanel.ts"
 /*!**************************************!*\
   !*** ./src/ts/output/OutputPanel.ts ***!
   \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -33564,13 +33575,13 @@ class OutputPanel {
 new OutputPanel();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/output/PreviewFileName.ts":
+/***/ "./src/ts/output/PreviewFileName.ts"
 /*!******************************************!*\
   !*** ./src/ts/output/PreviewFileName.ts ***!
   \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -33680,13 +33691,13 @@ class PreviewFileName {
 new PreviewFileName();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/output/ShowURLs.ts":
+/***/ "./src/ts/output/ShowURLs.ts"
 /*!***********************************!*\
   !*** ./src/ts/output/ShowURLs.ts ***!
   \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -33741,13 +33752,13 @@ class ShowURLs {
 new ShowURLs();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/pageFunciton/BatchFollowUser.ts":
+/***/ "./src/ts/pageFunciton/BatchFollowUser.ts"
 /*!************************************************!*\
   !*** ./src/ts/pageFunciton/BatchFollowUser.ts ***!
   \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -34074,13 +34085,13 @@ const batchFollowUser = new BatchFollowUser();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/pageFunciton/BookmarkAllWorks.ts":
+/***/ "./src/ts/pageFunciton/BookmarkAllWorks.ts"
 /*!*************************************************!*\
   !*** ./src/ts/pageFunciton/BookmarkAllWorks.ts ***!
   \*************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -34245,13 +34256,13 @@ class BookmarkAllWorks {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/pageFunciton/BookmarksAddTag.ts":
+/***/ "./src/ts/pageFunciton/BookmarksAddTag.ts"
 /*!************************************************!*\
   !*** ./src/ts/pageFunciton/BookmarksAddTag.ts ***!
   \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -34386,13 +34397,13 @@ class BookmarksAddTag {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/pageFunciton/CopyButtonOnWorkPage.ts":
+/***/ "./src/ts/pageFunciton/CopyButtonOnWorkPage.ts"
 /*!*****************************************************!*\
   !*** ./src/ts/pageFunciton/CopyButtonOnWorkPage.ts ***!
   \*****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -34482,13 +34493,13 @@ class CopyButtonOnWorkPage {
 new CopyButtonOnWorkPage();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/pageFunciton/DeleteWorks.ts":
+/***/ "./src/ts/pageFunciton/DeleteWorks.ts"
 /*!********************************************!*\
   !*** ./src/ts/pageFunciton/DeleteWorks.ts ***!
   \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -34683,13 +34694,13 @@ class DeleteWorks {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/pageFunciton/DestroyManager.ts":
+/***/ "./src/ts/pageFunciton/DestroyManager.ts"
 /*!***********************************************!*\
   !*** ./src/ts/pageFunciton/DestroyManager.ts ***!
   \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -34724,13 +34735,13 @@ const destroyManager = new DestroyManager();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/pageFunciton/DisplayThumbnailListOnMultiImageWorkPage.ts":
+/***/ "./src/ts/pageFunciton/DisplayThumbnailListOnMultiImageWorkPage.ts"
 /*!*************************************************************************!*\
   !*** ./src/ts/pageFunciton/DisplayThumbnailListOnMultiImageWorkPage.ts ***!
   \*************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -34873,13 +34884,13 @@ const displayThumbnailListOnMultiImageWorkPage = new DisplayThumbnailListOnMulti
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/pageFunciton/ExportFollowingList.ts":
+/***/ "./src/ts/pageFunciton/ExportFollowingList.ts"
 /*!****************************************************!*\
   !*** ./src/ts/pageFunciton/ExportFollowingList.ts ***!
   \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -35100,13 +35111,13 @@ const exportFollowingList = new ExportFollowingList();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/pageFunciton/FastScreen.ts":
+/***/ "./src/ts/pageFunciton/FastScreen.ts"
 /*!*******************************************!*\
   !*** ./src/ts/pageFunciton/FastScreen.ts ***!
   \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -35217,13 +35228,368 @@ class FastScreen {
 
 
 
-/***/ }),
+/***/ },
 
+<<<<<<< HEAD
 /***/ "./src/ts/pageFunciton/QuickBookmark.ts":
+=======
+/***/ "./src/ts/pageFunciton/FilterInactiveUsers.ts"
+/*!****************************************************!*\
+  !*** ./src/ts/pageFunciton/FilterInactiveUsers.ts ***!
+  \****************************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   filterInactiveUsers: () => (/* binding */ filterInactiveUsers)
+/* harmony export */ });
+/* harmony import */ var _Language__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Language */ "./src/ts/Language.ts");
+/* harmony import */ var _Log__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Log */ "./src/ts/Log.ts");
+/* harmony import */ var _PageType__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../PageType */ "./src/ts/PageType.ts");
+/* harmony import */ var _setting_Settings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../setting/Settings */ "./src/ts/setting/Settings.ts");
+/* harmony import */ var _Toast__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Toast */ "./src/ts/Toast.ts");
+/* harmony import */ var _utils_Utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/Utils */ "./src/ts/utils/Utils.ts");
+/* harmony import */ var _API__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../API */ "./src/ts/API.ts");
+/* harmony import */ var _MsgBox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../MsgBox */ "./src/ts/MsgBox.ts");
+/* harmony import */ var _Input__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Input */ "./src/ts/Input.ts");
+
+
+
+
+
+
+
+
+
+// 筛选不活跃（在最近一段时间内没有发表新作品）的用户
+class FilterInactiveUsers {
+    busy = false;
+    baseOffset = 0; // 开始抓取时，记录初始的偏移量
+    onceNumber = 24; // 每页 24 个用户
+    crawlPageNumber = 1; // 需要抓取多少个页面
+    // 页面子类型：我的关注 | 我的好 P 友 | 我的粉丝
+    pageType = 'following';
+    rest = 'show';
+    tag = '';
+    currentUserId = '';
+    requestTimes = 0; // 获取用户列表时，记录请求的次数
+    limit = 100; // 每次请求多少个用户
+    totalNeed = Number.MAX_SAFE_INTEGER;
+    /**要求用户在这个时间之后有新作品，否则就是不活跃的用户 */
+    time = 0;
+    /**已经抓取了多少个用户（未过滤） */
+    numberOfCrawledUsers = 0;
+    // 储存符合条件的用户
+    //**没有作品的用户 */
+    userNoWork = [];
+    //**最近不活跃的用户 */
+    userInactive = [];
+    /**一共储存了多少个用户 */
+    get total() {
+        return this.userNoWork.length + this.userInactive.length;
+    }
+    async start() {
+        if (this.busy) {
+            _Toast__WEBPACK_IMPORTED_MODULE_4__.toast.error(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_有同类任务正在执行请等待之前的任务完成'));
+            return;
+        }
+        const input = new _Input__WEBPACK_IMPORTED_MODULE_8__.Input({
+            instruction: `${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_筛选不活跃的用户的输入提示')}`,
+            value: '6',
+            width: 500,
+        });
+        const value = await input.submit();
+        if (!value) {
+            return _Toast__WEBPACK_IMPORTED_MODULE_4__.toast.warning(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_本次操作已取消'));
+        }
+        const number = Number.parseInt(value);
+        if (isNaN(number) || number <= 0) {
+            return _Toast__WEBPACK_IMPORTED_MODULE_4__.toast.error(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_参数不合法本次操作已取消'));
+        }
+        this.time = new Date().getTime() - number * 30 * 24 * 60 * 60 * 1000;
+        this.busy = true;
+        // 显示提示
+        const log1 = '🚀' + _Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_筛选不活跃的用户');
+        _Log__WEBPACK_IMPORTED_MODULE_1__.log.log(log1);
+        _Toast__WEBPACK_IMPORTED_MODULE_4__.toast.warning(log1);
+        const log2 = _Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_开始抓取用户列表');
+        _Log__WEBPACK_IMPORTED_MODULE_1__.log.log(log2);
+        // 总是慢速抓取
+        _Log__WEBPACK_IMPORTED_MODULE_1__.log.warning(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_慢速抓取'));
+        this.readyGet();
+    }
+    getWantPage() {
+        this.crawlPageNumber = _setting_Settings__WEBPACK_IMPORTED_MODULE_3__.settings.crawlNumber[_PageType__WEBPACK_IMPORTED_MODULE_2__.pageType.type].value;
+        if (this.crawlPageNumber === -1) {
+            _Log__WEBPACK_IMPORTED_MODULE_1__.log.warning(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_下载所有页面'));
+        }
+        else {
+            _Log__WEBPACK_IMPORTED_MODULE_1__.log.warning(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_注意这个任务遵从抓取多少页面的设置'));
+            _Log__WEBPACK_IMPORTED_MODULE_1__.log.warning(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_从本页开始下载x页', this.crawlPageNumber.toString()));
+        }
+    }
+    getPageType() {
+        const pathname = window.location.pathname;
+        if (pathname.includes('/following')) {
+            this.pageType = 'following';
+        }
+        else if (pathname.includes('/mypixiv')) {
+            this.pageType = 'mypixiv';
+        }
+        else if (pathname.includes('/followers')) {
+            this.pageType = 'followers';
+        }
+    }
+    readyGet() {
+        this.getWantPage();
+        this.getPageType();
+        this.rest = location.href.includes('rest=hide') ? 'hide' : 'show';
+        this.tag = _utils_Utils__WEBPACK_IMPORTED_MODULE_5__.Utils.getURLPathField(window.location.pathname, 'following');
+        // 获取抓取开始时的页码
+        const nowPage = _utils_Utils__WEBPACK_IMPORTED_MODULE_5__.Utils.getURLSearchField(location.href, 'p');
+        // 计算开始抓取时的偏移量
+        if (nowPage !== '') {
+            this.baseOffset = (parseInt(nowPage) - 1) * this.onceNumber;
+        }
+        else {
+            this.baseOffset = 0;
+        }
+        // 要抓取多少个用户
+        this.totalNeed = Number.MAX_SAFE_INTEGER;
+        if (this.crawlPageNumber !== -1) {
+            this.totalNeed = this.onceNumber * this.crawlPageNumber;
+        }
+        // 获取当前页面的用户 id
+        const test = /users\/(\d*)\//.exec(location.href);
+        if (test && test.length > 1) {
+            this.currentUserId = test[1];
+        }
+        else {
+            const msg = `Get the user's own id failed`;
+            _Log__WEBPACK_IMPORTED_MODULE_1__.log.error(msg, 2);
+            throw new Error(msg);
+        }
+        this.getUserList();
+    }
+    // 获取用户列表
+    async getUserList() {
+        const offset = this.baseOffset + this.requestTimes * this.limit;
+        let res;
+        try {
+            switch (this.pageType) {
+                case 'following':
+                    res = await _API__WEBPACK_IMPORTED_MODULE_6__.API.getFollowingList(this.currentUserId, this.rest, this.tag, offset);
+                    break;
+                case 'mypixiv':
+                    res = await _API__WEBPACK_IMPORTED_MODULE_6__.API.getMyPixivList(this.currentUserId, offset);
+                    break;
+                case 'followers':
+                    res = await _API__WEBPACK_IMPORTED_MODULE_6__.API.getFollowersList(this.currentUserId, offset);
+                    break;
+            }
+        }
+        catch {
+            this.getUserList();
+            return;
+        }
+        const users = res.body.users;
+        if (users.length === 0) {
+            // 用户列表抓取完毕
+            return this.getUserListComplete();
+        }
+        for (const userData of users) {
+            this.check(userData);
+            this.numberOfCrawledUsers++;
+            if (this.numberOfCrawledUsers >= this.totalNeed) {
+                // 抓取到了指定数量的用户
+                return this.getUserListComplete();
+            }
+        }
+        _Log__WEBPACK_IMPORTED_MODULE_1__.log.log(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_当前有x个符合条件的用户', this.total.toString()), 1, false, 'filterInactiveUsersProgress');
+        this.requestTimes++;
+        // 获取下一批用户列表
+        window.setTimeout(() => {
+            this.getUserList();
+        }, _setting_Settings__WEBPACK_IMPORTED_MODULE_3__.settings.slowCrawlDealy);
+    }
+    async getUserListComplete() {
+        this.busy = false;
+        _Log__WEBPACK_IMPORTED_MODULE_1__.log.log(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_当前有x个符合条件的用户', this.total.toString()));
+        // 在批量关注用户时，抓取结果为 0 并不影响继续执行
+        if (this.total === 0) {
+            const msg = '✅' +
+                _Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_用户数量为0') +
+                ', ' +
+                _Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_没有可用的抓取结果');
+            _Log__WEBPACK_IMPORTED_MODULE_1__.log.warning(msg);
+            _MsgBox__WEBPACK_IMPORTED_MODULE_7__.msgBox.warning(msg);
+        }
+        else {
+            this.exportResult();
+            const msg = '✅' + _Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_筛选不活跃的用户');
+            _Log__WEBPACK_IMPORTED_MODULE_1__.log.success(msg);
+            _Toast__WEBPACK_IMPORTED_MODULE_4__.toast.success(msg);
+        }
+        this.reset();
+    }
+    check(userData) {
+        // 如果该用户没有任何作品
+        if (userData.illusts.length === 0 && userData.novels.length === 0) {
+            this.userNoWork.push({
+                id: userData.userId,
+                name: userData.userName,
+            });
+            return;
+        }
+        // 如果有插画或小说中的任何一种作品，则检查其发布时间
+        const noNewIllust = this.checkNoNewWork('illust', userData.illusts);
+        const noNewNovel = this.checkNoNewWork('novel', userData.novels);
+        if (noNewIllust && noNewNovel) {
+            this.userInactive.push({
+                id: userData.userId,
+                name: userData.userName,
+            });
+            // if (userData.illusts.length > 0 && userData.novels.length > 0) {
+            //   console.log('该用户有两种作品并且不活跃', userData.userId)
+            // }
+        }
+    }
+    checkNoNewWork(type, workData) {
+        if (workData.length === 0) {
+            return true;
+        }
+        // 查找最近发表的作品的 id
+        const idList = workData.map((work) => Number.parseInt(work.id));
+        const maxId = Math.max(...idList).toString();
+        // 获取它的数据
+        const work = workData.find((work) => work.id === maxId);
+        const createTime = new Date(work.createDate).getTime();
+        return createTime < this.time;
+    }
+    exportResult() {
+        const noWorkUsersHtml = this.userNoWork.map((user) => `<li><a href="https://www.pixiv.net/users/${user.id}" target="_blank">${user.name}</a></li>`);
+        const inactiveUsersHtml = this.userInactive.map((user) => `<li><a href="https://www.pixiv.net/users/${user.id}" target="_blank">${user.name}</a></li>`);
+        const bgColor = '#222';
+        const html = `
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_筛选不活跃的用户')}</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        font-size: 14px;
+      }
+      body {
+        background-color: ${bgColor};
+        color: #fff;
+        font-size: 1.2rem;
+      }
+      a {
+        color: #00a6ef;
+        text-decoration: none;
+      }
+      a:visited {
+        color: #b733f8;
+      }
+      .usersWrap {
+        width: 90vw;
+        max-height: 95vh;
+        margin: 3vh auto 0;
+        display: flex;
+        justify-content: space-between;
+      }
+      .list {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        flex-basis: 50%;
+        flex-shrink: 0;
+        flex-grow: 0;
+        overflow-y: auto;
+      }
+      .list:nth-child(1) {
+        border-right: #aaa 1px solid;
+      }
+      .list .title {
+        font-size: 1.4rem;
+        flex-grow: 0;
+      }
+      .list ul {
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+      }
+      .list .title,
+      .list li {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        list-style: none;
+        min-height: 40px;
+        padding: 4px 0;
+        line-height: 32px;
+        text-align: center;
+      }
+      .list li {
+        flex-basis: 33%;
+        word-break: break-all;
+        flex-grow: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="usersWrap">
+      <div class="list">
+        <div class="title">${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_没有作品的用户')}（${this.userNoWork.length}）</div>
+        <ul>
+            ${noWorkUsersHtml.join('')}
+        </ul>
+      </div>
+      <div class="list">
+        <div class="title">${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_最近不活跃的用户')}（${this.userInactive.length}）</div>
+        <ul>
+            ${inactiveUsersHtml.join('')}
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
+`;
+        const blob = new Blob([html], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+    }
+    reset() {
+        this.requestTimes = 0;
+        this.numberOfCrawledUsers = 0;
+        this.userNoWork = [];
+        this.userInactive = [];
+    }
+}
+const filterInactiveUsers = new FilterInactiveUsers();
+
+
+
+/***/ },
+
+/***/ "./src/ts/pageFunciton/QuickBookmark.ts"
+>>>>>>> 9653f5a7 (Refactor: replace Whammy with mediabunny to improve ToWebM performance)
 /*!**********************************************!*\
   !*** ./src/ts/pageFunciton/QuickBookmark.ts ***!
   \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -35470,13 +35836,13 @@ class QuickBookmark {
 new QuickBookmark();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/pageFunciton/RemoveWorksOfFollowedUsersOnSearchPage.ts":
+/***/ "./src/ts/pageFunciton/RemoveWorksOfFollowedUsersOnSearchPage.ts"
 /*!***********************************************************************!*\
   !*** ./src/ts/pageFunciton/RemoveWorksOfFollowedUsersOnSearchPage.ts ***!
   \***********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -35599,13 +35965,13 @@ const removeWorksOfFollowedUsersOnSearchPage = new RemoveWorksOfFollowedUsersOnS
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/pageFunciton/SaveAvatarIcon.ts":
+/***/ "./src/ts/pageFunciton/SaveAvatarIcon.ts"
 /*!***********************************************!*\
   !*** ./src/ts/pageFunciton/SaveAvatarIcon.ts ***!
   \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -35661,13 +36027,13 @@ class SaveAvatarIcon {
 new SaveAvatarIcon();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/pageFunciton/SaveAvatarImage.ts":
+/***/ "./src/ts/pageFunciton/SaveAvatarImage.ts"
 /*!************************************************!*\
   !*** ./src/ts/pageFunciton/SaveAvatarImage.ts ***!
   \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -35722,13 +36088,13 @@ class SaveAvatarImage {
 new SaveAvatarImage();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/pageFunciton/SaveUserCover.ts":
+/***/ "./src/ts/pageFunciton/SaveUserCover.ts"
 /*!**********************************************!*\
   !*** ./src/ts/pageFunciton/SaveUserCover.ts ***!
   \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -35786,13 +36152,13 @@ class SaveUserCover {
 new SaveUserCover();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/setting/ConvertOldSettings.ts":
+/***/ "./src/ts/setting/ConvertOldSettings.ts"
 /*!**********************************************!*\
   !*** ./src/ts/setting/ConvertOldSettings.ts ***!
   \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -35853,13 +36219,13 @@ const convertOldSettings = new ConvertOldSettings();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/setting/CrawlNumber.ts":
+/***/ "./src/ts/setting/CrawlNumber.ts"
 /*!***************************************!*\
   !*** ./src/ts/setting/CrawlNumber.ts ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -36038,13 +36404,13 @@ class CrawlNumber {
 new CrawlNumber();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/setting/DoNotDownloadLastFewImages.ts":
+/***/ "./src/ts/setting/DoNotDownloadLastFewImages.ts"
 /*!******************************************************!*\
   !*** ./src/ts/setting/DoNotDownloadLastFewImages.ts ***!
   \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -36353,13 +36719,13 @@ class DoNotDownloadLastFewImages {
 new DoNotDownloadLastFewImages();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/setting/Form.ts":
+/***/ "./src/ts/setting/Form.ts"
 /*!********************************!*\
   !*** ./src/ts/setting/Form.ts ***!
   \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -36684,13 +37050,13 @@ class Form {
 new Form();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/setting/FormHTML.ts":
+/***/ "./src/ts/setting/FormHTML.ts"
 /*!************************************!*\
   !*** ./src/ts/setting/FormHTML.ts ***!
   \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -38129,13 +38495,13 @@ const formHtml = `
 </form>`;
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/setting/FormSettings.ts":
+/***/ "./src/ts/setting/FormSettings.ts"
 /*!****************************************!*\
   !*** ./src/ts/setting/FormSettings.ts ***!
   \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -38485,13 +38851,13 @@ class FormSettings {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/setting/InvisibleSettings.ts":
+/***/ "./src/ts/setting/InvisibleSettings.ts"
 /*!*********************************************!*\
   !*** ./src/ts/setting/InvisibleSettings.ts ***!
   \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -38547,13 +38913,13 @@ class InvisibleSettings {
 new InvisibleSettings();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/setting/NameRuleManager.ts":
+/***/ "./src/ts/setting/NameRuleManager.ts"
 /*!*******************************************!*\
   !*** ./src/ts/setting/NameRuleManager.ts ***!
   \*******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -38720,13 +39086,13 @@ const nameRuleManager = new NameRuleManager();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/setting/Options.ts":
+/***/ "./src/ts/setting/Options.ts"
 /*!***********************************!*\
   !*** ./src/ts/setting/Options.ts ***!
   \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -38901,13 +39267,13 @@ const options = new Options();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/setting/SaveNamingRule.ts":
+/***/ "./src/ts/setting/SaveNamingRule.ts"
 /*!******************************************!*\
   !*** ./src/ts/setting/SaveNamingRule.ts ***!
   \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -39038,13 +39404,13 @@ class SaveNamingRule {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/setting/Settings.ts":
+/***/ "./src/ts/setting/Settings.ts"
 /*!************************************!*\
   !*** ./src/ts/setting/Settings.ts ***!
   \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -39840,13 +40206,13 @@ const setSetting = self.setSetting.bind(self);
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/setting/UseDifferentNameRuleIfWorkHasTag.ts":
+/***/ "./src/ts/setting/UseDifferentNameRuleIfWorkHasTag.ts"
 /*!************************************************************!*\
   !*** ./src/ts/setting/UseDifferentNameRuleIfWorkHasTag.ts ***!
   \************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -40125,13 +40491,13 @@ class UseDifferentNameRuleIfWorkHasTag {
 new UseDifferentNameRuleIfWorkHasTag();
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/setting/Wiki.ts":
+/***/ "./src/ts/setting/Wiki.ts"
 /*!********************************!*\
   !*** ./src/ts/setting/Wiki.ts ***!
   \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -40386,13 +40752,13 @@ const wiki = new Wiki();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/store/CacheWorkData.ts":
+/***/ "./src/ts/store/CacheWorkData.ts"
 /*!***************************************!*\
   !*** ./src/ts/store/CacheWorkData.ts ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -40434,13 +40800,13 @@ const cacheWorkData = new CacheWorkData();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/store/SaveArtworkData.ts":
+/***/ "./src/ts/store/SaveArtworkData.ts"
 /*!*****************************************!*\
   !*** ./src/ts/store/SaveArtworkData.ts ***!
   \*****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -40641,13 +41007,13 @@ const saveArtworkData = new SaveArtworkData();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/store/SaveNovelData.ts":
+/***/ "./src/ts/store/SaveNovelData.ts"
 /*!***************************************!*\
   !*** ./src/ts/store/SaveNovelData.ts ***!
   \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -40773,13 +41139,13 @@ const saveNovelData = new SaveNovelData();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/store/States.ts":
+/***/ "./src/ts/store/States.ts"
 /*!********************************!*\
   !*** ./src/ts/store/States.ts ***!
   \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -40907,13 +41273,13 @@ const states = new States();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/store/Store.ts":
+/***/ "./src/ts/store/Store.ts"
 /*!*******************************!*\
   !*** ./src/ts/store/Store.ts ***!
   \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -41130,13 +41496,13 @@ const store = new Store();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/store/WorkPublishTimeIllusts.ts":
+/***/ "./src/ts/store/WorkPublishTimeIllusts.ts"
 /*!************************************************!*\
   !*** ./src/ts/store/WorkPublishTimeIllusts.ts ***!
   \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -54937,13 +55303,13 @@ const illustsData = [
 ];
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/store/WorkPublishTimeNovels.ts":
+/***/ "./src/ts/store/WorkPublishTimeNovels.ts"
 /*!***********************************************!*\
   !*** ./src/ts/store/WorkPublishTimeNovels.ts ***!
   \***********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -57610,13 +57976,13 @@ const novelsData = [
 ];
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/utils/CreateCSV.ts":
+/***/ "./src/ts/utils/CreateCSV.ts"
 /*!***********************************!*\
   !*** ./src/ts/utils/CreateCSV.ts ***!
   \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -57724,13 +58090,13 @@ const createCSV = new CreateCSV();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/utils/DateFormat.ts":
+/***/ "./src/ts/utils/DateFormat.ts"
 /*!************************************!*\
   !*** ./src/ts/utils/DateFormat.ts ***!
   \************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -57812,13 +58178,13 @@ class DateFormat {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/utils/IndexedDB.ts":
+/***/ "./src/ts/utils/IndexedDB.ts"
 /*!***********************************!*\
   !*** ./src/ts/utils/IndexedDB.ts ***!
   \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -58068,13 +58434,13 @@ class IndexedDB {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/utils/SecretSignal.ts":
+/***/ "./src/ts/utils/SecretSignal.ts"
 /*!**************************************!*\
   !*** ./src/ts/utils/SecretSignal.ts ***!
   \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -58137,13 +58503,13 @@ const secretSignal = new SecretSignal();
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/utils/Utils.ts":
+/***/ "./src/ts/utils/Utils.ts"
 /*!*******************************!*\
   !*** ./src/ts/utils/Utils.ts ***!
   \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -58648,13 +59014,13 @@ class Utils {
 
 
 
-/***/ }),
+/***/ },
 
-/***/ "./src/ts/utils/imageToIcon.ts":
+/***/ "./src/ts/utils/imageToIcon.ts"
 /*!*************************************!*\
   !*** ./src/ts/utils/imageToIcon.ts ***!
   \*************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
@@ -58864,7 +59230,7 @@ const img2ico = new ImageToIcon();
 
 
 
-/***/ })
+/***/ }
 
 /******/ 	});
 /************************************************************************/
@@ -58877,6 +59243,12 @@ const img2ico = new ImageToIcon();
 /******/ 		var cachedModule = __webpack_module_cache__[moduleId];
 /******/ 		if (cachedModule !== undefined) {
 /******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Check if module exists (development only)
+/******/ 		if (__webpack_modules__[moduleId] === undefined) {
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
