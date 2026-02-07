@@ -1690,6 +1690,8 @@ class ArtworkThumbnail extends _WorkThumbnail__WEBPACK_IMPORTED_MODULE_0__.WorkT
                 'div[data-ga4-entity-id^="manga"]>div:nth-child(2)',
                 // 在新版搜索页面里使用
                 'li[id]>div:nth-child(2)',
+                // 在比赛页面使用
+                '.thumbnail-container',
             ];
             // div[data-ga4-entity-id^="illust"]>div:nth-child(2) 匹配新版首页的插画作品区域
             // 即显示在页面左半边的作品缩略图。它们的元素里含有此类特征：
@@ -1758,6 +1760,10 @@ class ArtworkThumbnail extends _WorkThumbnail__WEBPACK_IMPORTED_MODULE_0__.WorkT
             }
             if (selector === 'li[id]>div:nth-child(2)' &&
                 _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.type !== _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.list.ArtworkRanking) {
+                continue;
+            }
+            if (selector === '.thumbnail-container' &&
+                _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.type !== _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.list.Contest) {
                 continue;
             }
             const elements = parent.querySelectorAll(selector);
@@ -16553,9 +16559,7 @@ class InitContestPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0__.I
     }
     /** applications: 抓取应募作品；winning: 抓取获奖作品 */
     scope = 'applications';
-    type = location.pathname.includes('/novel')
-        ? 'novel'
-        : 'illust';
+    type = 'illust';
     page = 1;
     /** 比赛名称 */
     name = '';

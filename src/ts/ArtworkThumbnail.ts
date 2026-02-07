@@ -38,6 +38,8 @@ class ArtworkThumbnail extends WorkThumbnail {
         'div[data-ga4-entity-id^="manga"]>div:nth-child(2)',
         // 在新版搜索页面里使用
         'li[id]>div:nth-child(2)',
+        // 在比赛页面使用
+        '.thumbnail-container',
       ]
       // div[data-ga4-entity-id^="illust"]>div:nth-child(2) 匹配新版首页的插画作品区域
       // 即显示在页面左半边的作品缩略图。它们的元素里含有此类特征：
@@ -129,6 +131,13 @@ class ArtworkThumbnail extends WorkThumbnail {
       if (
         selector === 'li[id]>div:nth-child(2)' &&
         pageType.type !== pageType.list.ArtworkRanking
+      ) {
+        continue
+      }
+
+      if (
+        selector === '.thumbnail-container' &&
+        pageType.type !== pageType.list.Contest
       ) {
         continue
       }
