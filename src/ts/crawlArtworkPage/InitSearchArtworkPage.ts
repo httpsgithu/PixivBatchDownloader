@@ -28,6 +28,11 @@ import '../pageFunciton/RemoveWorksOfFollowedUsersOnSearchPage'
 import { vipSearchOptimize } from '../crawl/VipSearchOptimize'
 import '../filter/FilterSearchResults'
 
+// 用于测试抓取的 URL：
+// 搜索图像作品的两种 URL：
+// https://www.pixiv.net/tags/%E5%8E%9F%E7%A5%9E/illustrations?order=date&mode=r18&scd=2025-02-10&ecd=2026-02-10&wlt=3000&hlt=3000&ratio=0.5&tool=Photoshop&ai_type=1&csw=1
+// https://www.pixiv.net/search?q=%E5%8E%9F%E7%A5%9E&s_mode=tag&type=illust_ugoira&order=date&mode=r18&scd=2025-02-10&ecd=2026-02-10&wlt=3000&hlt=3000&ratio=0.5&tool=Photoshop&ai_type=1&csw=1
+
 type AddBMKData = {
   id: number
   tags: string[]
@@ -48,36 +53,91 @@ class InitSearchArtworkPage extends InitPageBase {
   private readonly ugoiraClass = 'ugoiraPart'
   private readonly addBMKBtnClass = 'bmkBtn'
   private readonly bookmarkedClass = 'bookmarked'
-  private readonly countSelector = 'section h3+div span'
   private countEl?: HTMLElement
 
-  private worksType = ''
+  private APIPath: 'artworks' | 'illustrations' | 'manga' = 'artworks'
   private option: SearchOption = {}
   private readonly worksNoPerPage = 60 // 每个页面有多少个作品
   private needCrawlPageCount = 0 // 需要抓取多少个列表页面
   private sendCrawlTaskCount = 0 // 发送抓取请求之前会自增，用于计算要抓取的页码。不是请求完成后自增
   private readonly allOption = [
-    'order',
-    'type',
-    'wlt',
-    'wgt',
-    'hlt',
-    'hgt',
-    'ratio',
-    'tool',
+    // 搜索词
+    'q',
+
+    // 检索范围，有这些值：
+    // tag            标签（部分一致）
+    // tag_full       标签（完全一致）
+    // tc             标题、说明文字
+    // tag_tc         标签、标题、说明文字
     's_mode',
+
+    // 作品类型，有这些值：
+    // artwork        插画、漫画、动图（动态插画）
+    // illust_ugoira  插画、动图
+    // illust         插画
+    // manga          漫画
+    // ugoira         动图
+    // novel          小说
+    'type',
+
+    // 排序方式，有这些值：
+    // 无             从新到旧
+    // date           从旧到新
+    // popular_d      按欢迎度倒序排列
+    // popular_male_d 受男性欢迎倒序排列
+    // popular_female_d 受女性欢迎倒序排列
+    'order',
+
+    //  年龄范围，有这些值：
+    // all            全部
+    // safe           全年龄
+    // r18            R-18
     'mode',
+
+    // 起始日期，如 2025-02-10
     'scd',
+    // 结束日期，如果无此参数则截止到现在
     'ecd',
+
+    // 宽度需要大于这个值
+    'wlt',
+    // 宽度需要小于这个值
+    'wgt',
+    // 高度需要大于这个值
+    'hlt',
+    // 高度需要小于这个值
+    'hgt',
+
+    // 收藏数量需要大于这个值
     'blt',
+    // 收藏数量需要小于这个值
     'bgt',
-    'work_lang',
+
+    // 比例
+    // 无   所有比例的图片
+    // 0.5  横图
+    // -0.5 竖图
+    // 0    方图
+    'ratio',
+
+    // 是否显示 AI 生成作品
+    // 0 或者无此参数则显示
+    // 1 不显示
     'ai_type',
+
+    // 创作工具，是软件名，例如 Photoshop、SAI 等
+    // 无此参数时则不筛选创作工具
+    'tool',
+
+    // 是否按作者整合
+    // 0 或者无此参数则不整合
+    // 1 按作者整合
+    'csw',
   ]
 
   private resultMeta: Result[] = [] // 每次“开始筛选”完成后，储存当时所有结果，以备“在结果中筛选”使用
 
-  private worksWrap: HTMLUListElement | null = null
+  private worksWrap: HTMLElement | null = null
 
   private deleteId = 0 // 手动删除时，要删除的作品的 id
 
@@ -150,12 +210,25 @@ class InitSearchArtworkPage extends InitPageBase {
     bookmarkAllBtn.addEventListener('click', () => {
       const listWrap = this.findWorksWrap()
       if (listWrap) {
-        const list = listWrap.querySelectorAll('li')
-        // 被二次筛选过滤掉的作品会被隐藏，所以批量添加收藏时，过滤掉隐藏的作品
+        // 选择作品列表
+        // 2026-02-10 改版前的选择器，以及下载器在预览抓取结果时添加的作品元素是 li
+        let list = listWrap.querySelectorAll('li')
+
+        // 2026-02-10 改版后的选择器
+        if (list.length === 0) {
+          list = document.querySelectorAll(
+            'div[data-ga4-label="works_content"]>div:last-child>div'
+          )
+        }
+
+        // 在显示了预览的抓取结果时，被二次筛选过滤掉的作品会被隐藏，所以批量添加收藏时需要过滤掉隐藏的作品
         const showList = Array.from(list).filter((el) => {
           return el.style.display !== 'none'
         })
-        bookmarkAll.sendWorkList(showList)
+
+        if (list.length > 0) {
+          bookmarkAll.sendWorkList(showList)
+        }
       }
     })
   }
@@ -277,35 +350,51 @@ class InitSearchArtworkPage extends InitPageBase {
 
     this.clearPreview()
 
-    this.countEl = document.querySelector(this.countSelector) as HTMLElement
+    // 显示作品数量的元素
+    // 第一个选择器是旧版页面的，以后可能不需要使用了
+    // 第二个下载器是新版页面里的
+    this.countEl =
+      document.querySelector('section h3+div span') ||
+      (document.querySelector(
+        'div[data-ga4-label="works_content"]>div:first-child div:first-child span span'
+      ) as HTMLElement)
   }
 
   // 组织要请求的 url 中的参数
   private initFetchURL() {
-    // 从 URL 中获取分类。可能有语言标识。
-    /*
-    https://www.pixiv.net/tags/Fate%2FGrandOrder/illustrations
-    https://www.pixiv.net/en/tags/Fate%2FGrandOrder/illustrations
-    */
-    const URLType = location.pathname.split('tags/')[1].split('/')[1] ?? ''
-    // 在“顶部”页面的时候是没有分类的，会是 undefined，此时使用空字符串
+    // 从 URL 中获取发起请求时的分类路径
+    let APIPath = 'illustrations'
+    if (location.pathname.startsWith('/tags')) {
+      // 如果是 /tags 开头的 URL，分类路径在搜索词后面，例如
+      // https://www.pixiv.net/tags/Fate%2FGrandOrder/illustrations
+      APIPath = location.pathname.split('tags/')[1].split('/')[1] ?? 'artworks'
+      // 在“顶部”页面的时候，URL 里是没有分类的，会是 undefined，此时使用代表“顶部”的 'artworks'
+    } else {
+      // 处理以 /search 开头的 URL
+      // 在“插画”分类页面里，参数里的 type 并不等同于分类路径。例如 type='illust_ugoira' 对应的路径是 'illustrations'
+      // 在漫画、小说分类页面里，使用参数里的 type 即可
+      APIPath =
+        Utils.getURLSearchField(location.href, 'type') || 'illustrations'
+      // 以 /search 开头时，没有“顶部”页面，所以默认值是“插画”页面的 'illustrations'，而不是“顶部”页面的 'artworks'
+    }
 
-    switch (URLType) {
-      case '':
-        this.worksType = 'artworks'
-        break
+    switch (APIPath) {
       case 'illustrations':
+      case 'illust_ugoira':
       case 'illust_and_ugoira':
       case 'ugoira':
       case 'illust':
-        this.worksType = 'illustrations'
+        // 插画（含动图）
+        this.APIPath = 'illustrations'
         break
       case 'manga':
-        this.worksType = 'manga'
+        // 漫画
+        this.APIPath = 'manga'
         break
 
       default:
-        this.worksType = 'artworks'
+        // 顶部
+        this.APIPath = 'artworks'
         break
     }
 
@@ -315,15 +404,60 @@ class InitSearchArtworkPage extends InitPageBase {
     // 从页面 url 中获取可以使用的选项
     this.option = {}
     this.allOption.forEach((param) => {
-      let value = Utils.getURLSearchField(location.href, param)
-      if (value !== '') {
-        this.option[param] = value
+      // 这里不获取 q，因为它储存在 store.tag 里，会添加到 API 参数里，不必重复获取
+      // 这里不获取 p，因为它储存在 this.startpageNo 里
+      if (param !== 'q' && param !== 'p') {
+        let value = Utils.getURLSearchField(location.href, param)
+        if (value !== '') {
+          this.option[param] = value
+        }
+
+        if (param === 'type') {
+          const path = location.pathname
+          if (path.startsWith('/search')) {
+            // 虽然 URL 里的 type 是 illust_ugoira，但查询时要使用 illust_and_ugoira
+            // https://www.pixiv.net/search?q=%E5%8E%9F%E7%A5%9E&s_mode=tag&type=illust_ugoira
+            // 我也不知道为什么，反正 Pixiv 官方的请求是这样的
+            if (value === 'illust_ugoira') {
+              this.option[param] = 'illust_and_ugoira'
+            }
+          }
+
+          if (path.startsWith('/tags')) {
+            // https://www.pixiv.net/tags/%E5%8E%9F%E7%A5%9E/illustrations
+            // 虽然上面的 URL 里没有 type 参数，但是 pixiv 的查询参数里附带了 type='illust_and_ugoira'
+            // 下载器也照样处理一下
+            if (value === '') {
+              if (path.includes('/illustrations')) {
+                this.option[param] = 'illust_and_ugoira'
+              }
+            }
+          }
+        }
+
+        // 请求里的 s_mode 也不是 url 里的 s_mode
+        if (param === 's_mode') {
+          if (location.pathname.startsWith('/search')) {
+            if (value === 'tag') {
+              this.option[param] = 's_tag'
+            }
+            if (value === '') {
+              this.option[param] = 's_tag_full'
+            }
+            if (value === 'tag_tc') {
+              this.option[param] = 's_tag_tc'
+            }
+            if (value === 'tc') {
+              this.option[param] = 's_tc'
+            }
+          }
+        }
       }
     })
 
-    // 如果 url 里没有显式指定标签匹配模式，则使用 完全一致 模式
-    // 因为在这种情况下，pixiv 默认使用的就是 完全一致
+    // 如果 url 里没有显式指定标签匹配模式，则使用“完全一致”模式
     if (!this.option.s_mode) {
+      // “完全一致”的 API 参数使用 s_tag_full 或 tag_full 都可以，但 s_tag_full 更严格，作品数量更少一些
       this.option.s_mode = 's_tag_full'
     }
 
@@ -337,11 +471,15 @@ class InitSearchArtworkPage extends InitPageBase {
   private tipSearchMode(mode: string) {
     switch (mode) {
       case 's_tag':
+      case 'tag':
         return lang.transl('_标签部分一致')
       case 's_tag_full':
+      case 'tag_full':
         return lang.transl('_标签完全一致')
       case 's_tc':
         return lang.transl('_标题说明文字')
+      case 'tag_tc':
+        return lang.transl('_标签标题说明文字')
       default:
         return mode
     }
@@ -349,12 +487,7 @@ class InitSearchArtworkPage extends InitPageBase {
 
   // 获取搜索页的数据。因为有多处使用，所以进行了封装
   private async getSearchData(p: number) {
-    let data = await API.getSearchData(
-      store.tag,
-      this.worksType,
-      p,
-      this.option
-    )
+    let data = await API.getSearchData(store.tag, this.APIPath, p, this.option)
     return data.body.illust || data.body.illustManga || data.body.manga
   }
 
@@ -546,24 +679,49 @@ class InitSearchArtworkPage extends InitPageBase {
     }, 0)
   }
 
-  // 返回包含作品列表的 ul 元素
+  // 返回包含作品列表的容器元素
   private findWorksWrap() {
-    let wrap: HTMLUListElement | null = null
+    let wrap: HTMLElement | null = null
 
     // 对于已经查找过的情况，直接定位到该元素
     const old = document.querySelector(`#${this.workListWrapID}`)
     if (old) {
-      wrap = old as HTMLUListElement
+      wrap = old as HTMLElement
     } else {
       // 重新查找
       // 先查找作品列表里最后一个作品链接，然后向上查找 UL 元素
       // 为什么用最后一个作品，而不是第一个作品：
       // 有时在作品列表上方会显示“热门作品”和“成为pixiv高级会员”按钮的板块
       // 如果使用第一个作品，就会选择到这个板块，而非其下方真正的作品列表
-      const works = document.querySelectorAll('li a[data-gtm-user-id]')
+      let works = document.querySelectorAll(
+        'li a[data-gtm-user-id][href^="/artworks"]'
+      )
       if (works.length > 0) {
         const lastWork = Array.from(works).pop()!
-        wrap = lastWork.closest('ul')!
+        wrap = lastWork.closest('ul')
+      }
+
+      // 2026-02-10 改版后
+      if (!wrap) {
+        // 查找作品元素
+        works = document.querySelectorAll('.col-span-2')
+        if (works.length > 0) {
+          const lastWork = Array.from(works).pop()!
+          if (lastWork.querySelector('a[href^="/artworks"]')) {
+            wrap = lastWork.parentElement!
+          }
+        }
+      }
+
+      if (!wrap) {
+        // 查找作品缩略图
+        works = document.querySelectorAll('div[width="184"]')
+        if (works.length > 0) {
+          const lastWork = Array.from(works).pop()!
+          wrap =
+            lastWork.closest('div.mx-auto') ||
+            lastWork.closest('div[data-ga4-label="works_content"]')
+        }
       }
     }
 
@@ -919,9 +1077,49 @@ class InitSearchArtworkPage extends InitPageBase {
       if (pageType.type !== pageType.list.ArtworkSearch) {
         return
       }
+      // 移除覆盖在整个热门作品区域上的超链接
       const hotWorksLink = document.querySelector('section a[href^="/premium"]')
       if (hotWorksLink) {
         hotWorksLink.remove()
+      }
+      // 移除热门作品列表右侧的提示购买会员的文字
+      const workSpanList = document.querySelectorAll(
+        'aside ul span[data-gtm-value]'
+      ) as NodeListOf<HTMLSpanElement>
+      if (workSpanList.length > 0) {
+        // aside 元素的直接子元素有 iframe ul div button 元素，只需要保留 ul
+        const aside = workSpanList[0].closest('aside')
+        if (aside) {
+          ;[...aside.children].forEach((el) => {
+            if (el.nodeName !== 'UL') {
+              el.remove()
+            }
+          })
+        }
+
+        // 每个缩略图元素里没有超链接，所以无法点击。为它们添加超链接
+        workSpanList.forEach((span) => {
+          if (span.dataset.addLink !== '1') {
+            span.dataset.addLink = '1'
+            const id = span.dataset.gtmValue
+            if (id) {
+              // 把 a 标签放到一个 div 元素里，让 ArtworkThumbnail 可以通过查找子元素来查找到它
+              const div = document.createElement('div')
+              const a = document.createElement('a')
+              a.href = `https://www.pixiv.net/artworks/${id}`
+              a.target = '_blank'
+              a.classList.add('hotBarWorkLink')
+              div.append(a)
+              // 把 span 里原有的子元素都移动到 a 标签里
+              ;[...span.children].forEach((el) => {
+                if (el.nodeName !== 'A') {
+                  a.appendChild(el)
+                }
+              })
+              span.insertAdjacentElement('afterbegin', div)
+            }
+          }
+        })
       }
     }, 300)
   }

@@ -184,7 +184,7 @@ class Utils {
     return window.location.host.endsWith('.pixiv.net')
   }
 
-  // 从 url 中获取指定的查询字段的值
+  /** 从 url 中获取指定的查询字段的值 */
   // 注意：返回值经过 encodeURIComponent 编码！
   static getURLSearchField(url: string, query: string) {
     const result = new URL(url).searchParams.get(query)

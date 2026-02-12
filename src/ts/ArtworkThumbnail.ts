@@ -38,8 +38,12 @@ class ArtworkThumbnail extends WorkThumbnail {
         'div[data-ga4-entity-id^="manga"]>div:nth-child(2)',
         // 在新版搜索页面里使用
         'li[id]>div:nth-child(2)',
+        // 搜索页面的热门作品，这是我自己添加的 className
+        '.hotBarWorkLink',
         // 在比赛页面使用
         '.thumbnail-container',
+        // 首页-插画-瞩目的企划目录里的作品
+        'li[size="1"]',
       ]
       // div[data-ga4-entity-id^="illust"]>div:nth-child(2) 匹配新版首页的插画作品区域
       // 即显示在页面左半边的作品缩略图。它们的元素里含有此类特征：
@@ -97,6 +101,13 @@ class ArtworkThumbnail extends WorkThumbnail {
         continue
       }
 
+      if (
+        selector === '.hotBarWorkLink' &&
+        pageType.type !== pageType.list.ArtworkSearch
+      ) {
+        continue
+      }
+
       // div[type="illust"] 只在约稿页面使用
       // 因为已知问题：在收藏页面里， div[type="illust"] 嵌套了子元素 div[width="184"]
       // 这会导致重复绑定（在不同元素上）
@@ -131,6 +142,14 @@ class ArtworkThumbnail extends WorkThumbnail {
           selector === 'div[data-ga4-entity-id^="illust"]>div:nth-child(2)' ||
           selector === 'div[data-ga4-entity-id^="manga"]>div:nth-child(2)') &&
         pageType.type !== pageType.list.Home
+      ) {
+        continue
+      }
+
+      if (
+        selector === 'li[size="1"]' &&
+        pageType.type !== pageType.list.Home &&
+        !window.location.pathname.includes('/illustration')
       ) {
         continue
       }

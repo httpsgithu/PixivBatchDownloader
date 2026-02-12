@@ -1471,22 +1471,9 @@ class API {
         return this.fetch(url);
     }
     // 获取搜索数据
-    static getSearchData(word, type = 'artworks', p = 1, option = {}) {
-        // 基础的 url
-        let url = `https://www.pixiv.net/ajax/search/${type}/${encodeURIComponent(word)}?word=${encodeURIComponent(word)}&p=${p}`;
-        // 把可选项添加到 url 里
-        let temp = new URL(url);
-        for (const [key, value] of Object.entries(option)) {
-            if (value) {
-                temp.searchParams.set(key, value);
-            }
-        }
-        url = temp.toString();
-        return this.fetch(url);
-    }
-    static getNovelSearchData(word, p = 1, option = {}) {
-        // 基础的 url
-        let url = `https://www.pixiv.net/ajax/search/novels/${encodeURIComponent(word)}?word=${encodeURIComponent(word)}&p=${p}`;
+    static getSearchData(word, path = 'artworks', p = 1, option = {}) {
+        word = encodeURIComponent(word);
+        let url = `https://www.pixiv.net/ajax/search/${path}/${word}?q=${word}&p=${p}`;
         // 把可选项添加到 url 里
         let temp = new URL(url);
         for (const [key, value] of Object.entries(option)) {
@@ -1690,8 +1677,12 @@ class ArtworkThumbnail extends _WorkThumbnail__WEBPACK_IMPORTED_MODULE_0__.WorkT
                 'div[data-ga4-entity-id^="manga"]>div:nth-child(2)',
                 // 在新版搜索页面里使用
                 'li[id]>div:nth-child(2)',
+                // 搜索页面的热门作品，这是我自己添加的 className
+                '.hotBarWorkLink',
                 // 在比赛页面使用
                 '.thumbnail-container',
+                // 首页-插画-瞩目的企划目录里的作品
+                'li[size="1"]',
             ];
             // div[data-ga4-entity-id^="illust"]>div:nth-child(2) 匹配新版首页的插画作品区域
             // 即显示在页面左半边的作品缩略图。它们的元素里含有此类特征：
@@ -1738,6 +1729,10 @@ class ArtworkThumbnail extends _WorkThumbnail__WEBPACK_IMPORTED_MODULE_0__.WorkT
                 _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.type !== _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.list.Unsupported) {
                 continue;
             }
+            if (selector === '.hotBarWorkLink' &&
+                _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.type !== _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.list.ArtworkSearch) {
+                continue;
+            }
             // div[type="illust"] 只在约稿页面使用
             // 因为已知问题：在收藏页面里， div[type="illust"] 嵌套了子元素 div[width="184"]
             // 这会导致重复绑定（在不同元素上）
@@ -1762,6 +1757,11 @@ class ArtworkThumbnail extends _WorkThumbnail__WEBPACK_IMPORTED_MODULE_0__.WorkT
                 selector === 'div[data-ga4-entity-id^="illust"]>div:nth-child(2)' ||
                 selector === 'div[data-ga4-entity-id^="manga"]>div:nth-child(2)') &&
                 _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.type !== _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.list.Home) {
+                continue;
+            }
+            if (selector === 'li[size="1"]' &&
+                _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.type !== _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.list.Home &&
+                !window.location.pathname.includes('/illustration')) {
                 continue;
             }
             if (selector === 'li[id]>div:nth-child(2)' &&
@@ -6115,7 +6115,7 @@ class NovelThumbnail extends _WorkThumbnail__WEBPACK_IMPORTED_MODULE_0__.WorkThu
                 'div[size="496"]',
                 'div[size="392"]',
                 'div[data-ga4-entity-id^="novel"]>div:nth-child(2)',
-                // 在小说搜索页面里，选择了“整合相同系列的作品”模式时，小说的选择器
+                // 在搜索页面里，小说的选择器可能是这个
                 'div[data-ga4-label="works_content"]>div>div',
                 // 鼠标放到作者名字上，显示作者的 3 个作品预览图，其中小说的选择器是这个
                 'div[type="novel"][size]',
@@ -6175,7 +6175,8 @@ class NovelThumbnail extends _WorkThumbnail__WEBPACK_IMPORTED_MODULE_0__.WorkThu
                     _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.type !== _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.list.Home) {
                     continue;
                 }
-                if (selector === 'div[data-ga4-label="works_content"]>div>div' && _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.type !== _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.list.NovelSearch) {
+                if (selector === 'div[data-ga4-label="works_content"]>div>div' &&
+                    _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.type !== _PageType__WEBPACK_IMPORTED_MODULE_1__.pageType.list.NovelSearch) {
                     continue;
                 }
                 if ((selector === '.thumbnail-container' ||
@@ -6426,6 +6427,16 @@ class PageType {
                 ? PageName.NovelSearch
                 : PageName.ArtworkSearch;
         }
+        else if (path === '/search') {
+            // 在搜索框回车搜索时，是 /search?xxx 的网址
+            // 查询词 q 不一定是第一个，所以不能使用 '?q=' 来判断
+            if (url.includes('type=novel')) {
+                return PageName.NovelSearch;
+            }
+            else {
+                return PageName.ArtworkSearch;
+            }
+        }
         else if (path === '/ranking_area.php' && location.search !== '') {
             return PageName.AreaRanking;
         }
@@ -6538,7 +6549,19 @@ class PageType {
             },
             {
                 type: PageName.ArtworkSearch,
-                url: 'https://www.pixiv.net/tags/%E5%8E%9F%E7%A5%9E/artworks?s_mode=s_tag',
+                url: 'https://www.pixiv.net/tags/%E5%8E%9F%E7%A5%9E',
+            },
+            {
+                type: PageName.ArtworkSearch,
+                url: 'https://www.pixiv.net/search?s_mode=tag&type=artwork&q=%E5%8E%9F%E7%A5%9E',
+            },
+            {
+                type: PageName.ArtworkSearch,
+                url: 'https://www.pixiv.net/tags/%E5%8E%9F%E7%A5%9E/illustrations?order=date&mode=r18&scd=2025-02-10&ecd=2026-02-10&wlt=3000&hlt=3000&ratio=0.5&tool=Photoshop&ai_type=1&csw=1',
+            },
+            {
+                type: PageName.ArtworkSearch,
+                url: 'https://www.pixiv.net/search?q=%E5%8E%9F%E7%A5%9E&s_mode=tag&type=illust_ugoira&order=date&mode=r18&scd=2025-02-10&ecd=2026-02-10&wlt=3000&hlt=3000&ratio=0.5&tool=Photoshop&ai_type=1&csw=1',
             },
             {
                 type: PageName.SearchUsers,
@@ -6582,7 +6605,11 @@ class PageType {
             },
             {
                 type: PageName.NovelSearch,
-                url: 'https://www.pixiv.net/tags/%E7%99%BE%E5%90%88/novels',
+                url: 'https://www.pixiv.net/tags/%E5%8E%9F%E7%A5%9E/novels?order=date&mode=r18&scd=2025-02-10&ecd=2026-02-10&wlt=20000&wgt=79999&ai_type=1',
+            },
+            {
+                type: PageName.NovelSearch,
+                url: 'https://www.pixiv.net/search?q=%E5%8E%9F%E7%A5%9E&s_mode=tag&type=novel&order=date&mode=r18&scd=2025-02-10&ecd=2026-02-10&wlt=20000&wgt=79999&ai_type=1',
             },
             {
                 type: PageName.NovelRanking,
@@ -9456,6 +9483,15 @@ class ShowLargerThumbnails {
                     this.needFind = false;
                 }
             }
+            // 2026-02-10 改版后，搜索页的作品列表已经不使用 ul li 元素了，改为下面的查找方式
+            const workList = document.querySelectorAll('div[data-ga4-label="works_content"] div.col-span-2');
+            if (workList.length > 0) {
+                if (workList[0].querySelector('div[width="184"]')) {
+                    workList[0].parentElement.classList.add('worksUL');
+                    // 这个 worksULParent 也就是 div[data-ga4-label="works_content"]
+                    workList[0].parentElement.parentElement.classList.add('worksULParent');
+                }
+            }
         }
         // 已关注用户的新作品
         if (_PageType__WEBPACK_IMPORTED_MODULE_3__.pageType.type === _PageType__WEBPACK_IMPORTED_MODULE_3__.pageType.list.NewArtworkBookmark) {
@@ -10750,6 +10786,9 @@ class Tools {
         // 5 搜索页面
         if (nowURL.pathname.includes('/tags/')) {
             return decodeURIComponent(nowURL.pathname.split('tags/')[1].split('/')[0]);
+        }
+        if (nowURL.pathname.startsWith('/search')) {
+            return decodeURIComponent(_utils_Utils__WEBPACK_IMPORTED_MODULE_4__.Utils.getURLSearchField(location.href, 'q'));
         }
         // 默认情况，从查询字符串里获取，如下网址
         // https://www.pixiv.net/bookmark.php?tag=R-18
@@ -15195,30 +15234,74 @@ class InitSearchArtworkPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE
     ugoiraClass = 'ugoiraPart';
     addBMKBtnClass = 'bmkBtn';
     bookmarkedClass = 'bookmarked';
-    countSelector = 'section h3+div span';
     countEl;
-    worksType = '';
+    APIPath = 'artworks';
     option = {};
     worksNoPerPage = 60; // 每个页面有多少个作品
     needCrawlPageCount = 0; // 需要抓取多少个列表页面
     sendCrawlTaskCount = 0; // 发送抓取请求之前会自增，用于计算要抓取的页码。不是请求完成后自增
     allOption = [
-        'order',
-        'type',
-        'wlt',
-        'wgt',
-        'hlt',
-        'hgt',
-        'ratio',
-        'tool',
+        // 搜索词
+        'q',
+        // 检索范围，有这些值：
+        // tag            标签（部分一致）
+        // tag_full       标签（完全一致）
+        // tc             标题、说明文字
+        // tag_tc         标签、标题、说明文字
         's_mode',
+        // 作品类型，有这些值：
+        // artwork        插画、漫画、动图（动态插画）
+        // illust_ugoira  插画、动图
+        // illust         插画
+        // manga          漫画
+        // ugoira         动图
+        // novel          小说
+        'type',
+        // 排序方式，有这些值：
+        // 无             从新到旧
+        // date           从旧到新
+        // popular_d      按欢迎度倒序排列
+        // popular_male_d 受男性欢迎倒序排列
+        // popular_female_d 受女性欢迎倒序排列
+        'order',
+        //  年龄范围，有这些值：
+        // all            全部
+        // safe           全年龄
+        // r18            R-18
         'mode',
+        // 起始日期，如 2025-02-10
         'scd',
+        // 结束日期，如果无此参数则截止到现在
         'ecd',
+        // 宽度需要大于这个值
+        'wlt',
+        // 宽度需要小于这个值
+        'wgt',
+        // 高度需要大于这个值
+        'hlt',
+        // 高度需要小于这个值
+        'hgt',
+        // 收藏数量需要大于这个值
         'blt',
+        // 收藏数量需要小于这个值
         'bgt',
-        'work_lang',
+        // 比例
+        // 无   所有比例的图片
+        // 0.5  横图
+        // -0.5 竖图
+        // 0    方图
+        'ratio',
+        // 是否显示 AI 生成作品
+        // 0 或者无此参数则显示
+        // 1 不显示
         'ai_type',
+        // 创作工具，是软件名，例如 Photoshop、SAI 等
+        // 无此参数时则不筛选创作工具
+        'tool',
+        // 是否按作者整合
+        // 0 或者无此参数则不整合
+        // 1 按作者整合
+        'csw',
     ];
     resultMeta = []; // 每次“开始筛选”完成后，储存当时所有结果，以备“在结果中筛选”使用
     worksWrap = null;
@@ -15260,12 +15343,20 @@ class InitSearchArtworkPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE
         bookmarkAllBtn.addEventListener('click', () => {
             const listWrap = this.findWorksWrap();
             if (listWrap) {
-                const list = listWrap.querySelectorAll('li');
-                // 被二次筛选过滤掉的作品会被隐藏，所以批量添加收藏时，过滤掉隐藏的作品
+                // 选择作品列表
+                // 2026-02-10 改版前的选择器，以及下载器在预览抓取结果时添加的作品元素是 li
+                let list = listWrap.querySelectorAll('li');
+                // 2026-02-10 改版后的选择器
+                if (list.length === 0) {
+                    list = document.querySelectorAll('div[data-ga4-label="works_content"]>div:last-child>div');
+                }
+                // 在显示了预览的抓取结果时，被二次筛选过滤掉的作品会被隐藏，所以批量添加收藏时需要过滤掉隐藏的作品
                 const showList = Array.from(list).filter((el) => {
                     return el.style.display !== 'none';
                 });
-                bookmarkAll.sendWorkList(showList);
+                if (list.length > 0) {
+                    bookmarkAll.sendWorkList(showList);
+                }
             }
         });
     }
@@ -15355,32 +15446,47 @@ class InitSearchArtworkPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE
         }
         this.getIdList();
         this.clearPreview();
-        this.countEl = document.querySelector(this.countSelector);
+        // 显示作品数量的元素
+        // 第一个选择器是旧版页面的，以后可能不需要使用了
+        // 第二个下载器是新版页面里的
+        this.countEl =
+            document.querySelector('section h3+div span') ||
+                document.querySelector('div[data-ga4-label="works_content"]>div:first-child div:first-child span span');
     }
     // 组织要请求的 url 中的参数
     initFetchURL() {
-        // 从 URL 中获取分类。可能有语言标识。
-        /*
-        https://www.pixiv.net/tags/Fate%2FGrandOrder/illustrations
-        https://www.pixiv.net/en/tags/Fate%2FGrandOrder/illustrations
-        */
-        const URLType = location.pathname.split('tags/')[1].split('/')[1] ?? '';
-        // 在“顶部”页面的时候是没有分类的，会是 undefined，此时使用空字符串
-        switch (URLType) {
-            case '':
-                this.worksType = 'artworks';
-                break;
+        // 从 URL 中获取发起请求时的分类路径
+        let APIPath = 'illustrations';
+        if (location.pathname.startsWith('/tags')) {
+            // 如果是 /tags 开头的 URL，分类路径在搜索词后面，例如
+            // https://www.pixiv.net/tags/Fate%2FGrandOrder/illustrations
+            APIPath = location.pathname.split('tags/')[1].split('/')[1] ?? 'artworks';
+            // 在“顶部”页面的时候，URL 里是没有分类的，会是 undefined，此时使用代表“顶部”的 'artworks'
+        }
+        else {
+            // 处理以 /search 开头的 URL
+            // 在“插画”分类页面里，参数里的 type 并不等同于分类路径。例如 type='illust_ugoira' 对应的路径是 'illustrations'
+            // 在漫画、小说分类页面里，使用参数里的 type 即可
+            APIPath =
+                _utils_Utils__WEBPACK_IMPORTED_MODULE_14__.Utils.getURLSearchField(location.href, 'type') || 'illustrations';
+            // 以 /search 开头时，没有“顶部”页面，所以默认值是“插画”页面的 'illustrations'，而不是“顶部”页面的 'artworks'
+        }
+        switch (APIPath) {
             case 'illustrations':
+            case 'illust_ugoira':
             case 'illust_and_ugoira':
             case 'ugoira':
             case 'illust':
-                this.worksType = 'illustrations';
+                // 插画（含动图）
+                this.APIPath = 'illustrations';
                 break;
             case 'manga':
-                this.worksType = 'manga';
+                // 漫画
+                this.APIPath = 'manga';
                 break;
             default:
-                this.worksType = 'artworks';
+                // 顶部
+                this.APIPath = 'artworks';
                 break;
         }
         let p = _utils_Utils__WEBPACK_IMPORTED_MODULE_14__.Utils.getURLSearchField(location.href, 'p');
@@ -15388,14 +15494,56 @@ class InitSearchArtworkPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE
         // 从页面 url 中获取可以使用的选项
         this.option = {};
         this.allOption.forEach((param) => {
-            let value = _utils_Utils__WEBPACK_IMPORTED_MODULE_14__.Utils.getURLSearchField(location.href, param);
-            if (value !== '') {
-                this.option[param] = value;
+            // 这里不获取 q，因为它储存在 store.tag 里，会添加到 API 参数里，不必重复获取
+            // 这里不获取 p，因为它储存在 this.startpageNo 里
+            if (param !== 'q' && param !== 'p') {
+                let value = _utils_Utils__WEBPACK_IMPORTED_MODULE_14__.Utils.getURLSearchField(location.href, param);
+                if (value !== '') {
+                    this.option[param] = value;
+                }
+                if (param === 'type') {
+                    const path = location.pathname;
+                    if (path.startsWith('/search')) {
+                        // 虽然 URL 里的 type 是 illust_ugoira，但查询时要使用 illust_and_ugoira
+                        // https://www.pixiv.net/search?q=%E5%8E%9F%E7%A5%9E&s_mode=tag&type=illust_ugoira
+                        // 我也不知道为什么，反正 Pixiv 官方的请求是这样的
+                        if (value === 'illust_ugoira') {
+                            this.option[param] = 'illust_and_ugoira';
+                        }
+                    }
+                    if (path.startsWith('/tags')) {
+                        // https://www.pixiv.net/tags/%E5%8E%9F%E7%A5%9E/illustrations
+                        // 虽然上面的 URL 里没有 type 参数，但是 pixiv 的查询参数里附带了 type='illust_and_ugoira'
+                        // 下载器也照样处理一下
+                        if (value === '') {
+                            if (path.includes('/illustrations')) {
+                                this.option[param] = 'illust_and_ugoira';
+                            }
+                        }
+                    }
+                }
+                // 请求里的 s_mode 也不是 url 里的 s_mode
+                if (param === 's_mode') {
+                    if (location.pathname.startsWith('/search')) {
+                        if (value === 'tag') {
+                            this.option[param] = 's_tag';
+                        }
+                        if (value === '') {
+                            this.option[param] = 's_tag_full';
+                        }
+                        if (value === 'tag_tc') {
+                            this.option[param] = 's_tag_tc';
+                        }
+                        if (value === 'tc') {
+                            this.option[param] = 's_tc';
+                        }
+                    }
+                }
             }
         });
-        // 如果 url 里没有显式指定标签匹配模式，则使用 完全一致 模式
-        // 因为在这种情况下，pixiv 默认使用的就是 完全一致
+        // 如果 url 里没有显式指定标签匹配模式，则使用“完全一致”模式
         if (!this.option.s_mode) {
+            // “完全一致”的 API 参数使用 s_tag_full 或 tag_full 都可以，但 s_tag_full 更严格，作品数量更少一些
             this.option.s_mode = 's_tag_full';
         }
         // 在日志里显示标签匹配模式
@@ -15405,18 +15553,22 @@ class InitSearchArtworkPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE
     tipSearchMode(mode) {
         switch (mode) {
             case 's_tag':
+            case 'tag':
                 return _Language__WEBPACK_IMPORTED_MODULE_2__.lang.transl('_标签部分一致');
             case 's_tag_full':
+            case 'tag_full':
                 return _Language__WEBPACK_IMPORTED_MODULE_2__.lang.transl('_标签完全一致');
             case 's_tc':
                 return _Language__WEBPACK_IMPORTED_MODULE_2__.lang.transl('_标题说明文字');
+            case 'tag_tc':
+                return _Language__WEBPACK_IMPORTED_MODULE_2__.lang.transl('_标签标题说明文字');
             default:
                 return mode;
         }
     }
     // 获取搜索页的数据。因为有多处使用，所以进行了封装
     async getSearchData(p) {
-        let data = await _API__WEBPACK_IMPORTED_MODULE_6__.API.getSearchData(_store_Store__WEBPACK_IMPORTED_MODULE_7__.store.tag, this.worksType, p, this.option);
+        let data = await _API__WEBPACK_IMPORTED_MODULE_6__.API.getSearchData(_store_Store__WEBPACK_IMPORTED_MODULE_7__.store.tag, this.APIPath, p, this.option);
         return data.body.illust || data.body.illustManga || data.body.manga;
     }
     delayReTry(p) {
@@ -15575,7 +15727,7 @@ class InitSearchArtworkPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE
             _EVT__WEBPACK_IMPORTED_MODULE_4__.EVT.fire('worksUpdate');
         }, 0);
     };
-    // 返回包含作品列表的 ul 元素
+    // 返回包含作品列表的容器元素
     findWorksWrap() {
         let wrap = null;
         // 对于已经查找过的情况，直接定位到该元素
@@ -15589,10 +15741,31 @@ class InitSearchArtworkPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE
             // 为什么用最后一个作品，而不是第一个作品：
             // 有时在作品列表上方会显示“热门作品”和“成为pixiv高级会员”按钮的板块
             // 如果使用第一个作品，就会选择到这个板块，而非其下方真正的作品列表
-            const works = document.querySelectorAll('li a[data-gtm-user-id]');
+            let works = document.querySelectorAll('li a[data-gtm-user-id][href^="/artworks"]');
             if (works.length > 0) {
                 const lastWork = Array.from(works).pop();
                 wrap = lastWork.closest('ul');
+            }
+            // 2026-02-10 改版后
+            if (!wrap) {
+                // 查找作品元素
+                works = document.querySelectorAll('.col-span-2');
+                if (works.length > 0) {
+                    const lastWork = Array.from(works).pop();
+                    if (lastWork.querySelector('a[href^="/artworks"]')) {
+                        wrap = lastWork.parentElement;
+                    }
+                }
+            }
+            if (!wrap) {
+                // 查找作品缩略图
+                works = document.querySelectorAll('div[width="184"]');
+                if (works.length > 0) {
+                    const lastWork = Array.from(works).pop();
+                    wrap =
+                        lastWork.closest('div.mx-auto') ||
+                            lastWork.closest('div[data-ga4-label="works_content"]');
+                }
             }
         }
         // 查找到作品列表后，添加自定义的 ID，方便后续查找它
@@ -15896,9 +16069,46 @@ class InitSearchArtworkPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE
             if (_PageType__WEBPACK_IMPORTED_MODULE_19__.pageType.type !== _PageType__WEBPACK_IMPORTED_MODULE_19__.pageType.list.ArtworkSearch) {
                 return;
             }
+            // 移除覆盖在整个热门作品区域上的超链接
             const hotWorksLink = document.querySelector('section a[href^="/premium"]');
             if (hotWorksLink) {
                 hotWorksLink.remove();
+            }
+            // 移除热门作品列表右侧的提示购买会员的文字
+            const workSpanList = document.querySelectorAll('aside ul span[data-gtm-value]');
+            if (workSpanList.length > 0) {
+                // aside 元素的直接子元素有 iframe ul div button 元素，只需要保留 ul
+                const aside = workSpanList[0].closest('aside');
+                if (aside) {
+                    ;
+                    [...aside.children].forEach((el) => {
+                        if (el.nodeName !== 'UL') {
+                            el.remove();
+                        }
+                    });
+                }
+                // 每个缩略图元素里没有超链接，所以无法点击。为它们添加超链接
+                workSpanList.forEach((span) => {
+                    if (span.dataset.addLink !== '1') {
+                        span.dataset.addLink = '1';
+                        const id = span.dataset.gtmValue;
+                        if (id) {
+                            // 把 a 标签放到一个 div 元素里，让 ArtworkThumbnail 可以通过查找子元素来查找到它
+                            const div = document.createElement('div');
+                            const a = document.createElement('a');
+                            a.href = `https://www.pixiv.net/artworks/${id}`;
+                            a.target = '_blank';
+                            a.classList.add('hotBarWorkLink');
+                            div.append(a);
+                            [...span.children].forEach((el) => {
+                                if (el.nodeName !== 'A') {
+                                    a.appendChild(el);
+                                }
+                            });
+                            span.insertAdjacentElement('afterbegin', div);
+                        }
+                    }
+                });
             }
         }, 300);
     }
@@ -19232,6 +19442,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// 用于测试抓取的 URL：
+// 搜索小说作品的两种 URL：
+// https://www.pixiv.net/tags/%E5%8E%9F%E7%A5%9E/novels?order=date&mode=r18&scd=2025-02-10&ecd=2026-02-10&wlt=20000&wgt=79999&ai_type=1
+// https://www.pixiv.net/search?q=%E5%8E%9F%E7%A5%9E&s_mode=tag&type=novel&order=date&mode=r18&scd=2025-02-10&ecd=2026-02-10&wlt=20000&wgt=79999&ai_type=1
+// 在测试小说时，不必启用“整合相同系列的作品”和“整合相同作者的作品”，因为这可能导致页面上显示的数量少于实际小说的数量
+// 例如 3 个小说可能只显示为 2 个项目
+// 下载器抓取的是单篇小说，所以数量会是 3 个，与页面上显示的 2 个不符。所以为了测试更直观，便于对比，就不启用这两个条件了
 class InitSearchNovelPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0__.InitPageBase {
     constructor() {
         super();
@@ -19239,16 +19456,14 @@ class InitSearchNovelPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0
         new _pageFunciton_FastScreen__WEBPACK_IMPORTED_MODULE_7__.FastScreen();
         _crawlMixedPage_CrawlTagList__WEBPACK_IMPORTED_MODULE_13__.crawlTagList.init();
     }
-    worksWrapSelector = 'section>div ul';
     option = {};
     worksNoPerPage = 30; // 每个页面有多少个作品
     needCrawlPageCount = 0; // 一共有有多少个列表页面
     sendCrawlTaskCount = 0; // 已经抓取了多少个列表页面
     allOption = [
+        'q',
         'order',
         'type',
-        'wlt',
-        'wgt',
         'hlt',
         'hgt',
         'ratio',
@@ -19259,11 +19474,34 @@ class InitSearchNovelPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0
         'ecd',
         'blt',
         'bgt',
-        'tlt',
-        'tgt',
-        'original_only',
-        'work_lang',
         'ai_type',
+        // 作品的语言，只有小说搜索页面有这个参数
+        'work_lang',
+        // 字数需要大于这个值，只有小说搜索页面有这个参数
+        'tlt',
+        // 字数需要小于这个值，只有小说搜索页面有这个参数
+        'tgt',
+        // 单词数量需要大于这个值
+        // 在搜索图像作品时也有这个参数，但含义不同
+        'wlt',
+        // 单词数量需要小于这个值，只有小说搜索页面有这个参数
+        'wgt',
+        // 阅读时间需要大于这个值，只有小说搜索页面有这个参数
+        'rlt',
+        // 阅读时间需要小于这个值，只有小说搜索页面有这个参数
+        'rgt',
+        // 是否仅限原创作品
+        // 无此参数则不限制
+        // 1  只显示原创作品
+        'original_only',
+        // 是否整合相同系列的作品
+        // 无此参数则不整合
+        // 1  整合相同系列的作品
+        'gs',
+        // 是否仅限支持单词置换的作品
+        // 无此参数则不限制
+        // 1  只显示支持单词置换的作品
+        'replaceable_only',
     ];
     addCrawlBtns() {
         _Tools__WEBPACK_IMPORTED_MODULE_8__.Tools.addBtn('crawlBtns', _Colors__WEBPACK_IMPORTED_MODULE_1__.Colors.bgBlue, '_开始抓取', '_默认下载多页', 'startCrawling').addEventListener('click', () => {
@@ -19273,12 +19511,14 @@ class InitSearchNovelPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0
         this.addCancelTimedCrawlBtn();
     }
     getWorksWrap() {
-        const test = document.querySelectorAll(this.worksWrapSelector);
+        // 2026-02-10 改版前的选择器
+        let test = document.querySelectorAll('section>div ul');
         if (test.length > 0) {
-            // 小说页面用这个选择器，只匹配到了一个 ul
             return test[test.length - 1];
         }
-        return null;
+        // 2026-02-10 改版后的选择器
+        let test2 = document.querySelector('div[data-ga4-label="works_content"]');
+        return test2 || null;
     }
     addAnyElement() {
         // 添加收藏本页所有作品的功能
@@ -19287,7 +19527,13 @@ class InitSearchNovelPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0
         bookmarkAllBtn.addEventListener('click', () => {
             const listWrap = this.getWorksWrap();
             if (listWrap) {
-                const list = document.querySelectorAll('section>div ul>li');
+                // 选择作品列表
+                // 2026-02-10 改版前的选择器
+                let list = document.querySelectorAll('section>div ul>li');
+                // 2026-02-10 改版后的选择器
+                if (list.length === 0) {
+                    list = document.querySelectorAll('div[data-ga4-label="works_content"]>div:last-child>div');
+                }
                 if (list.length > 0) {
                     bookmarkAll.sendWorkList(list, 'novels');
                 }
@@ -19357,7 +19603,7 @@ class InitSearchNovelPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0
     }
     // 获取搜索页的数据。因为有多处使用，所以进行了封装
     async getSearchData(p) {
-        let data = await _API__WEBPACK_IMPORTED_MODULE_4__.API.getNovelSearchData(_store_Store__WEBPACK_IMPORTED_MODULE_5__.store.tag, p, this.option);
+        let data = await _API__WEBPACK_IMPORTED_MODULE_4__.API.getSearchData(_store_Store__WEBPACK_IMPORTED_MODULE_5__.store.tag, 'novels', p, this.option);
         return data.body.novel;
     }
     // 组织要请求的 url 中的参数
@@ -19370,6 +19616,22 @@ class InitSearchNovelPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0
             let value = _utils_Utils__WEBPACK_IMPORTED_MODULE_10__.Utils.getURLSearchField(location.href, param);
             if (value !== '') {
                 this.option[param] = value;
+            }
+            if (param === 's_mode') {
+                // url 里的 s_mode 并不是请求时的 s_mode
+                // 我也不知道为什么，反正 Pixiv 官方的请求是这样的。我只能照着做
+                if (value === 'tag') {
+                    this.option[param] = 's_tag_only';
+                }
+                if (value === 'tag_tc') {
+                    this.option[param] = 's_tag';
+                }
+                if (value === 'text') {
+                    this.option[param] = 's_tc';
+                }
+                if (value === '') {
+                    this.option[param] = 's_tag_full';
+                }
             }
         });
         // 抓取时始终关闭“以系列为单位显示”
@@ -31058,12 +31320,18 @@ JSON 형식은 다운로더의 내부 데이터로, 더 많은 정보를 저장�
         'Загрузчик временно пропустит его и попробует скачать снова после завершения загрузки других файлов.',
     ],
     _作品总数为0: [
-        '作品总数为 0，Pixiv 可能拒绝了此次抓取。请稍后重试。',
-        '作品總數為 0，Pixiv 可能拒絕了此次抓取。請稍後重試。',
-        'The total number of works is 0, Pixiv may have refused this crawl. Please try again later.',
-        '作品の総数は 0 です。 Pixivがこのクロールを拒否した可能性があります。 後でもう一度やり直してください。',
-        '총 작품 수가 0개입니다, Pixiv가 이번 긁어오기를 거부한 것으로 보입니다. 잠시 후에 다시 시도해주세요.',
-        'Общее количество работ равно 0, возможно, Pixiv блокирует сканирование. Пожалуйста, повторите попытку позже.',
+        `作品总数为 0。请检查页面上显示的作品总数是否为 0。<br>
+如果页面上显示的作品数量大于 0，可能是 Pixiv 拒绝了此次抓取，你可以等待几分钟后重试。`,
+        `作品總數為 0。請檢查頁面上顯示的作品總數是否為 0。<br>
+如果頁面上顯示的作品數量大於 0，可能是 Pixiv 拒絕了此次抓取，你可以等待幾分鐘後重試。`,
+        `Total number of works is 0. Please check if the total number of works displayed on the page is 0.<br>
+If the number of works shown on the page is greater than 0, it may be that Pixiv rejected this crawl attempt. You can wait a few minutes and try again.`,
+        `作品総数が 0 です。ページに表示されている作品総数が 0 かどうか確認してください。<br>
+ページに表示されている作品数が 0 より大きい場合、Pixiv が今回のクロールを拒否した可能性があります。数分待ってから再試行してください。`,
+        `작품 총 수가 0입니다. 페이지에 표시된 작품 총 수가 0인지 확인해 주세요.<br>
+페이지에 표시된 작품 수가 0보다 크다면 Pixiv가 이번 크롤링을 거부한 것일 수 있습니다. 몇 분 후에 다시 시도해 보세요.`,
+        `Общее количество работ равно 0. Пожалуйста, проверьте, действительно ли на странице отображается общее количество работ равное 0.<br>
+Если на странице показано больше 0 работ, возможно, Pixiv отклонил эту попытку краулинга. Подождите несколько минут и попробуйте снова.`,
     ],
     _优化预览作品功能: [
         '优化“预览作品”功能',
@@ -58973,7 +59241,7 @@ class Utils {
     static isPixiv() {
         return window.location.host.endsWith('.pixiv.net');
     }
-    // 从 url 中获取指定的查询字段的值
+    /** 从 url 中获取指定的查询字段的值 */
     // 注意：返回值经过 encodeURIComponent 编码！
     static getURLSearchField(url, query) {
         const result = new URL(url).searchParams.get(query);

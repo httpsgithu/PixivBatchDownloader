@@ -22,6 +22,14 @@ import { settings } from '../setting/Settings'
 import { pageType } from '../PageType'
 import '../filter/FilterSearchResults'
 
+// 用于测试抓取的 URL：
+// 搜索小说作品的两种 URL：
+// https://www.pixiv.net/tags/%E5%8E%9F%E7%A5%9E/novels?order=date&mode=r18&scd=2025-02-10&ecd=2026-02-10&wlt=20000&wgt=79999&ai_type=1
+// https://www.pixiv.net/search?q=%E5%8E%9F%E7%A5%9E&s_mode=tag&type=novel&order=date&mode=r18&scd=2025-02-10&ecd=2026-02-10&wlt=20000&wgt=79999&ai_type=1
+// 在测试小说时，不必启用“整合相同系列的作品”和“整合相同作者的作品”，因为这可能导致页面上显示的数量少于实际小说的数量
+// 例如 3 个小说可能只显示为 2 个项目
+// 下载器抓取的是单篇小说，所以数量会是 3 个，与页面上显示的 2 个不符。所以为了测试更直观，便于对比，就不启用这两个条件了
+
 class InitSearchNovelPage extends InitPageBase {
   constructor() {
     super()
@@ -30,17 +38,14 @@ class InitSearchNovelPage extends InitPageBase {
     crawlTagList.init()
   }
 
-  private readonly worksWrapSelector = 'section>div ul'
-
   private option: SearchOption = {}
   private readonly worksNoPerPage = 30 // 每个页面有多少个作品
   private needCrawlPageCount = 0 // 一共有有多少个列表页面
   private sendCrawlTaskCount = 0 // 已经抓取了多少个列表页面
   private readonly allOption = [
+    'q',
     'order',
     'type',
-    'wlt',
-    'wgt',
     'hlt',
     'hgt',
     'ratio',
@@ -51,11 +56,41 @@ class InitSearchNovelPage extends InitPageBase {
     'ecd',
     'blt',
     'bgt',
-    'tlt',
-    'tgt',
-    'original_only',
-    'work_lang',
     'ai_type',
+
+    // 作品的语言，只有小说搜索页面有这个参数
+    'work_lang',
+
+    // 字数需要大于这个值，只有小说搜索页面有这个参数
+    'tlt',
+    // 字数需要小于这个值，只有小说搜索页面有这个参数
+    'tgt',
+
+    // 单词数量需要大于这个值
+    // 在搜索图像作品时也有这个参数，但含义不同
+    'wlt',
+    // 单词数量需要小于这个值，只有小说搜索页面有这个参数
+    'wgt',
+
+    // 阅读时间需要大于这个值，只有小说搜索页面有这个参数
+    'rlt',
+    // 阅读时间需要小于这个值，只有小说搜索页面有这个参数
+    'rgt',
+
+    // 是否仅限原创作品
+    // 无此参数则不限制
+    // 1  只显示原创作品
+    'original_only',
+
+    // 是否整合相同系列的作品
+    // 无此参数则不整合
+    // 1  整合相同系列的作品
+    'gs',
+
+    // 是否仅限支持单词置换的作品
+    // 无此参数则不限制
+    // 1  只显示支持单词置换的作品
+    'replaceable_only',
   ]
 
   protected addCrawlBtns() {
@@ -74,12 +109,15 @@ class InitSearchNovelPage extends InitPageBase {
   }
 
   private getWorksWrap() {
-    const test = document.querySelectorAll(this.worksWrapSelector)
+    // 2026-02-10 改版前的选择器
+    let test = document.querySelectorAll('section>div ul')
     if (test.length > 0) {
-      // 小说页面用这个选择器，只匹配到了一个 ul
       return test[test.length - 1] as HTMLUListElement
     }
-    return null
+
+    // 2026-02-10 改版后的选择器
+    let test2 = document.querySelector('div[data-ga4-label="works_content"]')
+    return test2 || null
   }
 
   protected addAnyElement() {
@@ -96,9 +134,19 @@ class InitSearchNovelPage extends InitPageBase {
     bookmarkAllBtn.addEventListener('click', () => {
       const listWrap = this.getWorksWrap()
       if (listWrap) {
-        const list = document.querySelectorAll(
+        // 选择作品列表
+        // 2026-02-10 改版前的选择器
+        let list = document.querySelectorAll(
           'section>div ul>li'
         ) as NodeListOf<HTMLLIElement>
+
+        // 2026-02-10 改版后的选择器
+        if (list.length === 0) {
+          list = document.querySelectorAll(
+            'div[data-ga4-label="works_content"]>div:last-child>div'
+          )
+        }
+
         if (list.length > 0) {
           bookmarkAll.sendWorkList(list, 'novels')
         }
@@ -181,7 +229,7 @@ class InitSearchNovelPage extends InitPageBase {
 
   // 获取搜索页的数据。因为有多处使用，所以进行了封装
   private async getSearchData(p: number) {
-    let data = await API.getNovelSearchData(store.tag, p, this.option)
+    let data = await API.getSearchData(store.tag, 'novels', p, this.option)
     return data.body.novel
   }
 
@@ -196,6 +244,23 @@ class InitSearchNovelPage extends InitPageBase {
       let value = Utils.getURLSearchField(location.href, param)
       if (value !== '') {
         this.option[param] = value
+      }
+
+      if (param === 's_mode') {
+        // url 里的 s_mode 并不是请求时的 s_mode
+        // 我也不知道为什么，反正 Pixiv 官方的请求是这样的。我只能照着做
+        if (value === 'tag') {
+          this.option[param] = 's_tag_only'
+        }
+        if (value === 'tag_tc') {
+          this.option[param] = 's_tag'
+        }
+        if (value === 'text') {
+          this.option[param] = 's_tc'
+        }
+        if (value === '') {
+          this.option[param] = 's_tag_full'
+        }
       }
     })
 

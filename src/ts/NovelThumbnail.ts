@@ -23,7 +23,7 @@ class NovelThumbnail extends WorkThumbnail {
         'div[size="496"]',
         'div[size="392"]',
         'div[data-ga4-entity-id^="novel"]>div:nth-child(2)',
-        // 在小说搜索页面里，选择了“整合相同系列的作品”模式时，小说的选择器
+        // 在搜索页面里，小说的选择器可能是这个
         'div[data-ga4-label="works_content"]>div>div',
         // 鼠标放到作者名字上，显示作者的 3 个作品预览图，其中小说的选择器是这个
         'div[type="novel"][size]',
@@ -104,7 +104,10 @@ class NovelThumbnail extends WorkThumbnail {
           continue
         }
 
-        if(selector==='div[data-ga4-label="works_content"]>div>div' && pageType.type!==pageType.list.NovelSearch){
+        if (
+          selector === 'div[data-ga4-label="works_content"]>div>div' &&
+          pageType.type !== pageType.list.NovelSearch
+        ) {
           continue
         }
 

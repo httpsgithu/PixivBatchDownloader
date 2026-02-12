@@ -75,8 +75,6 @@ body[data-page-type='0'] {
 
     // 解除宽度 184px 的限制
     li div {
-      width: auto !important;
-
       // 隐藏它的 before，因为 pixiv 给 before 设置了 padding-top: 100%;
       // 会导致 div 被撑到最大高度 540px
       &::before {
@@ -84,6 +82,27 @@ body[data-page-type='0'] {
         display: none;
       }
     }
+  }
+
+  // 解除子容器的宽度限制
+  .homeFriendsNewWorks > div > div {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  // 首页精选新作里的小说的预览图的一个父 div 元素
+  // 它默认没有指定宽高，会导致小说封面图不会显示（因为这个 div 的高度会是 0），所以直接给它指定宽高
+  .homeFriendsNewWorks
+    li[data-ga4-label='thumbnail'][data-ga4-entity-id^='novel/']
+    > div:first-child
+    > div:first-child
+    > div:first-child {
+    width: 540px !important;
+    height: 540px !important;
+  }
+
+  .homeFriendsNewWorks li[data-ga4-label='thumbnail'] a.size-full > div > div {
+    padding: 0;
   }
 
   // 新版首页的推荐作品板块
@@ -530,7 +549,17 @@ body[data-page-type='4'] {
 // ArtworkSearch 图像作品的搜索页面
 // https://www.pixiv.net/tags/vtuber/artworks?s_mode=s_tag
 body[data-page-type='5'] {
+  // 隐藏顶部 tag 列表左右的占位元素
+  nav[data-ga4-label='tags_carousel'] > div > div:first-child {
+    mask-image: none;
+    padding-left: 72px;
+  }
+  nav[data-ga4-label='tags_carousel'] > div > div:first-child > div {
+    display: none;
+  }
+
   /* 取消宽度限制 */
+  .\[width\:calc\(var\(--columns\)\*80px\+\(var\(--columns\)-1\)\*24px\)\],
   .sectionParentDiv,
   .worksWrapper,
   .worksULParent,
@@ -539,27 +568,26 @@ body[data-page-type='5'] {
   .hbpcMJ {
     width: 92vw;
     max-width: 100%;
+    margin: 0 auto;
   }
 
   // 每个板块的最外层容器元素可能被设置了固定宽度，导致图片尺寸固定，或者容器不能完全显示里面的内容
   // 需要解除宽度限制
-  .bgPpJb {
-    width: auto !important;
-  }
 
-  // 顶部的 tag 列表
-  .jUPNzm,
-  .dizBQv {
-    padding: 0 70px;
-    max-width: 92vw;
-    min-width: unset;
+  // 作品总数量的元素的容器，使其占满宽度
+  .worksULParent > div {
+    margin: 0;
   }
 
   // ul
   // 图片列表容器（通常是 UL）元素是 grid 布局，改为 flex
   .worksUL {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    width: 92vw;
+    max-width: 100%;
+    margin: 0 auto;
   }
 
   // ul li
@@ -572,7 +600,8 @@ body[data-page-type='5'] {
 
   // ul li div[width="184"]
   // 解除 img 父级元素的宽度限制
-  div[width='184'] {
+  div[width='184'],
+  div[data-ga4-label='works_content'] div.col-span-2 > div {
     width: auto !important;
     height: auto !important;
   }
@@ -588,7 +617,7 @@ body[data-page-type='5'] {
   // 子页面的“热门作品”区域
   // 取消右侧的遮罩
   aside ul {
-    mask: unset;
+    mask: unset !important;
   }
 
   // 隐藏热门作品右侧的“成为pixiv高级会员”宣传文字
@@ -598,7 +627,9 @@ body[data-page-type='5'] {
 
   // 取消宽度限制，以显示更大的缩略图
   aside li > div,
-  div[width='104'] {
+  div[width='104'],
+  aside .size-104,
+  aside .size-104 > div > div {
     width: auto !important;
     height: auto !important;
   }
@@ -606,12 +637,16 @@ body[data-page-type='5'] {
   /* 下载器预览搜索结果时添加的列表元素 */
   #workListWrap {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
   }
 
   .searchList {
     width: auto !important;
     max-width: 540px;
     max-height: 600px;
+    margin: 14px;
+    list-style: none;
   }
 
   .searchList .searchContent {

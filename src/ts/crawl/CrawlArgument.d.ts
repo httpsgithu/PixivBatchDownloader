@@ -32,5 +32,7 @@ export interface SearchOption {
   ecd?: string
   blt?: string
   bgt?: string
+  p?: string
+  csw?: string
   [key: string]: string | undefined
 }

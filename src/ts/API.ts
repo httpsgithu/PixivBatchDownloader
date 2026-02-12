@@ -366,39 +366,29 @@ class API {
     return this.fetch(url)
   }
 
+  static getSearchData(
+    word: string,
+    path: 'artworks' | 'illustrations' | 'manga',
+    p: number,
+    option: SearchOption
+  ): Promise<SearchData>
+
+  static getSearchData(
+    word: string,
+    path: 'novels',
+    p: number,
+    option: SearchOption
+  ): Promise<NovelSearchData>
+
   // 获取搜索数据
   static getSearchData(
     word: string,
-    type: string = 'artworks',
+    path = 'artworks',
     p: number = 1,
     option: SearchOption = {}
-  ): Promise<SearchData> {
-    // 基础的 url
-    let url = `https://www.pixiv.net/ajax/search/${type}/${encodeURIComponent(
-      word
-    )}?word=${encodeURIComponent(word)}&p=${p}`
-
-    // 把可选项添加到 url 里
-    let temp = new URL(url)
-    for (const [key, value] of Object.entries(option)) {
-      if (value) {
-        temp.searchParams.set(key, value)
-      }
-    }
-    url = temp.toString()
-
-    return this.fetch(url)
-  }
-
-  static getNovelSearchData(
-    word: string,
-    p: number = 1,
-    option: SearchOption = {}
-  ): Promise<NovelSearchData> {
-    // 基础的 url
-    let url = `https://www.pixiv.net/ajax/search/novels/${encodeURIComponent(
-      word
-    )}?word=${encodeURIComponent(word)}&p=${p}`
+  ): Promise<SearchData | NovelSearchData> {
+    word = encodeURIComponent(word)
+    let url = `https://www.pixiv.net/ajax/search/${path}/${word}?q=${word}&p=${p}`
 
     // 把可选项添加到 url 里
     let temp = new URL(url)

@@ -119,6 +119,14 @@ class PageType {
       return path.endsWith('/novels')
         ? PageName.NovelSearch
         : PageName.ArtworkSearch
+    } else if (path === '/search') {
+      // 在搜索框回车搜索时，是 /search?xxx 的网址
+      // 查询词 q 不一定是第一个，所以不能使用 '?q=' 来判断
+      if (url.includes('type=novel')) {
+        return PageName.NovelSearch
+      } else {
+        return PageName.ArtworkSearch
+      }
     } else if (path === '/ranking_area.php' && location.search !== '') {
       return PageName.AreaRanking
     } else if (path === '/ranking.php') {
@@ -226,7 +234,19 @@ class PageType {
       },
       {
         type: PageName.ArtworkSearch,
-        url: 'https://www.pixiv.net/tags/%E5%8E%9F%E7%A5%9E/artworks?s_mode=s_tag',
+        url: 'https://www.pixiv.net/tags/%E5%8E%9F%E7%A5%9E',
+      },
+      {
+        type: PageName.ArtworkSearch,
+        url: 'https://www.pixiv.net/search?s_mode=tag&type=artwork&q=%E5%8E%9F%E7%A5%9E',
+      },
+      {
+        type: PageName.ArtworkSearch,
+        url: 'https://www.pixiv.net/tags/%E5%8E%9F%E7%A5%9E/illustrations?order=date&mode=r18&scd=2025-02-10&ecd=2026-02-10&wlt=3000&hlt=3000&ratio=0.5&tool=Photoshop&ai_type=1&csw=1',
+      },
+      {
+        type: PageName.ArtworkSearch,
+        url: 'https://www.pixiv.net/search?q=%E5%8E%9F%E7%A5%9E&s_mode=tag&type=illust_ugoira&order=date&mode=r18&scd=2025-02-10&ecd=2026-02-10&wlt=3000&hlt=3000&ratio=0.5&tool=Photoshop&ai_type=1&csw=1',
       },
       {
         type: PageName.SearchUsers,
@@ -270,7 +290,11 @@ class PageType {
       },
       {
         type: PageName.NovelSearch,
-        url: 'https://www.pixiv.net/tags/%E7%99%BE%E5%90%88/novels',
+        url: 'https://www.pixiv.net/tags/%E5%8E%9F%E7%A5%9E/novels?order=date&mode=r18&scd=2025-02-10&ecd=2026-02-10&wlt=20000&wgt=79999&ai_type=1',
+      },
+      {
+        type: PageName.NovelSearch,
+        url: 'https://www.pixiv.net/search?q=%E5%8E%9F%E7%A5%9E&s_mode=tag&type=novel&order=date&mode=r18&scd=2025-02-10&ecd=2026-02-10&wlt=20000&wgt=79999&ai_type=1',
       },
       {
         type: PageName.NovelRanking,

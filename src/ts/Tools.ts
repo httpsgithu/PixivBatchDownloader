@@ -96,6 +96,9 @@ class Tools {
     if (nowURL.pathname.includes('/tags/')) {
       return decodeURIComponent(nowURL.pathname.split('tags/')[1].split('/')[0])
     }
+    if (nowURL.pathname.startsWith('/search')) {
+      return decodeURIComponent(Utils.getURLSearchField(location.href, 'q'))
+    }
 
     // 默认情况，从查询字符串里获取，如下网址
     // https://www.pixiv.net/bookmark.php?tag=R-18

@@ -293,6 +293,20 @@ class ShowLargerThumbnails {
           this.needFind = false
         }
       }
+
+      // 2026-02-10 改版后，搜索页的作品列表已经不使用 ul li 元素了，改为下面的查找方式
+      const workList = document.querySelectorAll(
+        'div[data-ga4-label="works_content"] div.col-span-2'
+      )
+      if (workList.length > 0) {
+        if (workList[0].querySelector('div[width="184"]')) {
+          workList[0].parentElement!.classList.add('worksUL')
+          // 这个 worksULParent 也就是 div[data-ga4-label="works_content"]
+          workList[0].parentElement!.parentElement!.classList.add(
+            'worksULParent'
+          )
+        }
+      }
     }
 
     // 已关注用户的新作品
