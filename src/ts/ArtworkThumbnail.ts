@@ -164,7 +164,8 @@ class ArtworkThumbnail extends WorkThumbnail {
       }
 
       if (
-        (selector === '.thumbnail-container' || selector=='._module-carousel-container>div') &&
+        (selector === '.thumbnail-container' ||
+          selector == '._module-carousel-container>div') &&
         pageType.type !== pageType.list.Contest
       ) {
         continue
