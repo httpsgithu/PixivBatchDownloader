@@ -110,7 +110,7 @@ class InitFollowingPage extends InitPageBase {
       Colors.bgGreen,
       '_查找已注销的用户',
       '',
-      'showDeletedFollowingUsers'
+      'findDeactivatedUsers'
     ).addEventListener('click', async () => {
       deletedFollowingUserView.check()
     })

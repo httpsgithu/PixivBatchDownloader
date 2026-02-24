@@ -10331,7 +10331,7 @@ class ShowWhatIsNew {
     constructor() {
         this.bindEvents();
     }
-    flag = '18.3.0';
+    flag = '18.3.1';
     bindEvents() {
         window.addEventListener(_EVT__WEBPACK_IMPORTED_MODULE_4__.EVT.list.settingInitialized, () => {
             // 在 settingInitialized 事件触发后生成消息，如果时间较早，可能会被翻译成错误的语言
@@ -10339,6 +10339,7 @@ class ShowWhatIsNew {
       <span>${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_扩展程序升到x版本', this.flag)}</span>
       <br>
       <br>
+      <span>${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_更新说明1831')}</span>
       <br>
       <br>
       <span>${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_优化用户体验')}</span>
@@ -17903,7 +17904,7 @@ class InitFollowingPage extends _crawl_InitPageBase__WEBPACK_IMPORTED_MODULE_0__
         // ).addEventListener('click', async () => {
         //   filterInactiveUsers.start()
         // })
-        _Tools__WEBPACK_IMPORTED_MODULE_6__.Tools.addBtn('crawlBtns', _Colors__WEBPACK_IMPORTED_MODULE_1__.Colors.bgGreen, '_查找已注销的用户', '', 'showDeletedFollowingUsers').addEventListener('click', async () => {
+        _Tools__WEBPACK_IMPORTED_MODULE_6__.Tools.addBtn('crawlBtns', _Colors__WEBPACK_IMPORTED_MODULE_1__.Colors.bgGreen, '_查找已注销的用户', '', 'findDeactivatedUsers').addEventListener('click', async () => {
             _DeletedFollowingUserView__WEBPACK_IMPORTED_MODULE_15__.deletedFollowingUserView.check();
         });
     }
@@ -34609,6 +34610,20 @@ To prevent duplicate filenames, it is recommended to always add {series_id}.`,
         `탈퇴한 사용자를 찾을 수 없습니다`,
         `Не найдено удалённых/деактивированных пользователей`,
     ],
+    _更新说明1831: [
+        `<strong>🐞修复了在 /en/tags 页面里，下载器抓取的作品分类可能不正确的问题</strong><br>
+<strong>🐞修复了“在搜索页面里移除已关注用户的作品”功能失效的问题</strong>`,
+        `<strong>🐞修復了在 /en/tags 頁面裡，下載器抓取的作品分類可能不正確的問題</strong><br>
+<strong>🐞修復了「在搜尋頁面裡移除已關注用戶的作品」功能失效的問題</strong>`,
+        `<strong>🐞Fixed the issue where the downloader might incorrectly classify works when crawling on /en/tags pages</strong><br>
+<strong>🐞Fixed the issue where the "Remove works from followed users on the search page" feature stopped working</strong>`,
+        `<strong>🐞/en/tags ページでダウンロードツールが作品分類を正しく取得できない問題を修正</strong><br>
+<strong>🐞「検索ページでフォロー中のユーザーの作品を非表示にする」機能が動作しなくなっていた問題を修正</strong>`,
+        `<strong>🐞/en/tags 페이지에서 다운로더가 작품 분류를 잘못 가져올 수 있는 문제 수정</strong><br>
+<strong>🐞"검색 페이지에서 팔로우한 사용자의 작품 제거" 기능이 작동하지 않는 문제 수정</strong>`,
+        `<strong>🐞Исправлена проблема, при которой на страницах /en/tags загрузчик мог неверно классифицировать работы</strong><br>
+<strong>🐞Исправлена проблема, из-за которой функция «Удалять работы от подписанных пользователей на странице поиска» перестала работать</strong>`,
+    ],
 };
 
 // prompt
@@ -41510,6 +41525,7 @@ class Wiki {
             'exportDashboardData',
             'crawlApplicationWork',
             'crawlWinningWork',
+            'findDeactivatedUsers',
         ],
         'Buttons-Download': [
             'importCrawlResults',

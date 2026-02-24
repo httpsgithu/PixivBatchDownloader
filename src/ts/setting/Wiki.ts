@@ -163,6 +163,7 @@ class Wiki {
       'exportDashboardData',
       'crawlApplicationWork',
       'crawlWinningWork',
+      'findDeactivatedUsers',
     ],
     'Buttons-Download': [
       'importCrawlResults',
