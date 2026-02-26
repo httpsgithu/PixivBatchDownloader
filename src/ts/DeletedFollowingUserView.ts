@@ -28,7 +28,6 @@ class DeletedFollowingUserView {
           )?.deletedUsers
           if (deletedUsers) {
             this.deletedUsers = deletedUsers
-            console.log('deletedUsers：', this.deletedUsers)
           }
         }
       }
@@ -68,13 +67,26 @@ class DeletedFollowingUserView {
         // 检查用户是否已注销
         const link = Tools.createUserLink(user.id, user.name)
         log.log(lang.transl('_检查用户x是否已注销', link))
-        const json = await API.getUserProfile(user.id, '0')
-        if (json.error) {
+
+        let flag = false
+        try {
+          // 调试用：获取一个不存在的用户的信息
+          // const json = await API.getUserProfile('16689973', '0')
+          const json = await API.getUserProfile(user.id, '0')
+          if (json.error) {
+            flag = true
+          } else {
+            log.log(lang.transl('_该用户未注销'))
+          }
+        } catch (error: Error | any) {
+          if (error?.status === 403) {
+            flag = true
+          }
+        }
+        if (flag) {
           user.exist = false
           deactivatedUsers.push(user)
           log.log(lang.transl('_该用户已注销'))
-        } else {
-          log.log(lang.transl('_该用户未注销'))
         }
 
         await Utils.sleep(settings.slowCrawlDealy)

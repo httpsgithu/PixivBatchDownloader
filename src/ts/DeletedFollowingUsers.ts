@@ -1,4 +1,5 @@
-import { DeletedUser, FollowingData, DispatchMsg } from './FollowingData'
+import { DeletedUser, FollowingData } from './FollowingData'
+import { backgroundAPI } from './backgroundAPI'
 
 // 这是一个后台脚本
 // 当关注列表变化时，保存被删除的用户 ID。这些用户可能是被取消了关注，也可能是账号已经不存在了。
@@ -41,7 +42,7 @@ class DeletedFollowingUsers {
     deletedUsers.forEach((user) => {
       const exist = dataSource.deletedUsers!.find((u) => u.id === user.id)
       if (!exist) {
-        dataSource.deletedUsers!.push(user)
+        this.push(user)
       }
     })
   }
@@ -51,7 +52,7 @@ class DeletedFollowingUsers {
     this.initDeletedUsers(dataSource)
     const exist = dataSource.deletedUsers.find((u) => u.id === userID)
     if (!exist) {
-      dataSource.deletedUsers.push({
+      this.push({
         id: userID,
         name: '',
         avatar: '',
@@ -77,7 +78,23 @@ class DeletedFollowingUsers {
     }
   }
 
-  // 获取用户的名称和头像信息。每次执行只会获取一个用户的数据
+  private push(user: DeletedUser) {
+    if (!this.dataSource) {
+      return
+    }
+
+    // 获取用户的名称和头像信息，然后保存
+    const userInfo = this.dataSource.followedUsersInfo.find(
+      (userInfo) => userInfo.id === user.id
+    )
+    if (userInfo) {
+      user.name = userInfo.name
+      user.avatar = userInfo.avatar
+    }
+    this.dataSource.deletedUsers.push(user)
+  }
+
+  // 获取用户的名称和头像信息并保存。每次执行只会获取一个用户的数据
   private async updateUserInfo() {
     if (!this.dataSource || this.updateStatus === 'updating') {
       return
@@ -93,31 +110,33 @@ class DeletedFollowingUsers {
 
     try {
       this.updateStatus = 'updating'
-      // full=0 获取简略信息，full=1 获取完整信息。我们这里只需要用户名字和头像，所以用 full=0 就够了
-      const url = `https://www.pixiv.net/ajax/user/${user.id}?full=0`
-      const res = await fetch(url)
-      const json = await res.json()
 
+      const userData = await backgroundAPI.getUserProfile(user.id, '0')
       // 如果 error 为 true，说明这个用户不存在了
-      if (json.error) {
+      // 但这个判断条件应该不会被执行，因为此时状态码会是 403
+      if (userData.error) {
         user.exist = false
       } else {
-        // 判断这个用户是否还在 deletedUsers 里。如果不存在，或者数据显示关注了该用户，则不修改其信息
+        // 检查这个用户是否还在 deletedUsers 里。如果不存在则不修改其信息
         const exist = this.dataSource!.deletedUsers.find(
           (u) => u.id === user.id
         )
-        if (exist && json.body.isFollowed === false) {
+        if (exist) {
           // 储存用户信息
-          user.name = json.body.name || ''
-          user.avatar = json.body.imageBig || json.body.image || ''
+          user.name = userData.body.name || ''
+          user.avatar = userData.body.imageBig || userData.body.image || ''
           user.exist = true
         }
       }
 
       // 重新 dispatch 数据，以便内容脚本能拿到更新后的 deletedUsers 数据
       this.changed = true
-    } catch (e) {
-      console.log(`updateUserInfo: 获取用户 ${user.id} 的信息时出错了`, e)
+    } catch (error: Error | any) {
+      if (error?.status === 403) {
+        console.log(403, user.id)
+        user.exist = false
+        this.changed = true
+      }
     } finally {
       this.updateStatus = 'idle'
     }

@@ -17,7 +17,7 @@ class HighlightFollowingUsers {
       return
     }
 
-    followingList.onUpdate(() => {
+    window.addEventListener(EVT.list.followingUsersChange, () => {
       this.makeHighlight()
     })
 

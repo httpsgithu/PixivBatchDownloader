@@ -6,7 +6,12 @@ import { settings } from './setting/Settings'
 import { store } from './store/Store'
 import { toast } from './Toast'
 import { Utils } from './utils/Utils'
-import { DispatchMsg, AllUserFollowingData } from './FollowingData'
+import {
+  DispatchMsg,
+  UserInfo,
+  AllUserFollowingData,
+  DeletedUser,
+} from './FollowingData'
 import { log } from './Log'
 
 // 更新关注列表
@@ -55,6 +60,7 @@ class FollowingList {
 
   /**当前登录用户的关注用户列表 */
   public following: string[] = []
+  public followedUsersInfo: UserInfo[] = []
 
   /**当前登录用户的关注用户总数，也就是 pixiv 页面上显示的公开关注 + 非公开关注数量之和。
    * 这不一定是实际关注数量（也就是不一定等于 this.following.length)，因为有些用户可能已经注销了，所以实际关注数量比显示的数量少是很常见的 */
@@ -91,8 +97,10 @@ class FollowingList {
     // 获取公开关注和私密关注，然后合并
     const publicList = await this.getFollowingList('show')
     const privateList = await this.getFollowingList('hide')
-    const followingIDList = publicList.concat(privateList)
-    this.following = followingIDList
+    this.following = publicList.following.concat(privateList.following)
+    this.followedUsersInfo = publicList.followedUsersInfo.concat(
+      privateList.followedUsersInfo
+    )
 
     const tip2 = lang.transl('_已更新关注用户列表')
     log.success(tip2)
@@ -104,7 +112,8 @@ class FollowingList {
       msg: 'setFollowingData',
       data: {
         user: store.loggedUserID,
-        following: followingIDList,
+        following: this.following,
+        followedUsersInfo: this.followedUsersInfo,
         total: this.total,
       },
     })
@@ -115,13 +124,20 @@ class FollowingList {
   }
 
   /**获取公开或私密关注的用户 ID 列表 */
-  private async getFollowingList(rest: 'show' | 'hide'): Promise<string[]> {
+  private async getFollowingList(rest: 'show' | 'hide'): Promise<{
+    following: string[]
+    followedUsersInfo: UserInfo[]
+  }> {
     const ids: string[] = []
+    const followedUsersInfo: UserInfo[] = []
     let offset = 0
     let total = await this.getFollowingTotal(rest)
 
     if (total === 0) {
-      return ids
+      return {
+        following: ids,
+        followedUsersInfo: [],
+      }
     }
 
     // 每次请求 100 个关注用户的数据
@@ -139,6 +155,11 @@ class FollowingList {
 
       for (const users of res.body.users) {
         ids.push(users.userId)
+        followedUsersInfo.push({
+          id: users.userId,
+          name: users.userName,
+          avatar: users.profileImageUrl,
+        })
       }
       const type =
         rest === 'show' ? lang.transl('_公开') : lang.transl('_非公开')
@@ -164,7 +185,10 @@ class FollowingList {
       await Utils.sleep(settings.slowCrawlDealy)
     }
 
-    return ids
+    return {
+      following: ids,
+      followedUsersInfo,
+    }
   }
 
   /**只请求关注列表第一页的数据，以获取 total */
@@ -179,10 +203,8 @@ class FollowingList {
     const data = list.find((data) => data.user === store.loggedUserID)
     if (data) {
       this.following = data.following
+      this.followedUsersInfo = data.followedUsersInfo
       this.total = data.total
-      // console.log('receiveData total', this.total)
-
-      this.executeUpdateCB()
     } else {
       // 恢复的数据里没有当前用户的数据，需要获取
       this.checkNeedUpdate()
@@ -243,25 +265,12 @@ class FollowingList {
     }
   }
 
-  // 等待队列
+  // getList 的等待队列。当一个 getList 已经在执行时，再次调用 getList 的话会进入等待队列，等待 getList 完毕
   private queue: Function[] = []
   private executeQueue() {
     while (this.queue.length > 0) {
       const func = this.queue.shift()!
       func()
-    }
-  }
-
-  // 当关注列表全量更新时，执行回调函数
-  private onUpdateCB: Function[] = []
-
-  public onUpdate(cb: Function) {
-    this.onUpdateCB.push(cb)
-  }
-
-  private executeUpdateCB() {
-    for (const cb of this.onUpdateCB) {
-      cb()
     }
   }
 }

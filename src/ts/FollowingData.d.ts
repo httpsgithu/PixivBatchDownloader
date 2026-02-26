@@ -10,11 +10,19 @@ export interface DeletedUser {
   deleteByUser: boolean
 }
 
+export interface UserInfo {
+  id: string
+  name: string | ''
+  avatar: string | ''
+}
+
 export interface FollowingData {
   /** 指示这个对象属于哪个用户 id **/
   user: string
   /** 用户最新的关注列表 **/
   following: string[]
+  /** 保存用户关注过的所有用户的信息。即使是被取消关注的用户，也依然保留他的数据 */
+  followedUsersInfo: UserInfo[]
   /** 此用户的关注用户总数。这是公开和非公开关注的数量之和。因为本程序不区分一个关注是公开的还是非公开的
    *  注意这可能与 following 的 length 不同，因为这是按照 API 返回的 total 计算的，但是 API 返回的实际用户数量可能比 total 少
    */

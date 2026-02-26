@@ -3498,14 +3498,27 @@ class DeletedFollowingUserView {
                 // 检查用户是否已注销
                 const link = _Tools__WEBPACK_IMPORTED_MODULE_11__.Tools.createUserLink(user.id, user.name);
                 _Log__WEBPACK_IMPORTED_MODULE_5__.log.log(_Language__WEBPACK_IMPORTED_MODULE_3__.lang.transl('_检查用户x是否已注销', link));
-                const json = await _API__WEBPACK_IMPORTED_MODULE_7__.API.getUserProfile(user.id, '0');
-                if (json.error) {
+                let flag = false;
+                try {
+                    // 调试用：获取一个不存在的用户的信息
+                    // const json = await API.getUserProfile('16689973', '0')
+                    const json = await _API__WEBPACK_IMPORTED_MODULE_7__.API.getUserProfile(user.id, '0');
+                    if (json.error) {
+                        flag = true;
+                    }
+                    else {
+                        _Log__WEBPACK_IMPORTED_MODULE_5__.log.log(_Language__WEBPACK_IMPORTED_MODULE_3__.lang.transl('_该用户未注销'));
+                    }
+                }
+                catch (error) {
+                    if (error?.status === 403) {
+                        flag = true;
+                    }
+                }
+                if (flag) {
                     user.exist = false;
                     deactivatedUsers.push(user);
                     _Log__WEBPACK_IMPORTED_MODULE_5__.log.log(_Language__WEBPACK_IMPORTED_MODULE_3__.lang.transl('_该用户已注销'));
-                }
-                else {
-                    _Log__WEBPACK_IMPORTED_MODULE_5__.log.log(_Language__WEBPACK_IMPORTED_MODULE_3__.lang.transl('_该用户未注销'));
                 }
                 await _utils_Utils__WEBPACK_IMPORTED_MODULE_6__.Utils.sleep(_setting_Settings__WEBPACK_IMPORTED_MODULE_10__.settings.slowCrawlDealy);
             }
@@ -4328,6 +4341,7 @@ class FollowingList {
     }
     /**当前登录用户的关注用户列表 */
     following = [];
+    followedUsersInfo = [];
     /**当前登录用户的关注用户总数，也就是 pixiv 页面上显示的公开关注 + 非公开关注数量之和。
      * 这不一定是实际关注数量（也就是不一定等于 this.following.length)，因为有些用户可能已经注销了，所以实际关注数量比显示的数量少是很常见的 */
     total = 0;
@@ -4357,8 +4371,8 @@ class FollowingList {
         // 获取公开关注和私密关注，然后合并
         const publicList = await this.getFollowingList('show');
         const privateList = await this.getFollowingList('hide');
-        const followingIDList = publicList.concat(privateList);
-        this.following = followingIDList;
+        this.following = publicList.following.concat(privateList.following);
+        this.followedUsersInfo = publicList.followedUsersInfo.concat(privateList.followedUsersInfo);
         const tip2 = _Language__WEBPACK_IMPORTED_MODULE_3__.lang.transl('_已更新关注用户列表');
         _Log__WEBPACK_IMPORTED_MODULE_8__.log.success(tip2);
         _Toast__WEBPACK_IMPORTED_MODULE_6__.toast.success(tip2, {
@@ -4368,7 +4382,8 @@ class FollowingList {
             msg: 'setFollowingData',
             data: {
                 user: _store_Store__WEBPACK_IMPORTED_MODULE_5__.store.loggedUserID,
-                following: followingIDList,
+                following: this.following,
+                followedUsersInfo: this.followedUsersInfo,
                 total: this.total,
             },
         });
@@ -4379,10 +4394,14 @@ class FollowingList {
     /**获取公开或私密关注的用户 ID 列表 */
     async getFollowingList(rest) {
         const ids = [];
+        const followedUsersInfo = [];
         let offset = 0;
         let total = await this.getFollowingTotal(rest);
         if (total === 0) {
-            return ids;
+            return {
+                following: ids,
+                followedUsersInfo: [],
+            };
         }
         // 每次请求 100 个关注用户的数据
         const limit = 100;
@@ -4391,6 +4410,11 @@ class FollowingList {
             offset = offset + limit;
             for (const users of res.body.users) {
                 ids.push(users.userId);
+                followedUsersInfo.push({
+                    id: users.userId,
+                    name: users.userName,
+                    avatar: users.profileImageUrl,
+                });
             }
             const type = rest === 'show' ? _Language__WEBPACK_IMPORTED_MODULE_3__.lang.transl('_公开') : _Language__WEBPACK_IMPORTED_MODULE_3__.lang.transl('_非公开');
             _Log__WEBPACK_IMPORTED_MODULE_8__.log.log(`${type} ${ids.length} / ${total}`, 1, false, `getFollowingList_${rest}`);
@@ -4402,7 +4426,10 @@ class FollowingList {
             }
             await _utils_Utils__WEBPACK_IMPORTED_MODULE_7__.Utils.sleep(_setting_Settings__WEBPACK_IMPORTED_MODULE_4__.settings.slowCrawlDealy);
         }
-        return ids;
+        return {
+            following: ids,
+            followedUsersInfo,
+        };
     }
     /**只请求关注列表第一页的数据，以获取 total */
     async getFollowingTotal(rest) {
@@ -4411,13 +4438,12 @@ class FollowingList {
         return res.body.total;
     }
     async receiveData(list) {
-        // console.log('receiveData', list)
+        console.log('receiveData', list);
         const data = list.find((data) => data.user === _store_Store__WEBPACK_IMPORTED_MODULE_5__.store.loggedUserID);
         if (data) {
             this.following = data.following;
+            this.followedUsersInfo = data.followedUsersInfo;
             this.total = data.total;
-            // console.log('receiveData total', this.total)
-            this.executeUpdateCB();
         }
         else {
             // 恢复的数据里没有当前用户的数据，需要获取
@@ -4466,22 +4492,12 @@ class FollowingList {
             });
         }
     }
-    // 等待队列
+    // getList 的等待队列。当一个 getList 已经在执行时，再次调用 getList 的话会进入等待队列，等待 getList 完毕
     queue = [];
     executeQueue() {
         while (this.queue.length > 0) {
             const func = this.queue.shift();
             func();
-        }
-    }
-    // 当关注列表全量更新时，执行回调函数
-    onUpdateCB = [];
-    onUpdate(cb) {
-        this.onUpdateCB.push(cb);
-    }
-    executeUpdateCB() {
-        for (const cb of this.onUpdateCB) {
-            cb();
         }
     }
 }
@@ -4522,7 +4538,7 @@ class HighlightFollowingUsers {
         if (!_utils_Utils__WEBPACK_IMPORTED_MODULE_3__.Utils.isPixiv()) {
             return;
         }
-        _FollowingList__WEBPACK_IMPORTED_MODULE_6__.followingList.onUpdate(() => {
+        window.addEventListener(_EVT__WEBPACK_IMPORTED_MODULE_0__.EVT.list.followingUsersChange, () => {
             this.makeHighlight();
         });
         window.setTimeout(() => {

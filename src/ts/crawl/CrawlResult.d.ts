@@ -1405,6 +1405,7 @@ export interface FollowingResponse {
     users: {
       userId: string
       userName: string
+      /** 170px 尺寸的头像 */
       profileImageUrl: string
       userComment: string
       following: boolean

@@ -3,14 +3,17 @@ import {
   DeletedUser,
   FollowingData,
   AllUserFollowingData,
+  UserInfo,
 } from './FollowingData'
 import { deletedFollowingUsers } from './DeletedFollowingUsers'
+import { backgroundAPI } from './backgroundAPI'
 
 interface SetData {
   /**数据属于哪个用户 */
   user: string
   /**此用户的关注用户的 id 列表 **/
   following: string[]
+  followedUsersInfo: UserInfo[]
   /**此用户的关注用户总数。注意这可能与 following 的 length 不同*/
   total: number
 }
@@ -62,7 +65,7 @@ class ManageFollowing {
         }
 
         if (msg.msg === 'needUpdateFollowingData') {
-          if (this.status === 'locked') {
+          if (this.uploadStatus === 'locked') {
             // 查询上次执行更新任务的标签页还是否存在，如果不存在，
             // 则改为让这次发起请求的标签页执行更新任务
             const tabs = await this.findAllPixivTab()
@@ -77,7 +80,7 @@ class ManageFollowing {
             this.updateTaskTabID = sender!.tab!.id!
           }
 
-          this.status = 'locked'
+          this.uploadStatus = 'locked'
 
           browser.tabs.sendMessage(this.updateTaskTabID, {
             msg: 'updateFollowingData',
@@ -89,7 +92,7 @@ class ManageFollowing {
           // 当前台获取新的关注列表完成之后，会发送此消息。
           // 如果发送消息的页面和发起请求的页面是同一个，则解除锁定状态
           if (sender!.tab!.id === this.updateTaskTabID) {
-            this.status = 'idle'
+            this.uploadStatus = 'idle'
           }
           // 不管数据是否来自于发起请求的页面都更新数据。因为有些操作可能会直接更新数据，没有事先请求批准的环节
 
@@ -196,23 +199,35 @@ class ManageFollowing {
 
   private data: AllUserFollowingData = []
 
-  /**当状态为 locked 时，如果需要增加或删除某个关注的用户，则将其放入等待队列 */
+  private uploadStatus: 'idle' | 'loading' | 'locked' = 'idle'
+  private updateTaskTabID = 0
+  /**当 uploadStatus 为 locked 时，如果需要增加或删除某个关注的用户，则将其放入等待队列 */
   private queue: UserOperate[] = []
 
-  private status: 'idle' | 'loading' | 'locked' = 'idle'
-
-  private updateTaskTabID = 0
+  /** 是否已完成 restore */
+  private restored = false
 
   private async restore() {
-    if (this.status !== 'idle') {
+    if (this.uploadStatus !== 'idle') {
       return
     }
 
-    this.status = 'loading'
-    const data = await browser.storage.local.get(this.store)
-    if (data[this.store] && Array.isArray(data[this.store])) {
-      this.data = data[this.store] as AllUserFollowingData
-      this.status = 'idle'
+    this.uploadStatus = 'loading'
+    const obj = await browser.storage.local.get(this.store)
+    if (obj[this.store] && Array.isArray(obj[this.store])) {
+      this.data = obj[this.store] as AllUserFollowingData
+      // 这些属性在之前的版本里没有，所以需要添加一下
+      this.data.forEach((item) => {
+        if (item.followedUsersInfo === undefined) {
+          item.followedUsersInfo = []
+        }
+        if (item.deletedUsers === undefined) {
+          item.deletedUsers = []
+        }
+      })
+
+      this.uploadStatus = 'idle'
+      this.restored = true
     } else {
       return setTimeout(() => {
         this.restore()
@@ -231,18 +246,24 @@ class ManageFollowing {
     // })
     // this.storage()
 
-    if (tab?.id) {
-      browser.tabs.sendMessage(tab.id, {
-        msg: 'dispathFollowingData',
-        data: this.data,
-      })
+    if (!this.restored) {
+      setTimeout(() => {
+        return this.dispatchFollowingList(tab)
+      }, 100)
     } else {
-      const tabs = await this.findAllPixivTab()
-      for (const tab of tabs) {
-        browser.tabs.sendMessage(tab.id!, {
+      if (tab?.id) {
+        browser.tabs.sendMessage(tab.id, {
           msg: 'dispathFollowingData',
           data: this.data,
         })
+      } else {
+        const tabs = await this.findAllPixivTab()
+        for (const tab of tabs) {
+          browser.tabs.sendMessage(tab.id!, {
+            msg: 'dispathFollowingData',
+            data: this.data,
+          })
+        }
       }
     }
   }
@@ -264,15 +285,15 @@ class ManageFollowing {
   }
 
   /**执行队列中的所有操作 */
-  private executionQueue() {
-    if (this.status !== 'idle' || this.queue.length === 0) {
+  private async executionQueue() {
+    if (this.uploadStatus !== 'idle' || this.queue.length === 0) {
       return
     }
 
     while (this.queue.length > 0) {
       // set 操作不会在此处执行
       const queue = this.queue.shift()!
-      this.addOrRemoveOne(queue)
+      await this.addOrRemoveOne(queue)
     }
 
     // 队列中的所有操作完成后，派发和储存数据
@@ -293,11 +314,24 @@ class ManageFollowing {
       this.data[index].following = data.following
       this.data[index].total = data.total
       this.data[index].time = new Date().getTime()
+      // 历史关注数据采用追加模式，而非直接覆盖
+      data.followedUsersInfo.forEach((newUserInfo) => {
+        const oldUserInfo = this.data[index].followedUsersInfo.find(
+          (userInfo) => userInfo.id === newUserInfo.id
+        )
+        if (oldUserInfo) {
+          oldUserInfo.name = newUserInfo.name
+          oldUserInfo.avatar = newUserInfo.avatar
+        } else {
+          this.data[index].followedUsersInfo.push(newUserInfo)
+        }
+      })
     } else {
-      // 之前没有保存过当前登录的用户的关注数据，新增一份数据
+      // 如果之前没有保存过当前登录的用户的关注数据，就新增一份数据
       this.data.push({
         user: data.user,
         following: data.following,
+        followedUsersInfo: data.followedUsersInfo,
         total: data.total,
         deletedUsers: [],
         time: new Date().getTime(),
@@ -305,7 +339,7 @@ class ManageFollowing {
     }
   }
 
-  private addOrRemoveOne(operate: UserOperate) {
+  private async addOrRemoveOne(operate: UserOperate) {
     const i = this.data.findIndex(
       (following) => following.user === operate.loggedUserID
     )
@@ -318,6 +352,31 @@ class ManageFollowing {
 
       this.data[i].following.push(operate.userID)
       this.data[i].total = this.data[i].total + 1
+
+      // 当用户手动关注一个用户时，需要把这个用户的信息添加到 followedUsersInfo 里
+      const exist = this.data[i].followedUsersInfo.find(
+        (userInfo) => userInfo.id === operate.userID
+      )
+      if (!exist) {
+        try {
+          // 调试用：获取一个不存在的用户的信息
+          // const userData = await backgroundAPI.getUserProfile('16689973', '0')
+          const userData = await backgroundAPI.getUserProfile(
+            operate.userID,
+            '0'
+          )
+          this.data[i].followedUsersInfo.push({
+            id: operate.userID,
+            name: userData.body.name || '',
+            avatar: userData.body.imageBig || userData.body.image || '',
+          })
+        } catch (error: Error | any) {
+          console.log(
+            `addOrRemoveOne: 获取用户 ${operate.userID} 的信息时出错了`,
+            error
+          )
+        }
+      }
     } else if (operate.action === 'remove') {
       deletedFollowingUsers.whenDeleteFollowing(this.data[i], operate.userID)
 
@@ -349,11 +408,11 @@ class ManageFollowing {
    */
   private checkDeadlock() {
     setInterval(async () => {
-      if (this.status === 'locked') {
+      if (this.uploadStatus === 'locked') {
         const tabs = await this.findAllPixivTab()
         const find = tabs.find((tab) => tab.id === this.updateTaskTabID)
         if (!find) {
-          this.status = 'idle'
+          this.uploadStatus = 'idle'
         }
       }
     }, 30000)
