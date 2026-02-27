@@ -18,6 +18,7 @@ import { setTimeoutWorker } from '../SetTimeoutWorker'
 import { mergeNovelFileName } from './MergeNovelFileName'
 import { SendDownload } from './SendDownload'
 import { msgBox } from '../MsgBox'
+import { filter } from '../filter/Filter'
 
 declare const jEpub: any
 
@@ -129,10 +130,10 @@ class MergeNovel {
       return 0
     }
 
-    await this.getNovelData()
+    await this.getAllNovelData()
 
     // 获取这个系列的设定资料
-    if (settings.saveNovelMeta) {
+    if (this.novelIdList.length > 0 && settings.saveNovelMeta) {
       log.log(lang.transl('_获取设定资料'))
       const data = await getNovelGlossarys.getGlossarys(
         this.seriesId,
@@ -489,21 +490,35 @@ class MergeNovel {
     )
 
     const list = seriesContents.body.page.seriesContents
-    list.forEach((item) => {
-      this.novelIdList.push(item.id)
-    })
+    for (const item of list) {
+      // 应用标签过滤器
+      const check = await filter.check({
+        tags: item.tags,
+      })
+      if (check) {
+        this.novelIdList.push(item.id)
+      } else {
+        const order_title = `#${item.series.contentOrder} ${item.title}`
+        const link = Tools.createWorkLink(item.id, order_title, 'novel')
+        log.warning(lang.transl('_排除小说') + ': ' + link)
+      }
+    }
 
     this.last += list.length
 
     // 如果这一次返回的作品数量达到了每批限制，可能这次没有请求完，继续请求后续的数据
     if (list.length === this.limit) {
       return this.getNovelIds()
+    } else {
+      // 获取完毕
+      if (this.novelIdList.length === 0) {
+        log.warning(lang.transl('_这个系列里的所有小说都被排除了'))
+      }
     }
-    // 获取完毕
   }
 
   /** 获取所有小说数据，然后储存必须的数据 */
-  private async getNovelData() {
+  private async getAllNovelData() {
     const total = this.novelIdList.length
     let count = 0
 
@@ -555,19 +570,36 @@ class MergeNovel {
         Tools.unshiftTag(tags, aiMarkString)
       }
 
-      const novelData: NovelSummary = {
-        id: data.body.id,
-        no: data.body.seriesNavData!.order,
-        updateDate: DateFormat.format(data.body.uploadDate),
-        title: Utils.replaceUnsafeStr(data.body.title),
+      // 应用标签过滤器
+      const check = await filter.check({
         tags,
-        description: Utils.htmlToText(Utils.htmlDecode(data.body.description)),
-        content: Tools.replaceNovelContentFlag(data.body.content),
-        coverUrl: data.body.coverUrl,
-        embeddedImages: Tools.extractEmbeddedImages(data),
+      })
+      const novelId = data.body.id
+      const title = data.body.title
+      const order = data.body.seriesNavData!.order
+      if (check) {
+        const novelData: NovelSummary = {
+          id: novelId,
+          no: order,
+          updateDate: DateFormat.format(data.body.uploadDate),
+          title: Utils.replaceUnsafeStr(title),
+          tags,
+          description: Utils.htmlToText(
+            Utils.htmlDecode(data.body.description)
+          ),
+          content: Tools.replaceNovelContentFlag(data.body.content),
+          coverUrl: data.body.coverUrl,
+          embeddedImages: Tools.extractEmbeddedImages(data),
+        }
+        this.allNovelData.push(novelData)
+      } else {
+        const order_title = `#${order} ${title}`
+        const link = Tools.createWorkLink(novelId, order_title, 'novel')
+        log.warning(lang.transl('_排除小说') + ': ' + link)
       }
-      this.allNovelData.push(novelData)
     }
+
+    // 获取了所有小说的数据
     log.persistentRefresh('getNovelDataProgress' + this.seriesId)
 
     // 按照小说的序号进行升序排列

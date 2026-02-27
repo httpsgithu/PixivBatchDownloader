@@ -606,7 +606,7 @@ class Tools {
     return false
   }
 
-  // 传入作品 id，生成作品页面的超链接
+  /** 传入作品 id，生成作品页面的超链接，即 A 标签 */
   static createWorkLink(
     id: number | string,
     title?: string,
