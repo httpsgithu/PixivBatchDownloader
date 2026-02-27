@@ -194,6 +194,11 @@ abstract class InitPageBase {
       return
     }
 
+    // 每次开始抓取时清空之前的日志
+    // 其实不清空通常也没有问题，但是考虑到定时抓取功能、以及其他一些行为可能会产生大量日志，
+    // 一直不清空的话会导致日志数量持续增加，占据的内存也会增加
+    EVT.fire('clearLog')
+
     log.success('🚀' + lang.transl('_开始抓取'))
     toast.show(lang.transl('_开始抓取'), {
       position: 'center',
@@ -248,6 +253,8 @@ abstract class InitPageBase {
       if (!this.confirmRecrawl()) {
         return
       }
+
+      EVT.fire('clearLog')
 
       log.success('🚀' + lang.transl('_开始抓取'))
       toast.show(lang.transl('_开始抓取'), {
@@ -598,10 +605,13 @@ abstract class InitPageBase {
       this.sortResult()
     }
 
-    log.log(lang.transl('_共抓取到n个作品', store.resultMeta.length.toString()))
-
-    log.log(lang.transl('_共抓取到n个文件', store.result.length.toString()))
-
+    log.log(
+      lang.transl(
+        '_共抓取到n个作品产生了n个抓取结果',
+        store.resultMeta.length.toString(),
+        store.result.length.toString()
+      )
+    )
     log.success('✅' + lang.transl('_抓取完毕'), 2)
 
     // 发出抓取完毕的信号
@@ -624,12 +634,13 @@ abstract class InitPageBase {
   // 每当抓取了一个作品之后，输出提示
   protected logResultNumber() {
     log.log(
-      `➡️${lang.transl('_抓取进度')}: ${lang.transl('_待处理')} ${store.idList.length}, ${lang.transl(
+      `➡️${lang.transl('_待处理')} ${store.idList.length}, ${lang.transl(
         '_共抓取到n个作品',
         store.resultMeta.length.toString()
       )}`,
       1,
-      false
+      false,
+      'getWorksProgress'
     )
   }
 

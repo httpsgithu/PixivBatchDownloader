@@ -17,12 +17,12 @@ class Log {
   constructor() {
     this.createToggleBtn()
 
-    // this.test(1000)
+    // this.test(300)
 
     // 日志区域限制了最大高度，可能会出现滚动条
     // 所以使用定时器，让日志滚动到底部
     window.setInterval(() => {
-      this.scrollToBottom()
+      this.scrollToBottom(this.logContent)
     }, 500)
 
     window.addEventListener(EVT.list.clearLog, () => {
@@ -59,12 +59,12 @@ class Log {
   /**最新的日志区域里的日志条数。刷新的日志不会计入；换行标签也不会计入（虽然连续的换行会产生空行，看起来有一行空白，但这只是某一条日志内部的换行，所以不会增加日志条数） */
   private count = 0
 
-  private logWrap = document.createElement('div') // 日志容器的区域，当日志条数很多时，会产生多个日志容器。默认是隐藏的（display: none）
+  private logWrap = document.createElement('div') // 日志容器的区域，当日志条数很多时，会产生多个日志容器
   private activeLogWrapID = 'logWrap' // 当前活跃的日志容器的 id，也是最新的一个日志容器
   private logContent = document.createElement('div') // 日志的主体区域，始终指向最新的那个日志容器内部
-  private logContentClassName = 'logContent' // 日志主体区域的类名
-  private logWrapClassName = 'logWrap' // 日志容器的类名，只负责样式
-  private logWrapFlag = 'logWrapFlag' // 日志容器的标志，当需要查找日志区域时，使用这个类名而不是 logWrap，因为其他元素可能也具有 logWrap 类名（为了应用其样式）。
+  private readonly logContentClassName = 'logContent' // 日志主体区域的类名
+  private readonly logWrapClassName = 'logWrap' // 日志容器的类名，只负责样式
+  private readonly logWrapFlag = 'logWrapFlag' // 日志容器的标志，当需要查找日志区域时，使用这个类名而不是 logWrap，因为其他元素可能也具有 logWrap 类名（为了应用其样式）。
 
   /**储存会刷新的日志所使用的元素（插槽），可以传入 key 来区分多个刷新区域 */
   // 每个刷新区域使用一个 span 元素，里面的文本会变化
@@ -133,7 +133,7 @@ class Log {
     return this._show
   }
 
-  /**最新一个日志区域在视口里是否可见。注意这不是判断 display，而是可见性（或者说是交叉状态）。
+  /**最新一个日志区域在视口里是否可见。注意这判断的不是 display 状态，而是可见性（也就是日志区域与其他元素的交叉状态）。
    * 当它符合可见条件为 true，否则为 false。
    * 注意：在 PC 端页面里需要完全可见；在移动端页面里只需要部分可见，当然完全可见也可以。
    * 这是因为在移动端页面里，下载器右侧的悬浮按钮经常会显示在日志区域上方，导致日志区域永远只有部分可见。
@@ -179,14 +179,14 @@ class Log {
     } else {
       this.count++
 
-      // 如果页面上的日志条数超过指定数量，则生成一个新的日志区域
-      // 因为日志数量太多的话会占用很大的内存。同时显示 8000 条日志可能占用接近 1 GB 的内存
+      // 如果页面上的日志条数达到最大值，则生成一个新的日志区域
+      // 日志数量太多的话会占用很大的内存，同时显示 8000 条日志可能占用接近 1 GB 的内存
       if (this.count >= this.max) {
         // 移除 id 属性，也就是 this.activeLogWrapID
         // 下次输出日志时查找不到这个 id，就会新建一个日志区域
         this.logWrap.removeAttribute('id')
-        // 滚动到底部
-        this.logContent.scrollTop = this.logContent.scrollHeight
+        // 滚动到底部。这是该区域里最后一条日志，之后该区域会被解除引用，所以需要立即执行一次
+        this.scrollToBottom(this.logContent)
       }
     }
 
@@ -346,6 +346,10 @@ class Log {
       this.count = 0
       this.isVisible = false
 
+      // 判断这是不是第一个日志区域
+      const exist = document.querySelector('.' + this.logWrapFlag)
+      const isFirst = exist === null
+
       const logWrap = document.createElement('div')
       logWrap.id = this.activeLogWrapID
       logWrap.classList.add(this.logWrapClassName, this.logWrapFlag)
@@ -355,6 +359,8 @@ class Log {
         logWrap.classList.add('mobile')
       }
       logWrap.append(logContent)
+      this.logWrap = logWrap
+      this.logContent = logContent
 
       // 点击日志区域两侧的空白处，可以隐藏日志区域
       logWrap.addEventListener('click', (ev) => {
@@ -362,20 +368,6 @@ class Log {
           this.show = false
         }
       })
-
-      // 添加到 body 前面
-      this.logWrap = logWrap
-      this.logContent = logContent
-      document.body.insertAdjacentElement('beforebegin', this.logWrap)
-      theme.register(this.logWrap)
-      // 虽然可以应用背景图片，但是由于日志区域比较狭长，背景图片的视觉效果不佳，看起来比较粗糙，所以还是不应用背景图片了
-      // bg.useBG(this.wrap, 0.9)
-
-      // 使新创建的日志区域的显示状态与上一个日志区域保持一致
-      // 如果这就是第一个日志区域，则是默认隐藏的
-      this.show = this.show
-      // 如果上一个日志区域是显示的，就需要设置 this.show = true 使新的区域也显示
-      // 这就是为什么要执行 this.show = this.show
 
       // 当鼠标进入日志区域时，不自动滚动到底部，这样可以保持显示区域的内容不变，便于用户查看和选择需要的日志
       this.logWrap.addEventListener('mouseenter', () => {
@@ -386,6 +378,20 @@ class Log {
         this.mouseover = false
       })
       // 当用户切换到其他标签页或其他应用程序时（不论是使用鼠标还是快捷键），浏览器都会自动触发 mouseleave 事件，所以 mouseover 会自动变成 false。
+
+      // 添加到 body 前面
+      document.body.insertAdjacentElement('beforebegin', this.logWrap)
+      theme.register(this.logWrap)
+      // 虽然可以应用背景图片，但是由于日志区域比较狭长，背景图片的视觉效果不佳，看起来比较粗糙，所以还是不应用背景图片了
+      // bg.useBG(this.wrap, 0.9)
+
+      // 如果这是第一个日志区域，则为其应用“日志区域的默认可见性”设置
+      if (isFirst) {
+        this.show = settings.logVisibleDefault === 'show'
+      } else {
+        // 如果这不是第一个日志区域，则让它的显示状态与上一个日志区域保持一致
+        this.show = this.show
+      }
 
       // 监听新的日志区域的可见性
       Utils.observeElement(
@@ -398,9 +404,9 @@ class Log {
     }
   }
 
-  private scrollToBottom() {
+  private scrollToBottom(el: HTMLElement) {
     if (this.show && this.toBottom && !this.mouseover) {
-      this.logContent.scrollTop = this.logContent.scrollHeight
+      el.scrollTop = el.scrollHeight
       this.toBottom = false
     }
   }

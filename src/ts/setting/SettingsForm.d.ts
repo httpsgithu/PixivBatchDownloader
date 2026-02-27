@@ -168,4 +168,5 @@ export interface SettingsForm extends HTMLFormElement {
   skipNovelsInSeriesWhenAutoMerge: HTMLInputElement
   seriesNovelNameRule: HTMLInputElement
   filterSearchResults: HTMLInputElement
+  logVisibleDefault: HTMLInputElement
 }

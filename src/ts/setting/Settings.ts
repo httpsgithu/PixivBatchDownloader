@@ -316,6 +316,7 @@ interface XzSetting {
   skipNovelsInSeriesWhenAutoMerge: boolean
   seriesNovelNameRule: string
   filterSearchResults: boolean
+  logVisibleDefault: 'show' | 'hide'
 }
 
 type SettingKeys = keyof XzSetting
@@ -789,6 +790,7 @@ class Settings {
     seriesNovelNameRule:
       'novel series/{page_tag}/{series_title}-{series_id}-{user}-{part}-{tags}.{ext}',
     filterSearchResults: false,
+    logVisibleDefault: 'show',
   }
 
   private allSettingKeys = Object.keys(this.defaultSettings)

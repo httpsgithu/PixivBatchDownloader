@@ -529,7 +529,7 @@ class DownloadControl {
 
     // 显示下载进度
     const text = `${this.downloaded} / ${store.result.length}`
-    log.log('➡️' + text, 2, false)
+    log.log('➡️' + text, 1, false, 'downloadProgress')
 
     // 设置总下载进度条
     progressBar.setTotalProgress(this.downloaded)

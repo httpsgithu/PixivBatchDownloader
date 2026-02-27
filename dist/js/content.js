@@ -5549,12 +5549,12 @@ class Lang {
         }
     }
     // translate
-    transl(name, ...arg) {
+    transl(name, ...args) {
         // if(!langText[name]){
         //   console.log(`not found lang ${name}`)
         // }
         let content = _langText__WEBPACK_IMPORTED_MODULE_0__.langText[name][this.flagIndex.get(this.type)];
-        arg.forEach((val) => (content = content.replace('{}', val)));
+        args.forEach((arg) => (content = content.replace('{}', arg)));
         return content;
     }
     // 保存注册的元素
@@ -5807,11 +5807,11 @@ __webpack_require__.r(__webpack_exports__);
 class Log {
     constructor() {
         this.createToggleBtn();
-        // this.test(1000)
+        // this.test(300)
         // 日志区域限制了最大高度，可能会出现滚动条
         // 所以使用定时器，让日志滚动到底部
         window.setInterval(() => {
-            this.scrollToBottom();
+            this.scrollToBottom(this.logContent);
         }, 500);
         window.addEventListener(_EVT__WEBPACK_IMPORTED_MODULE_0__.EVT.list.clearLog, () => {
             this.removeAll();
@@ -5839,7 +5839,7 @@ class Log {
     max = 200;
     /**最新的日志区域里的日志条数。刷新的日志不会计入；换行标签也不会计入（虽然连续的换行会产生空行，看起来有一行空白，但这只是某一条日志内部的换行，所以不会增加日志条数） */
     count = 0;
-    logWrap = document.createElement('div'); // 日志容器的区域，当日志条数很多时，会产生多个日志容器。默认是隐藏的（display: none）
+    logWrap = document.createElement('div'); // 日志容器的区域，当日志条数很多时，会产生多个日志容器
     activeLogWrapID = 'logWrap'; // 当前活跃的日志容器的 id，也是最新的一个日志容器
     logContent = document.createElement('div'); // 日志的主体区域，始终指向最新的那个日志容器内部
     logContentClassName = 'logContent'; // 日志主体区域的类名
@@ -5901,7 +5901,7 @@ class Log {
     get show() {
         return this._show;
     }
-    /**最新一个日志区域在视口里是否可见。注意这不是判断 display，而是可见性（或者说是交叉状态）。
+    /**最新一个日志区域在视口里是否可见。注意这判断的不是 display 状态，而是可见性（也就是日志区域与其他元素的交叉状态）。
      * 当它符合可见条件为 true，否则为 false。
      * 注意：在 PC 端页面里需要完全可见；在移动端页面里只需要部分可见，当然完全可见也可以。
      * 这是因为在移动端页面里，下载器右侧的悬浮按钮经常会显示在日志区域上方，导致日志区域永远只有部分可见。
@@ -5940,14 +5940,14 @@ class Log {
         }
         else {
             this.count++;
-            // 如果页面上的日志条数超过指定数量，则生成一个新的日志区域
-            // 因为日志数量太多的话会占用很大的内存。同时显示 8000 条日志可能占用接近 1 GB 的内存
+            // 如果页面上的日志条数达到最大值，则生成一个新的日志区域
+            // 日志数量太多的话会占用很大的内存，同时显示 8000 条日志可能占用接近 1 GB 的内存
             if (this.count >= this.max) {
                 // 移除 id 属性，也就是 this.activeLogWrapID
                 // 下次输出日志时查找不到这个 id，就会新建一个日志区域
                 this.logWrap.removeAttribute('id');
-                // 滚动到底部
-                this.logContent.scrollTop = this.logContent.scrollHeight;
+                // 滚动到底部。这是该区域里最后一条日志，之后该区域会被解除引用，所以需要立即执行一次
+                this.scrollToBottom(this.logContent);
             }
         }
         span.innerHTML = str;
@@ -6060,6 +6060,9 @@ class Log {
         if (test === null) {
             this.count = 0;
             this.isVisible = false;
+            // 判断这是不是第一个日志区域
+            const exist = document.querySelector('.' + this.logWrapFlag);
+            const isFirst = exist === null;
             const logWrap = document.createElement('div');
             logWrap.id = this.activeLogWrapID;
             logWrap.classList.add(this.logWrapClassName, this.logWrapFlag);
@@ -6069,24 +6072,14 @@ class Log {
                 logWrap.classList.add('mobile');
             }
             logWrap.append(logContent);
+            this.logWrap = logWrap;
+            this.logContent = logContent;
             // 点击日志区域两侧的空白处，可以隐藏日志区域
             logWrap.addEventListener('click', (ev) => {
                 if (ev.target === logWrap) {
                     this.show = false;
                 }
             });
-            // 添加到 body 前面
-            this.logWrap = logWrap;
-            this.logContent = logContent;
-            document.body.insertAdjacentElement('beforebegin', this.logWrap);
-            _Theme__WEBPACK_IMPORTED_MODULE_1__.theme.register(this.logWrap);
-            // 虽然可以应用背景图片，但是由于日志区域比较狭长，背景图片的视觉效果不佳，看起来比较粗糙，所以还是不应用背景图片了
-            // bg.useBG(this.wrap, 0.9)
-            // 使新创建的日志区域的显示状态与上一个日志区域保持一致
-            // 如果这就是第一个日志区域，则是默认隐藏的
-            this.show = this.show;
-            // 如果上一个日志区域是显示的，就需要设置 this.show = true 使新的区域也显示
-            // 这就是为什么要执行 this.show = this.show
             // 当鼠标进入日志区域时，不自动滚动到底部，这样可以保持显示区域的内容不变，便于用户查看和选择需要的日志
             this.logWrap.addEventListener('mouseenter', () => {
                 this.mouseover = true;
@@ -6095,15 +6088,28 @@ class Log {
                 this.mouseover = false;
             });
             // 当用户切换到其他标签页或其他应用程序时（不论是使用鼠标还是快捷键），浏览器都会自动触发 mouseleave 事件，所以 mouseover 会自动变成 false。
+            // 添加到 body 前面
+            document.body.insertAdjacentElement('beforebegin', this.logWrap);
+            _Theme__WEBPACK_IMPORTED_MODULE_1__.theme.register(this.logWrap);
+            // 虽然可以应用背景图片，但是由于日志区域比较狭长，背景图片的视觉效果不佳，看起来比较粗糙，所以还是不应用背景图片了
+            // bg.useBG(this.wrap, 0.9)
+            // 如果这是第一个日志区域，则为其应用“日志区域的默认可见性”设置
+            if (isFirst) {
+                this.show = _setting_Settings__WEBPACK_IMPORTED_MODULE_8__.settings.logVisibleDefault === 'show';
+            }
+            else {
+                // 如果这不是第一个日志区域，则让它的显示状态与上一个日志区域保持一致
+                this.show = this.show;
+            }
             // 监听新的日志区域的可见性
             _utils_Utils__WEBPACK_IMPORTED_MODULE_7__.Utils.observeElement(this.logWrap, (value) => {
                 this.isVisible = value;
             }, _Config__WEBPACK_IMPORTED_MODULE_10__.Config.mobile ? 0 : 1);
         }
     }
-    scrollToBottom() {
+    scrollToBottom(el) {
         if (this.show && this.toBottom && !this.mouseover) {
-            this.logContent.scrollTop = this.logContent.scrollHeight;
+            el.scrollTop = el.scrollHeight;
             this.toBottom = false;
         }
     }
@@ -10406,7 +10412,6 @@ class ShowWhatIsNew {
     }
     show(msg) {
         // 如果这个标记是初始值，说明这是用户首次安装这个扩展，或者重置了设置，此时不显示版本更新提示
-        // 因为对于新安装的用户来说，没必要显示版本更新提示
         if (_setting_Settings__WEBPACK_IMPORTED_MODULE_5__.settings.whatIsNewFlag === _Config__WEBPACK_IMPORTED_MODULE_1__.Config.whatIsNewFlagDefault) {
             (0,_setting_Settings__WEBPACK_IMPORTED_MODULE_5__.setSetting)('whatIsNewFlag', this.flag);
             return;
@@ -13313,6 +13318,10 @@ class InitPageBase {
         if (!this.confirmRecrawl()) {
             return;
         }
+        // 每次开始抓取时清空之前的日志
+        // 其实不清空通常也没有问题，但是考虑到定时抓取功能、以及其他一些行为可能会产生大量日志，
+        // 一直不清空的话会导致日志数量持续增加，占据的内存也会增加
+        _EVT__WEBPACK_IMPORTED_MODULE_6__.EVT.fire('clearLog');
         _Log__WEBPACK_IMPORTED_MODULE_5__.log.success('🚀' + _Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_开始抓取'));
         _Toast__WEBPACK_IMPORTED_MODULE_17__.toast.show(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_开始抓取'), {
             position: 'center',
@@ -13356,6 +13365,7 @@ class InitPageBase {
             if (!this.confirmRecrawl()) {
                 return;
             }
+            _EVT__WEBPACK_IMPORTED_MODULE_6__.EVT.fire('clearLog');
             _Log__WEBPACK_IMPORTED_MODULE_5__.log.success('🚀' + _Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_开始抓取'));
             _Toast__WEBPACK_IMPORTED_MODULE_17__.toast.show(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_开始抓取'), {
                 bgColor: _Colors__WEBPACK_IMPORTED_MODULE_1__.Colors.bgBlue,
@@ -13653,8 +13663,7 @@ class InitPageBase {
             // 如果用户未设置排序规则，则每个页面自行处理排序逻辑
             this.sortResult();
         }
-        _Log__WEBPACK_IMPORTED_MODULE_5__.log.log(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_共抓取到n个作品', _store_Store__WEBPACK_IMPORTED_MODULE_4__.store.resultMeta.length.toString()));
-        _Log__WEBPACK_IMPORTED_MODULE_5__.log.log(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_共抓取到n个文件', _store_Store__WEBPACK_IMPORTED_MODULE_4__.store.result.length.toString()));
+        _Log__WEBPACK_IMPORTED_MODULE_5__.log.log(_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_共抓取到n个作品产生了n个抓取结果', _store_Store__WEBPACK_IMPORTED_MODULE_4__.store.resultMeta.length.toString(), _store_Store__WEBPACK_IMPORTED_MODULE_4__.store.result.length.toString()));
         _Log__WEBPACK_IMPORTED_MODULE_5__.log.success('✅' + _Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_抓取完毕'), 2);
         // 发出抓取完毕的信号
         _EVT__WEBPACK_IMPORTED_MODULE_6__.EVT.fire('crawlComplete');
@@ -13671,7 +13680,7 @@ class InitPageBase {
     }
     // 每当抓取了一个作品之后，输出提示
     logResultNumber() {
-        _Log__WEBPACK_IMPORTED_MODULE_5__.log.log(`➡️${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_抓取进度')}: ${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_待处理')} ${_store_Store__WEBPACK_IMPORTED_MODULE_4__.store.idList.length}, ${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_共抓取到n个作品', _store_Store__WEBPACK_IMPORTED_MODULE_4__.store.resultMeta.length.toString())}`, 1, false);
+        _Log__WEBPACK_IMPORTED_MODULE_5__.log.log(`➡️${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_待处理')} ${_store_Store__WEBPACK_IMPORTED_MODULE_4__.store.idList.length}, ${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_共抓取到n个作品', _store_Store__WEBPACK_IMPORTED_MODULE_4__.store.resultMeta.length.toString())}`, 1, false, 'getWorksProgress');
     }
     // 抓取结果为 0 时输出提示
     noResult() {
@@ -21278,7 +21287,7 @@ class DownloadControl {
         this.downloaded = _DownloadStates__WEBPACK_IMPORTED_MODULE_10__.downloadStates.downloadedCount();
         // 显示下载进度
         const text = `${this.downloaded} / ${_store_Store__WEBPACK_IMPORTED_MODULE_3__.store.result.length}`;
-        _Log__WEBPACK_IMPORTED_MODULE_4__.log.log('➡️' + text, 2, false);
+        _Log__WEBPACK_IMPORTED_MODULE_4__.log.log('➡️' + text, 1, false, 'downloadProgress');
         // 设置总下载进度条
         _ProgressBar__WEBPACK_IMPORTED_MODULE_9__.progressBar.setTotalProgress(this.downloaded);
         _store_Store__WEBPACK_IMPORTED_MODULE_3__.store.remainingDownload = _store_Store__WEBPACK_IMPORTED_MODULE_3__.store.result.length - this.downloaded;
@@ -24069,7 +24078,7 @@ class Resume {
         _store_Store__WEBPACK_IMPORTED_MODULE_3__.store.crawlCompleteTime = meta.date;
         _store_Store__WEBPACK_IMPORTED_MODULE_3__.store.URLWhenCrawlStart = meta.URLWhenCrawlStart || '';
         // 恢复模式就绪
-        _Log__WEBPACK_IMPORTED_MODULE_1__.log.success(_Language__WEBPACK_IMPORTED_MODULE_2__.lang.transl('_已恢复抓取结果'), 2);
+        _Log__WEBPACK_IMPORTED_MODULE_1__.log.success(_Language__WEBPACK_IMPORTED_MODULE_2__.lang.transl('_已恢复抓取结果'), 1);
         _EVT__WEBPACK_IMPORTED_MODULE_0__.EVT.fire('resume');
     }
     async saveData() {
@@ -24103,7 +24112,7 @@ class Resume {
             states: _DownloadStates__WEBPACK_IMPORTED_MODULE_5__.downloadStates.states,
         };
         this.IDB.add(this.statesName, statesData);
-        _Log__WEBPACK_IMPORTED_MODULE_1__.log.success(_Language__WEBPACK_IMPORTED_MODULE_2__.lang.transl('_已保存抓取结果'), 2);
+        _Log__WEBPACK_IMPORTED_MODULE_1__.log.success(_Language__WEBPACK_IMPORTED_MODULE_2__.lang.transl('_已保存抓取结果'), 1);
     }
     // 存储抓取结果
     async saveTaskData() {
@@ -28064,6 +28073,14 @@ Zip 파일이 원본 파일입니다.`,
         '合計 {} つの作品があります',
         '총 {}개의 작품을 긁어왔습니다',
         'Всего просканированно {} работ',
+    ],
+    _共抓取到n个作品产生了n个抓取结果: [
+        `共抓取到 {} 个作品，产生了 {} 个抓取结果`,
+        `共抓取到 {} 個作品，產生了 {} 個抓取結果`,
+        `Crawled a total of {} works, producing {} crawl results`,
+        `合計 {} 件の作品をクロールし、{} 件のクロール結果を生成しました`,
+        `총 {}개의 작품을 크롤링하여 {}개의 크롤링 결과가 생성되었습니다`,
+        `Всего скраулено {} работ, сгенерировано {} результатов краулинга`,
     ],
     _命名规则: [
         '<span class="key">命名</span>规则',
@@ -34653,6 +34670,24 @@ To prevent duplicate filenames, it is recommended to always add {series_id}.`,
         `탈퇴한 사용자를 찾을 수 없습니다`,
         `Не найдено удалённых/деактивированных пользователей`,
     ],
+    _日志区域的默认可见性: [
+        `日志区域的默认<span class="key">可见性</span>`,
+        `日誌區域的預設<span class="key">可見性</span>`,
+        `Default <span class="key">visibility</span> of the log area`,
+        `ログ領域のデフォルト<span class="key">可視性</span>`,
+        `로그 영역의 기본 <span class="key">가시성</span>`,
+        `Область журнала по умолчанию <span class="key">видимость</span>`,
+    ],
+    _日志区域的默认可见性的说明: [
+        `显示当下载器在页面顶部输出日志时，你可以控制日志区域默认显示还是隐藏。`,
+        `顯示當下載器在頁面頂部輸出日誌時，你可以控制日誌區域預設顯示還是隱藏。`,
+        `When the downloader outputs logs at the top of the page, you can control whether the log area is shown or hidden by default.`,
+        `ダウンロードツールがページ上部にログを出力する際、ログ領域のデフォルト表示（表示／非表示）を制御できます。`,
+        `다운로더가 페이지 상단에 로그를 출력할 때, 로그 영역의 기본 표시 또는 숨김을 제어할 수 있습니다。`,
+        `Когда загрузчик выводит логи в верхней части страницы, вы можете управлять, будет ли область журнала отображаться или скрываться по умолчанию。`,
+    ],
+    _显示: [`显示`, `顯示`, `Show`, `表示`, `표시`, `Показать`],
+    _隐藏: [`隐藏`, `隱藏`, `Hide`, `非表示`, `숨기기`, `Скрыть`],
     _更新说明1831: [
         `<strong>🐞修复了在 /en/tags 页面里，下载器抓取的作品分类可能不正确的问题</strong><br>
 <strong>🐞修复了“在搜索页面里移除已关注用户的作品”功能失效的问题</strong>`,
@@ -37973,7 +38008,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Wiki__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Wiki */ "./src/ts/setting/Wiki.ts");
 
 
-// 设置项编号从 0 开始，现在最大是 92
+// 设置项编号从 0 开始，现在最大是 93
 const formHtml = `
 <form class="settingForm">
   <div class="tabsContnet">
@@ -39284,6 +39319,20 @@ const formHtml = `
       <span class="blue">ss</span> <span>08</span>
       <br>
     </p>
+    
+    <p class="option" data-no="93">
+      <a href="${_Wiki__WEBPACK_IMPORTED_MODULE_1__.wiki.link(93)}" target="_blank" class="has_tip settingNameStyle" data-xztip="_日志区域的默认可见性的说明">
+        <span data-xztext="_日志区域的默认可见性"></span>
+        <span class="gray1"> ? </span>
+      </a>
+      <input type="radio" name="logVisibleDefault" id="logVisibleDefault1" class="need_beautify radio" value="show" checked>
+      <span class="beautify_radio" tabindex="0"></span>
+      <label for="logVisibleDefault1" data-xztext="_显示"></label>
+      <input type="radio" name="logVisibleDefault" id="logVisibleDefault2" class="need_beautify radio" value="hide">
+      <span class="beautify_radio" tabindex="0"></span>
+      <label for="logVisibleDefault2" data-xztext="_隐藏"></label>
+    </p>
+
     <p class="option" data-no="78">
       <a href="${_Wiki__WEBPACK_IMPORTED_MODULE_1__.wiki.link(78)}" target="_blank" class="settingNameStyle" data-xztext="_导出日志"></a>
       <input type="checkbox" name="exportLog" class="need_beautify checkbox_switch">
@@ -39605,6 +39654,7 @@ class FormSettings {
             'downloadOrder',
             'downloadOrderSortBy',
             'copyImageSize',
+            'logVisibleDefault',
         ],
         textarea: [
             'notNeedTag',
@@ -40840,6 +40890,7 @@ class Settings {
         skipNovelsInSeriesWhenAutoMerge: true,
         seriesNovelNameRule: 'novel series/{page_tag}/{series_title}-{series_id}-{user}-{part}-{tags}.{ext}',
         filterSearchResults: false,
+        logVisibleDefault: 'show',
     };
     allSettingKeys = Object.keys(this.defaultSettings);
     // 值为浮点数的选项
@@ -41531,7 +41582,7 @@ class Wiki {
         'More-Enhance': [
             60, 84, 87, 68, 63, 55, 71, 62, 40, 56, 86, 48, 88, 18, 34, 14,
         ],
-        'More-Others': [61, 31, 78, 36, 41, 45, 53, 32, 37],
+        'More-Others': [61, 31, 78, 36, 41, 45, 53, 32, 37, 93],
         'More-Hidden': [79, 80, 14, 15],
         'Buttons-Crawl': [
             'startCrawling',

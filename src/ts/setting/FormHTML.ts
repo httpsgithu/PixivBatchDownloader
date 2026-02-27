@@ -1,7 +1,7 @@
 import { Config } from '../Config'
 import { wiki } from './Wiki'
 
-// 设置项编号从 0 开始，现在最大是 92
+// 设置项编号从 0 开始，现在最大是 93
 export const formHtml = `
 <form class="settingForm">
   <div class="tabsContnet">
@@ -1312,6 +1312,20 @@ export const formHtml = `
       <span class="blue">ss</span> <span>08</span>
       <br>
     </p>
+    
+    <p class="option" data-no="93">
+      <a href="${wiki.link(93)}" target="_blank" class="has_tip settingNameStyle" data-xztip="_日志区域的默认可见性的说明">
+        <span data-xztext="_日志区域的默认可见性"></span>
+        <span class="gray1"> ? </span>
+      </a>
+      <input type="radio" name="logVisibleDefault" id="logVisibleDefault1" class="need_beautify radio" value="show" checked>
+      <span class="beautify_radio" tabindex="0"></span>
+      <label for="logVisibleDefault1" data-xztext="_显示"></label>
+      <input type="radio" name="logVisibleDefault" id="logVisibleDefault2" class="need_beautify radio" value="hide">
+      <span class="beautify_radio" tabindex="0"></span>
+      <label for="logVisibleDefault2" data-xztext="_隐藏"></label>
+    </p>
+
     <p class="option" data-no="78">
       <a href="${wiki.link(78)}" target="_blank" class="settingNameStyle" data-xztext="_导出日志"></a>
       <input type="checkbox" name="exportLog" class="need_beautify checkbox_switch">
