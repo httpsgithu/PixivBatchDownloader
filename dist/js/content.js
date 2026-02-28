@@ -4173,12 +4173,8 @@ class FindDeactivatedUsers {
     }
     dataChange = false;
     async waitChange() {
-        if (this.dataChange) {
-            return;
-        }
-        else {
+        while (!this.dataChange) {
             await _utils_Utils__WEBPACK_IMPORTED_MODULE_4__.Utils.sleep(100);
-            return this.waitChange();
         }
     }
     async check() {
@@ -4322,7 +4318,7 @@ class FollowingList {
             if (!this.isMsg(msg)) {
                 return false;
             }
-            if (msg.msg === 'dispathFollowingData') {
+            if (msg.msg === 'dispatchFollowingData') {
                 this.receiveData(msg.data || []);
             }
             if (msg.msg === 'updateFollowingData') {
@@ -4396,24 +4392,24 @@ class FollowingList {
     }
     /**获取公开或私密关注的用户 ID 列表 */
     async getFollowingList(rest) {
-        const ids = [];
+        const following = [];
         const followedUsersInfo = [];
-        let offset = 0;
         let total = await this.getFollowingTotal(rest);
         if (total === 0) {
             return {
-                following: ids,
-                followedUsersInfo: [],
+                following,
+                followedUsersInfo,
                 total,
             };
         }
         // 每次请求 100 个关注用户的数据
         const limit = 100;
-        while (ids.length < total) {
+        let offset = 0;
+        while (following.length < total) {
             const res = await _API__WEBPACK_IMPORTED_MODULE_1__.API.getFollowingList(_store_Store__WEBPACK_IMPORTED_MODULE_5__.store.loggedUserID, rest, '', offset, limit);
             offset = offset + limit;
             for (const users of res.body.users) {
-                ids.push(users.userId);
+                following.push(users.userId);
                 followedUsersInfo.push({
                     id: users.userId,
                     name: users.userName,
@@ -4423,7 +4419,7 @@ class FollowingList {
                 });
             }
             const type = rest === 'show' ? _Language__WEBPACK_IMPORTED_MODULE_3__.lang.transl('_公开') : _Language__WEBPACK_IMPORTED_MODULE_3__.lang.transl('_非公开');
-            _Log__WEBPACK_IMPORTED_MODULE_8__.log.log(`${type} ${ids.length} / ${total}`, 1, false, `getFollowingList_${rest}`);
+            _Log__WEBPACK_IMPORTED_MODULE_8__.log.log(`${type} ${following.length} / ${total}`, 1, false, `getFollowingList_${rest}`);
             if (res.body.users.length === 0) {
                 // 实际获取到的关注用户数量可能比 total 少，这是正常的
                 // 例如 toal 是 3522，实际上获取到的可能是 3483 个，再往后都是空数组了
@@ -4433,7 +4429,7 @@ class FollowingList {
             await _utils_Utils__WEBPACK_IMPORTED_MODULE_7__.Utils.sleep(_setting_Settings__WEBPACK_IMPORTED_MODULE_4__.settings.slowCrawlDealy);
         }
         return {
-            following: ids,
+            following,
             followedUsersInfo,
             total,
         };
@@ -40193,7 +40189,6 @@ class Options {
         2, 4, 13, 17, 20, 26, 32, 44, 50, 51, 57, 64,
     ];
     // 90 天内添加的设置项，显示 new 角标
-    now = Date.now();
     newRange = 1000 * 60 * 60 * 24 * 90;
     newOptions = [
         {
@@ -40231,6 +40226,12 @@ class Options {
             id: 92,
             // 2025-12-19
             time: 1766102400000,
+        },
+        {
+            // 日志区域的默认可见性
+            id: 93,
+            // 2026-02-28
+            time: 1772287652821,
         },
     ];
     bindEvents() {
@@ -40295,8 +40296,9 @@ class Options {
     }
     /**显示 new 角标 */
     showNewIcon() {
+        const now = Date.now();
         this.newOptions.forEach((option) => {
-            if (this.now - option.time <= this.newRange) {
+            if (now - option.time <= this.newRange) {
                 const el = this.getOption(option.id);
                 el.classList.add('new');
             }

@@ -1245,12 +1245,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _backgroundAPI__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./backgroundAPI */ "./src/ts/backgroundAPI.ts");
 
 
-// 这是一个后台脚本
+// 这是一个后台脚本，用于保存、维护、派发用户的关注列表
 class ManageFollowing {
     constructor() {
         this.restore();
         webextension_polyfill__WEBPACK_IMPORTED_MODULE_0___default().runtime.onInstalled.addListener(async () => {
-            // 每次更新或刷新扩展时尝试读取数据，如果数据不存在则设置数据
+            // 每次更新或刷新扩展时尝试读取数据，如果数据不存在则储存初始数据
             const data = await webextension_polyfill__WEBPACK_IMPORTED_MODULE_0___default().storage.local.get(this.store);
             if (data[this.store] === undefined ||
                 Array.isArray(data[this.store]) === false) {
@@ -1287,7 +1287,6 @@ class ManageFollowing {
                 });
             }
             if (msg.msg === 'setFollowingData') {
-                const data = msg.data;
                 // 当前台获取新的关注列表完成之后，会发送此消息。
                 // 如果发送消息的页面和发起请求的页面是同一个，则解除锁定状态
                 if (sender.tab.id === this.updateTaskTabID) {
@@ -1297,7 +1296,7 @@ class ManageFollowing {
                 // set 操作不会被放入等待队列中，而且总是会被立即执行
                 // 这是因为在请求数据的过程中可能产生了其他操作，set 操作的数据可能已经是旧的了
                 // 所以需要先应用 set 里的数据，然后再执行其他操作，在旧数据的基础上进行修改
-                await this.setData(data);
+                await this.setData(msg.data);
                 // 如果队列中没有等待的操作，则立即派发数据并储存数据
                 // 如果有等待的操作，则不派发和储存数据，因为稍后队列执行完毕后也会派发和储存数据
                 // 这是为了避免重复派发和储存数据，避免影响性能
@@ -1374,10 +1373,6 @@ class ManageFollowing {
         this.checkDeadlock();
         this.clearUnusedData();
     }
-    // 类型守卫
-    isMsg(msg) {
-        return !!msg.msg;
-    }
     store = 'following';
     data = [];
     uploadStatus = 'idle';
@@ -1415,13 +1410,13 @@ class ManageFollowing {
     // SW 会在空闲 30 秒左右时被浏览器回收，当 SW 再次接到前台的消息时会被再次激活。
     // 此时需要等待数据恢复完毕再操作数据，否则会造成 BUG
     async waitRestored() {
-        if (this.restored) {
-            return;
-        }
-        else {
+        while (!this.restored) {
             await this.sleep(100);
-            return this.waitRestored();
         }
+    }
+    // 收到消息时的类型守卫
+    isMsg(msg) {
+        return !!msg.msg;
     }
     /**向前台脚本派发数据
      * 可以指定向哪个 tab 派发
@@ -1431,7 +1426,7 @@ class ManageFollowing {
         await this.waitRestored();
         if (tab?.id) {
             webextension_polyfill__WEBPACK_IMPORTED_MODULE_0___default().tabs.sendMessage(tab.id, {
-                msg: 'dispathFollowingData',
+                msg: 'dispatchFollowingData',
                 data: this.data,
             });
         }
@@ -1439,19 +1434,10 @@ class ManageFollowing {
             const tabs = await this.findAllPixivTab();
             for (const tab of tabs) {
                 webextension_polyfill__WEBPACK_IMPORTED_MODULE_0___default().tabs.sendMessage(tab.id, {
-                    msg: 'dispathFollowingData',
+                    msg: 'dispatchFollowingData',
                     data: this.data,
                 });
             }
-        }
-    }
-    async dispatchRecaptchaToken(recaptcha_enterprise_score_token) {
-        const tabs = await this.findAllPixivTab();
-        for (const tab of tabs) {
-            webextension_polyfill__WEBPACK_IMPORTED_MODULE_0___default().tabs.sendMessage(tab.id, {
-                msg: 'dispatchRecaptchaToken',
-                data: recaptcha_enterprise_score_token,
-            });
         }
     }
     storage() {
@@ -1578,14 +1564,11 @@ class ManageFollowing {
     clearUnusedData() {
         setInterval(() => {
             const day30ms = 2592000000;
-            for (let index = 0; index < this.data.length; index++) {
-                const item = this.data[index];
-                if (Date.now() - item.time > day30ms) {
-                    this.data.splice(index, 1);
-                    this.dispatchFollowingList();
-                    this.storage();
-                    break;
-                }
+            const beforeLen = this.data.length;
+            this.data = this.data.filter((item) => Date.now() - item.time <= day30ms);
+            if (this.data.length !== beforeLen) {
+                this.dispatchFollowingList();
+                this.storage();
             }
         }, 3600000);
     }

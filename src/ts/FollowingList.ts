@@ -6,7 +6,7 @@ import { settings } from './setting/Settings'
 import { store } from './store/Store'
 import { toast } from './Toast'
 import { Utils } from './utils/Utils'
-import { DispatchMsg, UserInfo, AllUserFollowingData } from './FollowingData'
+import { BackgroundMsg, UserInfo, AllUserFollowingData } from './FollowingData'
 import { log } from './Log'
 
 // 更新关注列表
@@ -28,7 +28,7 @@ class FollowingList {
           return false
         }
 
-        if (msg.msg === 'dispathFollowingData') {
+        if (msg.msg === 'dispatchFollowingData') {
           this.receiveData(msg.data || [])
         }
 
@@ -66,7 +66,7 @@ class FollowingList {
   public status: 'idle' | 'locked' = 'idle'
 
   // 类型守卫，只要求消息有 msg 属性
-  private isMsg(msg: any): msg is DispatchMsg {
+  private isMsg(msg: any): msg is BackgroundMsg {
     return !!msg.msg
   }
 
@@ -125,23 +125,23 @@ class FollowingList {
     followedUsersInfo: UserInfo[]
     total: number
   }> {
-    const ids: string[] = []
+    const following: string[] = []
     const followedUsersInfo: UserInfo[] = []
-    let offset = 0
     let total = await this.getFollowingTotal(rest)
 
     if (total === 0) {
       return {
-        following: ids,
-        followedUsersInfo: [],
+        following,
+        followedUsersInfo,
         total,
       }
     }
 
     // 每次请求 100 个关注用户的数据
     const limit = 100
+    let offset = 0
 
-    while (ids.length < total) {
+    while (following.length < total) {
       const res = await API.getFollowingList(
         store.loggedUserID,
         rest,
@@ -152,7 +152,7 @@ class FollowingList {
       offset = offset + limit
 
       for (const users of res.body.users) {
-        ids.push(users.userId)
+        following.push(users.userId)
         followedUsersInfo.push({
           id: users.userId,
           name: users.userName,
@@ -164,7 +164,7 @@ class FollowingList {
       const type =
         rest === 'show' ? lang.transl('_公开') : lang.transl('_非公开')
       log.log(
-        `${type} ${ids.length} / ${total}`,
+        `${type} ${following.length} / ${total}`,
         1,
         false,
         `getFollowingList_${rest}`
@@ -186,7 +186,7 @@ class FollowingList {
     }
 
     return {
-      following: ids,
+      following,
       followedUsersInfo,
       total,
     }

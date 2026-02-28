@@ -20,11 +20,8 @@ class FindDeactivatedUsers {
   private dataChange = false
 
   private async waitChange(): Promise<void> {
-    if (this.dataChange) {
-      return
-    } else {
+    while (!this.dataChange) {
       await Utils.sleep(100)
-      return this.waitChange()
     }
   }
 

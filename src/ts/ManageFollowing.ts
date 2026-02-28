@@ -1,21 +1,6 @@
 import browser from 'webextension-polyfill'
-import { FollowingData, AllUserFollowingData, UserInfo } from './FollowingData'
+import { BackgroundMsg, AllUserFollowingData, SetData } from './FollowingData'
 import { backgroundAPI } from './backgroundAPI'
-
-interface SetData {
-  /**数据属于哪个用户 */
-  user: string
-  /**此用户的关注用户的 id 列表 **/
-  following: string[]
-  followedUsersInfo: UserInfo[]
-  /**此用户的关注用户总数。注意这可能与 following 的 length 不同*/
-  total: number
-}
-
-type Msg = {
-  msg: string
-  data?: SetData
-}
 
 interface UserOperate {
   action: '' | 'add' | 'remove'
@@ -23,13 +8,13 @@ interface UserOperate {
   userID: string
 }
 
-// 这是一个后台脚本
+// 这是一个后台脚本，用于保存、维护、派发用户的关注列表
 class ManageFollowing {
   constructor() {
     this.restore()
 
     browser.runtime.onInstalled.addListener(async () => {
-      // 每次更新或刷新扩展时尝试读取数据，如果数据不存在则设置数据
+      // 每次更新或刷新扩展时尝试读取数据，如果数据不存在则储存初始数据
       const data = await browser.storage.local.get(this.store)
       if (
         data[this.store] === undefined ||
@@ -73,7 +58,6 @@ class ManageFollowing {
         }
 
         if (msg.msg === 'setFollowingData') {
-          const data = msg.data as SetData
           // 当前台获取新的关注列表完成之后，会发送此消息。
           // 如果发送消息的页面和发起请求的页面是同一个，则解除锁定状态
           if (sender!.tab!.id === this.updateTaskTabID) {
@@ -84,7 +68,7 @@ class ManageFollowing {
           // set 操作不会被放入等待队列中，而且总是会被立即执行
           // 这是因为在请求数据的过程中可能产生了其他操作，set 操作的数据可能已经是旧的了
           // 所以需要先应用 set 里的数据，然后再执行其他操作，在旧数据的基础上进行修改
-          await this.setData(data)
+          await this.setData(msg.data)
 
           // 如果队列中没有等待的操作，则立即派发数据并储存数据
           // 如果有等待的操作，则不派发和储存数据，因为稍后队列执行完毕后也会派发和储存数据
@@ -175,11 +159,6 @@ class ManageFollowing {
     this.clearUnusedData()
   }
 
-  // 类型守卫
-  private isMsg(msg: any): msg is Msg {
-    return !!msg.msg
-  }
-
   private readonly store = 'following'
 
   private data: AllUserFollowingData = []
@@ -225,12 +204,14 @@ class ManageFollowing {
   // SW 会在空闲 30 秒左右时被浏览器回收，当 SW 再次接到前台的消息时会被再次激活。
   // 此时需要等待数据恢复完毕再操作数据，否则会造成 BUG
   private async waitRestored(): Promise<void> {
-    if (this.restored) {
-      return
-    } else {
+    while (!this.restored) {
       await this.sleep(100)
-      return this.waitRestored()
     }
+  }
+
+  // 收到消息时的类型守卫
+  private isMsg(msg: any): msg is BackgroundMsg {
+    return !!msg.msg
   }
 
   /**向前台脚本派发数据
@@ -242,29 +223,17 @@ class ManageFollowing {
 
     if (tab?.id) {
       browser.tabs.sendMessage(tab.id, {
-        msg: 'dispathFollowingData',
+        msg: 'dispatchFollowingData',
         data: this.data,
       })
     } else {
       const tabs = await this.findAllPixivTab()
       for (const tab of tabs) {
         browser.tabs.sendMessage(tab.id!, {
-          msg: 'dispathFollowingData',
+          msg: 'dispatchFollowingData',
           data: this.data,
         })
       }
-    }
-  }
-
-  private async dispatchRecaptchaToken(
-    recaptcha_enterprise_score_token: string
-  ) {
-    const tabs = await this.findAllPixivTab()
-    for (const tab of tabs) {
-      browser.tabs.sendMessage(tab.id!, {
-        msg: 'dispatchRecaptchaToken',
-        data: recaptcha_enterprise_score_token,
-      })
     }
   }
 
@@ -418,15 +387,12 @@ class ManageFollowing {
   private clearUnusedData() {
     setInterval(() => {
       const day30ms = 2592000000
-      for (let index = 0; index < this.data.length; index++) {
-        const item = this.data[index]
-        if (Date.now() - item.time > day30ms) {
-          this.data.splice(index, 1)
+      const beforeLen = this.data.length
+      this.data = this.data.filter((item) => Date.now() - item.time <= day30ms)
 
-          this.dispatchFollowingList()
-          this.storage()
-          break
-        }
+      if (this.data.length !== beforeLen) {
+        this.dispatchFollowingList()
+        this.storage()
       }
     }, 3600000)
   }

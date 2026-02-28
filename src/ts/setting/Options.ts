@@ -23,7 +23,6 @@ class Options {
   ]
 
   // 90 天内添加的设置项，显示 new 角标
-  private readonly now = Date.now()
   private readonly newRange = 1000 * 60 * 60 * 24 * 90
   private readonly newOptions: NewOption[] = [
     {
@@ -61,6 +60,12 @@ class Options {
       id: 92,
       // 2025-12-19
       time: 1766102400000,
+    },
+    {
+      // 日志区域的默认可见性
+      id: 93,
+      // 2026-02-28
+      time: 1772287652821,
     },
   ]
 
@@ -133,8 +138,9 @@ class Options {
 
   /**显示 new 角标 */
   private showNewIcon() {
+    const now = Date.now()
     this.newOptions.forEach((option) => {
-      if (this.now - option.time <= this.newRange) {
+      if (now - option.time <= this.newRange) {
         const el = this.getOption(option.id)
         el.classList.add('new')
       }

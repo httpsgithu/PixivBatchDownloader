@@ -26,8 +26,21 @@ export interface FollowingData {
 
 export type AllUserFollowingData = FollowingData[]
 
-/** 后台脚本向前台脚本派发关注数据时的消息 */
-export interface DispatchMsg {
-  msg: string
-  data?: AllUserFollowingData
+export interface SetData {
+  /**数据属于哪个用户 */
+  user: string
+  /**此用户的关注用户的 id 列表 **/
+  following: string[]
+  followedUsersInfo: UserInfo[]
+  /**此用户的关注用户总数。注意这可能与 following 的 length 不同*/
+  total: number
 }
+
+/** 前后台脚本交互的消息 */
+export type BackgroundMsg =
+  | { msg: 'requestFollowingData' }
+  | { msg: 'needUpdateFollowingData' }
+  | { msg: 'setFollowingData'; data: SetData }
+  | { msg: 'getLoggedUserID' }
+  | { msg: 'updateFollowingData' }
+  | { msg: 'dispatchFollowingData'; data: AllUserFollowingData }
