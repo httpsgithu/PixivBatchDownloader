@@ -1297,7 +1297,7 @@ class ManageFollowing {
                 // set 操作不会被放入等待队列中，而且总是会被立即执行
                 // 这是因为在请求数据的过程中可能产生了其他操作，set 操作的数据可能已经是旧的了
                 // 所以需要先应用 set 里的数据，然后再执行其他操作，在旧数据的基础上进行修改
-                this.setData(data);
+                await this.setData(data);
                 // 如果队列中没有等待的操作，则立即派发数据并储存数据
                 // 如果有等待的操作，则不派发和储存数据，因为稍后队列执行完毕后也会派发和储存数据
                 // 这是为了避免重复派发和储存数据，避免影响性能
@@ -1407,10 +1407,20 @@ class ManageFollowing {
             this.uploadStatus = 'idle';
             this.restored = true;
         }
+    }
+    sleep(time) {
+        return new Promise((res) => setTimeout(res, time));
+    }
+    /** 等待数据恢复完毕，然后再操作数据 */
+    // SW 会在空闲 30 秒左右时被浏览器回收，当 SW 再次接到前台的消息时会被再次激活。
+    // 此时需要等待数据恢复完毕再操作数据，否则会造成 BUG
+    async waitRestored() {
+        if (this.restored) {
+            return;
+        }
         else {
-            return setTimeout(() => {
-                this.restore();
-            }, 500);
+            await this.sleep(100);
+            return this.waitRestored();
         }
     }
     /**向前台脚本派发数据
@@ -1418,26 +1428,20 @@ class ManageFollowing {
      * 如果未指定 tab，则向所有的 pixiv 标签页派发
      */
     async dispatchFollowingList(tab) {
-        if (!this.restored) {
-            setTimeout(() => {
-                return this.dispatchFollowingList(tab);
-            }, 100);
+        await this.waitRestored();
+        if (tab?.id) {
+            webextension_polyfill__WEBPACK_IMPORTED_MODULE_0___default().tabs.sendMessage(tab.id, {
+                msg: 'dispathFollowingData',
+                data: this.data,
+            });
         }
         else {
-            if (tab?.id) {
+            const tabs = await this.findAllPixivTab();
+            for (const tab of tabs) {
                 webextension_polyfill__WEBPACK_IMPORTED_MODULE_0___default().tabs.sendMessage(tab.id, {
                     msg: 'dispathFollowingData',
                     data: this.data,
                 });
-            }
-            else {
-                const tabs = await this.findAllPixivTab();
-                for (const tab of tabs) {
-                    webextension_polyfill__WEBPACK_IMPORTED_MODULE_0___default().tabs.sendMessage(tab.id, {
-                        msg: 'dispathFollowingData',
-                        data: this.data,
-                    });
-                }
             }
         }
     }
@@ -1467,7 +1471,8 @@ class ManageFollowing {
         this.dispatchFollowingList();
         this.storage();
     }
-    setData(data) {
+    async setData(data) {
+        await this.waitRestored();
         const index = this.data.findIndex((following) => following.user === data.user);
         if (index > -1) {
             // 更新当前登录的用户的关注数据

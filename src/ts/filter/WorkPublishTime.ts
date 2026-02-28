@@ -61,14 +61,14 @@ class WorkPublishTime {
   private bindEvents() {
     // 获取图像作品的数据
     secretSignal.register('ppdtask1', () => {
-      // 上次记录到 141080000
-      this.crawlData(137070000, 141086707)
+      // 上次记录到 141710000
+      this.crawlData(141090000, 141711580)
     })
 
     // 获取小说作品的数据
     secretSignal.register('ppdtask2', () => {
-      // 上次记录到 27260000
-      this.crawlData(26370000, 27263687, 'novels')
+      // 上次记录到 27400000
+      this.crawlData(27270000, 27401909, 'novels')
     })
   }
 

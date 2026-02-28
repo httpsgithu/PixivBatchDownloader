@@ -92,10 +92,11 @@ class FollowingList {
     // 获取公开关注和私密关注，然后合并
     const publicList = await this.getFollowingList('show')
     const privateList = await this.getFollowingList('hide')
-    this.following = publicList.following.concat(privateList.following)
-    this.followedUsersInfo = publicList.followedUsersInfo.concat(
+    const following = publicList.following.concat(privateList.following)
+    const followedUsersInfo = publicList.followedUsersInfo.concat(
       privateList.followedUsersInfo
     )
+    const total = publicList.total + privateList.total
 
     const tip2 = lang.transl('_已更新关注用户列表')
     log.success(tip2)
@@ -107,9 +108,9 @@ class FollowingList {
       msg: 'setFollowingData',
       data: {
         user: store.loggedUserID,
-        following: this.following,
-        followedUsersInfo: this.followedUsersInfo,
-        total: this.total,
+        following: following,
+        followedUsersInfo: followedUsersInfo,
+        total: total,
       },
     })
 
@@ -122,6 +123,7 @@ class FollowingList {
   private async getFollowingList(rest: 'show' | 'hide'): Promise<{
     following: string[]
     followedUsersInfo: UserInfo[]
+    total: number
   }> {
     const ids: string[] = []
     const followedUsersInfo: UserInfo[] = []
@@ -132,6 +134,7 @@ class FollowingList {
       return {
         following: ids,
         followedUsersInfo: [],
+        total,
       }
     }
 
@@ -185,6 +188,7 @@ class FollowingList {
     return {
       following: ids,
       followedUsersInfo,
+      total,
     }
   }
 

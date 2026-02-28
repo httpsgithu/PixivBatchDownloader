@@ -4373,8 +4373,9 @@ class FollowingList {
         // 获取公开关注和私密关注，然后合并
         const publicList = await this.getFollowingList('show');
         const privateList = await this.getFollowingList('hide');
-        this.following = publicList.following.concat(privateList.following);
-        this.followedUsersInfo = publicList.followedUsersInfo.concat(privateList.followedUsersInfo);
+        const following = publicList.following.concat(privateList.following);
+        const followedUsersInfo = publicList.followedUsersInfo.concat(privateList.followedUsersInfo);
+        const total = publicList.total + privateList.total;
         const tip2 = _Language__WEBPACK_IMPORTED_MODULE_3__.lang.transl('_已更新关注用户列表');
         _Log__WEBPACK_IMPORTED_MODULE_8__.log.success(tip2);
         _Toast__WEBPACK_IMPORTED_MODULE_6__.toast.success(tip2, {
@@ -4384,9 +4385,9 @@ class FollowingList {
             msg: 'setFollowingData',
             data: {
                 user: _store_Store__WEBPACK_IMPORTED_MODULE_5__.store.loggedUserID,
-                following: this.following,
-                followedUsersInfo: this.followedUsersInfo,
-                total: this.total,
+                following: following,
+                followedUsersInfo: followedUsersInfo,
+                total: total,
             },
         });
         this.executeQueue();
@@ -4403,6 +4404,7 @@ class FollowingList {
             return {
                 following: ids,
                 followedUsersInfo: [],
+                total,
             };
         }
         // 每次请求 100 个关注用户的数据
@@ -4433,6 +4435,7 @@ class FollowingList {
         return {
             following: ids,
             followedUsersInfo,
+            total,
         };
     }
     /**只请求关注列表第一页的数据，以获取 total */
@@ -10381,7 +10384,7 @@ class ShowWhatIsNew {
     constructor() {
         this.bindEvents();
     }
-    flag = '18.3.1';
+    flag = '18.4.0';
     bindEvents() {
         window.addEventListener(_EVT__WEBPACK_IMPORTED_MODULE_4__.EVT.list.settingInitialized, () => {
             // 在 settingInitialized 事件触发后生成消息，如果时间较早，可能会被翻译成错误的语言
@@ -10389,7 +10392,7 @@ class ShowWhatIsNew {
       <span>${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_扩展程序升到x版本', this.flag)}</span>
       <br>
       <br>
-      <span>${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_更新说明1831')}</span>
+      <span>${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_更新说明1840')}</span>
       <br>
       <br>
       <span>${_Language__WEBPACK_IMPORTED_MODULE_0__.lang.transl('_优化用户体验')}</span>
@@ -26889,13 +26892,13 @@ class WorkPublishTime {
     bindEvents() {
         // 获取图像作品的数据
         _utils_SecretSignal__WEBPACK_IMPORTED_MODULE_1__.secretSignal.register('ppdtask1', () => {
-            // 上次记录到 141080000
-            this.crawlData(137070000, 141086707);
+            // 上次记录到 141710000
+            this.crawlData(141090000, 141711580);
         });
         // 获取小说作品的数据
         _utils_SecretSignal__WEBPACK_IMPORTED_MODULE_1__.secretSignal.register('ppdtask2', () => {
-            // 上次记录到 27260000
-            this.crawlData(26370000, 27263687, 'novels');
+            // 上次记录到 27400000
+            this.crawlData(27270000, 27401909, 'novels');
         });
     }
     async crawlData(start, end, type = 'illusts') {
@@ -34744,19 +34747,79 @@ To prevent duplicate filenames, it is recommended to always add {series_id}.`,
         `이 시리즈 내의 모든 소설이 제외되었습니다`,
         `Все романы в этой серии были исключены`,
     ],
-    _更新说明1831: [
-        `<strong>🐞修复了在 /en/tags 页面里，下载器抓取的作品分类可能不正确的问题</strong><br>
-<strong>🐞修复了“在搜索页面里移除已关注用户的作品”功能失效的问题</strong>`,
-        `<strong>🐞修復了在 /en/tags 頁面裡，下載器抓取的作品分類可能不正確的問題</strong><br>
-<strong>🐞修復了「在搜尋頁面裡移除已關注用戶的作品」功能失效的問題</strong>`,
-        `<strong>🐞Fixed the issue where the downloader might incorrectly classify works when crawling on /en/tags pages</strong><br>
-<strong>🐞Fixed the issue where the "Remove works from followed users on the search page" feature stopped working</strong>`,
-        `<strong>🐞/en/tags ページでダウンロードツールが作品分類を正しく取得できない問題を修正</strong><br>
-<strong>🐞「検索ページでフォロー中のユーザーの作品を非表示にする」機能が動作しなくなっていた問題を修正</strong>`,
-        `<strong>🐞/en/tags 페이지에서 다운로더가 작품 분류를 잘못 가져올 수 있는 문제 수정</strong><br>
-<strong>🐞"검색 페이지에서 팔로우한 사용자의 작품 제거" 기능이 작동하지 않는 문제 수정</strong>`,
-        `<strong>🐞Исправлена проблема, при которой на страницах /en/tags загрузчик мог неверно классифицировать работы</strong><br>
-<strong>🐞Исправлена проблема, из-за которой функция «Удалять работы от подписанных пользователей на странице поиска» перестала работать</strong>`,
+    _更新说明1840: [
+        `<strong>✨新设置：日志区域的默认可见性</strong><br>
+当下载器在页面顶部输出日志时，你可以控制日志区域默认显示还是隐藏。默认值是显示。<br>
+你可以在“更多”-“其他”分类里找到这个设置。<br>
+<br>
+<strong>✨新功能：查找已注销的用户</strong><br>
+下载器在关注页面（/following）里添加了此功能，你可以查找已注销的用户。<br>
+注意：这个功能不能查找以前注销的用户，只能查找此功能推出之后注销的用户。<br>
+<br>
+<strong>🐞修复了更新关注列表过于频繁的问题</strong><br>
+<br>
+<strong>😊合并系列小说时，可以应用标签过滤条件了</strong><br>
+现在下载器在合并系列小说时，会应用“必须含有标签”和“不能含有标签”两个过滤器。这样用户就可以通过指定标签来过滤掉不需要的小说了。`,
+        `<strong>✨新設置：日誌區域的預設可見性</strong><br>
+當下載器在頁面頂部輸出日誌時，你可以控制日誌區域預設顯示還是隱藏。預設值是顯示。<br>
+你可以在「更多」-「其他」分類裡找到這個設定。<br>
+<br>
+<strong>✨新功能：查找已註銷的用戶</strong><br>
+下載器在關注頁面（/following）裡添加了此功能，你可以查找已註銷的用戶。<br>
+注意：這個功能不能查找以前註銷的用戶，只能查找此功能推出之後註銷的用戶。<br>
+<br>
+<strong>🐞修復了更新關注列表過於頻繁的問題</strong><br>
+<br>
+<strong>😊合併系列小說時，可以應用標籤過濾條件了</strong><br>
+現在下載器在合併系列小說時，會應用「必須含有標籤」和「不能含有標籤」兩個過濾器。這樣用戶就可以通過指定標籤來過濾掉不需要的小說了。`,
+        `<strong>✨New Setting: Default Visibility of Log Area</strong><br>
+When the downloader outputs logs at the top of the page, you can control whether the log area is shown or hidden by default. The default value is Show.<br>
+You can find this setting in the "More" - "Other" category.<br>
+<br>
+<strong>✨New Feature: Find Deactivated Users</strong><br>
+The downloader has added this feature on the following page (/following). You can now find deactivated users.<br>
+Note: This feature cannot find users who deactivated before, it can only detect users who deactivated after this feature was released.<br>
+<br>
+<strong>🐞Fixed the issue of updating the following list too frequently</strong><br>
+<br>
+<strong>😊When merging novel series, tag filtering conditions can now be applied</strong><br>
+The downloader will now apply the "Must contain tags" and "Must not contain tags" filters when merging novel series. This allows users to filter out unwanted novels by specifying tags.`,
+        `<strong>✨新設定：ログ領域のデフォルト可視性</strong><br>
+ダウンロードツールがページ上部にログを出力する際、ログ領域のデフォルト表示（表示／非表示）を制御できます。デフォルト値は表示です。<br>
+この設定は「その他」-「その他」カテゴリで確認できます。<br>
+<br>
+<strong>✨新機能：退会済みユーザーを検索</strong><br>
+ダウンロードツールはフォロー中ページ（/following）にこの機能を追加しました。退会済みユーザーを検索できます。<br>
+注意：この機能は以前に退会したユーザーを検索できず、この機能リリース後（2026年3月）に退会したユーザーのみ検出可能です。<br>
+<br>
+<strong>🐞フォロー一覧の更新が頻繁すぎる問題を修正</strong><br>
+<br>
+<strong>😊シリーズ小説のマージ時にタグフィルターを適用可能に</strong><br>
+シリーズ小説をマージする際、「必須タグ」と「除外タグ」のフィルターが適用されるようになりました。これにより、指定したタグで不要な小説をフィルタリングできます。`,
+        `<strong>✨새 설정: 로그 영역의 기본 가시성</strong><br>
+다운로더가 페이지 상단에 로그를 출력할 때, 로그 영역의 기본 표시(표시/숨김)를 제어할 수 있습니다. 기본값은 표시입니다.<br>
+이 설정은 "더보기" - "기타" 카테고리에서 찾을 수 있습니다.<br>
+<br>
+<strong>✨새 기능: 탈퇴한 사용자 찾기</strong><br>
+다운로더가 팔로잉 페이지(/following)에 이 기능을 추가했습니다. 탈퇴한 사용자를 검색할 수 있습니다.<br>
+주의: 이 기능은 이전에 탈퇴한 사용자는 찾을 수 없으며, 기능 출시 이후에 탈퇴한 사용자만 확인할 수 있습니다.<br>
+<br>
+<strong>🐞팔로잉 목록 업데이트가 너무 빈번한 문제 수정</strong><br>
+<br>
+<strong>😊시리즈 소설 병합 시 태그 필터 적용 가능</strong><br>
+이제 시리즈 소설을 병합할 때 "필수 태그"와 "제외 태그" 필터를 적용할 수 있습니다. 이를 통해 원하지 않는 소설을 태그로 필터링할 수 있습니다。`,
+        `<strong>✨Новый параметр: Видимость области журнала по умолчанию</strong><br>
+Когда загрузчик выводит логи в верхней части страницы, вы можете управлять, будет ли область журнала отображаться или скрываться по умолчанию. Значение по умолчанию — Показать.<br>
+Вы можете найти эту настройку в категории «Больше» — «Другое».<br>
+<br>
+<strong>✨Новая функция: Поиск деактивированных пользователей</strong><br>
+Загрузчик добавил эту функцию на странице подписок (/following). Теперь вы можете находить деактивированных пользователей.<br>
+Внимание: Эта функция не может находить пользователей, которые деактивировали аккаунт раньше, она может обнаруживать только тех, кто сделал это после выпуска функции.<br>
+<br>
+<strong>🐞Исправлена проблема слишком частого обновления списка подписок</strong><br>
+<br>
+<strong>😊При объединении серий романов теперь можно применять фильтры по тегам</strong><br>
+Теперь при объединении серий романов загрузчик применяет два фильтра: «Должен содержать теги» и «Не должен содержать теги». Это позволяет пользователям отфильтровывать ненужные романы с помощью указанных тегов。`,
     ],
 };
 
@@ -56652,6 +56715,69 @@ const illustsData = [
     [141060000, 1770822300000],
     [141070000, 1770853380000],
     [141080000, 1770884940000],
+    [141090001, 1770900660000],
+    [141100000, 1770915600000],
+    [141110000, 1770952980000],
+    [141120000, 1770977460000],
+    [141130000, 1770990900000],
+    [141140000, 1771003380000],
+    [141150000, 1771032000000],
+    [141160000, 1771049880000],
+    [141170000, 1771064280000],
+    [141180000, 1771074240000],
+    [141190000, 1771083180000],
+    [141200000, 1771107780000],
+    [141210000, 1771131000000],
+    [141220000, 1771148760000],
+    [141230000, 1771161180000],
+    [141240000, 1771174800000],
+    [141250000, 1771210260000],
+    [141260000, 1771234800000],
+    [141270001, 1771249260000],
+    [141280000, 1771265820000],
+    [141290000, 1771301520000],
+    [141300000, 1771325100000],
+    [141310000, 1771338600000],
+    [141320000, 1771364760000],
+    [141330000, 1771397160000],
+    [141340000, 1771415820000],
+    [141350000, 1771428600000],
+    [141360000, 1771462620000],
+    [141370000, 1771491780000],
+    [141380000, 1771506960000],
+    [141390000, 1771525740000],
+    [141400000, 1771562880000],
+    [141410000, 1771584960000],
+    [141420001, 1771598280000],
+    [141430000, 1771621440000],
+    [141440000, 1771648560000],
+    [141450000, 1771668240000],
+    [141460000, 1771681620000],
+    [141470000, 1771697940000],
+    [141480000, 1771728060000],
+    [141490000, 1771747740000],
+    [141500000, 1771761540000],
+    [141510000, 1771772100000],
+    [141520000, 1771795200000],
+    [141530000, 1771820520000],
+    [141540000, 1771839120000],
+    [141550000, 1771851900000],
+    [141560000, 1771864980000],
+    [141570000, 1771897620000],
+    [141580000, 1771924860000],
+    [141590000, 1771939560000],
+    [141600000, 1771956720000],
+    [141610000, 1771991760000],
+    [141620000, 1772014920000],
+    [141630000, 1772028180000],
+    [141640000, 1772049780000],
+    [141650000, 1772084280000],
+    [141660000, 1772104920000],
+    [141670000, 1772118180000],
+    [141680000, 1772146620000],
+    [141690000, 1772178300000],
+    [141700000, 1772193960000],
+    [141710000, 1772206200000],
 ];
 
 
@@ -59396,6 +59522,20 @@ const novelsData = [
     [27240000, 1770646721000],
     [27250000, 1770750927000],
     [27260000, 1770854349000],
+    [27270000, 1770969522000],
+    [27280000, 1771040345000],
+    [27290001, 1771088409000],
+    [27300000, 1771174609000],
+    [27310000, 1771297394000],
+    [27320000, 1771410310000],
+    [27330001, 1771511574000],
+    [27340001, 1771615067000],
+    [27350000, 1771715889000],
+    [27360000, 1771790031000],
+    [27370000, 1771872224000],
+    [27380000, 1772002612000],
+    [27390000, 1772106359000],
+    [27400000, 1772199462000],
 ];
 
 
